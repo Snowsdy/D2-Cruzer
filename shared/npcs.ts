@@ -23,4 +23,4 @@ export const NPC_COLOR: Record<string, number> = {
   rahool: 0xf59e0b,
   ghost: 0xe8ecf1,
   cruzer: 0xf3075e,
-};
+}

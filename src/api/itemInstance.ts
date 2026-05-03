@@ -1,5 +1,5 @@
-import { bungieGet } from "./bungie";
-import type { DestinyItemResponse } from "bungie-api-ts/destiny2";
+import { bungieGet } from "./bungie"
+import type { DestinyItemResponse } from "bungie-api-ts/destiny2"
 
 /**
  * Fetch an instanced item's components (sockets, stats, perks).
@@ -13,5 +13,5 @@ export async function getItemInstance(
 ): Promise<DestinyItemResponse> {
   return bungieGet<DestinyItemResponse>(
     `/Destiny2/${membershipType}/Profile/${membershipId}/Item/${itemInstanceId}/?components=${components.join(",")}`
-  );
+  )
 }

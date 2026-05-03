@@ -9,10 +9,10 @@
  * like one system from the user's perspective, even though they're fed by
  * different APIs.
  */
-import { useAppStatus, useVisibleAnnouncements } from "@/hooks/useAppStatus";
-import { useDismissedAnnouncements } from "@/store/dismissedAnnouncements";
-import { sanitizeHtml } from "@/utils/sanitizeHtml";
-import type { StatusSeverity } from "@/api/appStatus";
+import { useAppStatus, useVisibleAnnouncements } from "@/hooks/useAppStatus"
+import { useDismissedAnnouncements } from "@/store/dismissedAnnouncements"
+import { sanitizeHtml } from "@/utils/sanitizeHtml"
+import type { StatusSeverity } from "@/api/appStatus"
 
 const SEVERITY_STYLE: Record<
   StatusSeverity,
@@ -39,24 +39,24 @@ const SEVERITY_STYLE: Record<
     icon: "text-red-300",
     glyph: "⚠",
   },
-};
+}
 
 async function openExternal(url: string) {
   try {
-    const { open } = await import("@tauri-apps/plugin-shell");
-    await open(url);
+    const { open } = await import("@tauri-apps/plugin-shell")
+    await open(url)
   } catch {
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.open(url, "_blank", "noopener,noreferrer")
   }
 }
 
 export function AppStatusBanner() {
-  const { data } = useAppStatus();
-  const announcements = useVisibleAnnouncements();
-  const dismiss = useDismissedAnnouncements((s) => s.dismiss);
+  const { data } = useAppStatus()
+  const announcements = useVisibleAnnouncements()
+  const dismiss = useDismissedAnnouncements((s) => s.dismiss)
 
-  const maintenance = data?.maintenance?.enabled ? data.maintenance : null;
-  if (!maintenance && announcements.length === 0) return null;
+  const maintenance = data?.maintenance?.enabled ? data.maintenance : null
+  if (!maintenance && announcements.length === 0) return null
 
   return (
     <>
@@ -64,17 +64,21 @@ export function AppStatusBanner() {
         <div
           className={`border-b ${SEVERITY_STYLE[maintenance.severity].border} ${
             SEVERITY_STYLE[maintenance.severity].bg
-          } ${SEVERITY_STYLE[maintenance.severity].text} px-4 py-2 text-sm flex items-center gap-3`}
+          } ${SEVERITY_STYLE[maintenance.severity].text} flex items-center gap-3 px-4 py-2 text-sm`}
         >
-          <span className={`text-lg shrink-0 ${SEVERITY_STYLE[maintenance.severity].icon}`}>
+          <span
+            className={`shrink-0 text-lg ${SEVERITY_STYLE[maintenance.severity].icon}`}
+          >
             {SEVERITY_STYLE[maintenance.severity].glyph}
           </span>
           <span
-            className="flex-1 min-w-0"
-            dangerouslySetInnerHTML={{ __html: sanitizeHtml(maintenance.message) }}
+            className="min-w-0 flex-1"
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtml(maintenance.message),
+            }}
           />
           {maintenance.expectedEndsAt && (
-            <span className="text-xs uppercase tracking-widest font-bold opacity-80 shrink-0">
+            <span className="shrink-0 text-xs font-bold tracking-widest uppercase opacity-80">
               fin prévue ·{" "}
               {new Date(maintenance.expectedEndsAt).toLocaleString(undefined, {
                 day: "2-digit",
@@ -88,21 +92,21 @@ export function AppStatusBanner() {
       )}
 
       {announcements.map((a) => {
-        const s = SEVERITY_STYLE[a.severity];
+        const s = SEVERITY_STYLE[a.severity]
         return (
           <div
             key={a.id}
-            className={`border-b ${s.border} ${s.bg} ${s.text} px-4 py-2 text-sm flex items-center gap-3`}
+            className={`border-b ${s.border} ${s.bg} ${s.text} flex items-center gap-3 px-4 py-2 text-sm`}
           >
-            <span className={`text-lg shrink-0 ${s.icon}`}>{s.glyph}</span>
+            <span className={`shrink-0 text-lg ${s.icon}`}>{s.glyph}</span>
             <span
-              className="flex-1 min-w-0"
+              className="min-w-0 flex-1"
               dangerouslySetInnerHTML={{ __html: sanitizeHtml(a.message) }}
             />
             {a.link && (
               <button
                 onClick={() => openExternal(a.link!.url)}
-                className="text-xs uppercase tracking-widest font-bold px-2 py-1 rounded border border-current/40 hover:bg-white/5 transition-colors shrink-0"
+                className="shrink-0 rounded border border-current/40 px-2 py-1 text-xs font-bold tracking-widest uppercase transition-colors hover:bg-white/5"
               >
                 {a.link.label} ↗
               </button>
@@ -112,14 +116,14 @@ export function AppStatusBanner() {
                 onClick={() => dismiss(a.id)}
                 aria-label="Ignorer"
                 title="Ignorer"
-                className="w-6 h-6 rounded-full border border-current/40 hover:bg-white/10 transition-colors shrink-0 flex items-center justify-center text-[11px]"
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-current/40 text-[11px] transition-colors hover:bg-white/10"
               >
                 ×
               </button>
             )}
           </div>
-        );
+        )
       })}
     </>
-  );
+  )
 }

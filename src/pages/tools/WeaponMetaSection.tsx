@@ -4,11 +4,11 @@
  * no podium, no emoji clutter.
  */
 
-import { useMemo, useState } from "react";
-import { useAccountStats } from "@/hooks/useAccountStats";
-import { readStat } from "@/api/stats";
+import { useMemo, useState } from "react"
+import { useAccountStats } from "@/hooks/useAccountStats"
+import { readStat } from "@/api/stats"
 
-type Mode = "allPvE" | "allPvP" | "trialsOfOsiris" | "gambit" | "ironBanner";
+type Mode = "allPvE" | "allPvP" | "trialsOfOsiris" | "gambit" | "ironBanner"
 
 const MODE_LABELS: Record<Mode, string> = {
   allPvE: "Avant-Garde",
@@ -16,7 +16,7 @@ const MODE_LABELS: Record<Mode, string> = {
   trialsOfOsiris: "Jugement d'Osiris",
   gambit: "Gambit",
   ironBanner: "Bannière de Fer",
-};
+}
 
 // Couleurs canoniques Destiny 2 :
 //   Avant-garde (PvE)      → bleu (Zavala)
@@ -30,39 +30,59 @@ const MODE_COLORS: Record<Mode, string> = {
   trialsOfOsiris: "#facc15",
   gambit: "#34d399",
   ironBanner: "#bdb76b",
-};
+}
 
 interface Archetype {
-  key: string;
-  label: string;
-  statKey: string;
+  key: string
+  label: string
+  statKey: string
 }
 
 const WEAPON_ARCHETYPES: Archetype[] = [
   { key: "auto", label: "Fusil auto", statKey: "weaponKillsAutoRifle" },
   { key: "hc", label: "Revolver", statKey: "weaponKillsHandCannon" },
-  { key: "pulse", label: "Fusil à impulsion", statKey: "weaponKillsPulseRifle" },
+  {
+    key: "pulse",
+    label: "Fusil à impulsion",
+    statKey: "weaponKillsPulseRifle",
+  },
   { key: "scout", label: "Fusil à visée", statKey: "weaponKillsScoutRifle" },
-  { key: "smg", label: "Pistolet-mitrailleur", statKey: "weaponKillsSubmachinegun" },
+  {
+    key: "smg",
+    label: "Pistolet-mitrailleur",
+    statKey: "weaponKillsSubmachinegun",
+  },
   { key: "sidearm", label: "Pistolet", statKey: "weaponKillsSidearm" },
   { key: "bow", label: "Arc", statKey: "weaponKillsBow" },
   { key: "trace", label: "Fusil à traçage", statKey: "weaponKillsTraceRifle" },
   { key: "fusion", label: "Fusil à fusion", statKey: "weaponKillsFusionRifle" },
-  { key: "linear", label: "FF linéaire", statKey: "weaponKillsLinearFusionRifle" },
+  {
+    key: "linear",
+    label: "FF linéaire",
+    statKey: "weaponKillsLinearFusionRifle",
+  },
   { key: "sniper", label: "Fusil de précision", statKey: "weaponKillsSniper" },
   { key: "shotgun", label: "Fusil à pompe", statKey: "weaponKillsShotgun" },
   { key: "gl", label: "Lance-grenades", statKey: "weaponKillsGrenadeLauncher" },
-  { key: "rocket", label: "Lance-roquettes", statKey: "weaponKillsRocketLauncher" },
-  { key: "machine", label: "Mitrailleuse lourde", statKey: "weaponKillsMachineGun" },
+  {
+    key: "rocket",
+    label: "Lance-roquettes",
+    statKey: "weaponKillsRocketLauncher",
+  },
+  {
+    key: "machine",
+    label: "Mitrailleuse lourde",
+    statKey: "weaponKillsMachineGun",
+  },
   { key: "sword", label: "Épée", statKey: "weaponKillsSword" },
-];
+]
 
 const ABILITY_KILLS = [
   { key: "super", label: "Super", statKey: "weaponKillsSuper" },
   { key: "grenade", label: "Grenade", statKey: "weaponKillsGrenade" },
   { key: "melee", label: "Mêlée", statKey: "weaponKillsMelee" },
   { key: "ability", label: "Capacité", statKey: "weaponKillsAbility" },
-];
+]
 
 // ---------------------------------------------------------------------------
 // Leaderboard — a dense typography-driven list.
@@ -77,15 +97,15 @@ function Leaderboard({
   total,
   color,
 }: {
-  rows: { key: string; label: string; value: number }[];
-  total: number;
-  color: string;
+  rows: { key: string; label: string; value: number }[]
+  total: number
+  color: string
 }) {
-  if (rows.length === 0) return null;
-  const max = rows[0]?.value ?? 0;
+  if (rows.length === 0) return null
+  const max = rows[0]?.value ?? 0
   return (
     <div
-      className="rounded-lg overflow-hidden"
+      className="overflow-hidden rounded-lg"
       style={{
         background: "rgba(10,8,16,0.55)",
         border: "1px solid rgba(255,255,255,0.05)",
@@ -94,11 +114,11 @@ function Leaderboard({
       <table className="w-full border-collapse">
         <tbody>
           {rows.map((r, i) => {
-            const rank = i + 1;
-            const pct = total > 0 ? (r.value / total) * 100 : 0;
+            const rank = i + 1
+            const pct = total > 0 ? (r.value / total) * 100 : 0
             // Background intensity scales with rank — top items slightly
             // brighter so you can parse the leaderboard without bars.
-            const weight = max > 0 ? r.value / max : 0;
+            const weight = max > 0 ? r.value / max : 0
             return (
               <tr
                 key={r.key}
@@ -109,20 +129,17 @@ function Leaderboard({
                       ? `linear-gradient(90deg, ${color}10, transparent 60%)`
                       : undefined,
                   borderTop:
-                    rank > 1
-                      ? "1px solid rgba(255,255,255,0.04)"
-                      : undefined,
+                    rank > 1 ? "1px solid rgba(255,255,255,0.04)" : undefined,
                 }}
               >
                 {/* Rank */}
                 <td
-                  className="pl-4 pr-3 py-2.5 w-10 text-right align-middle"
+                  className="w-10 py-2.5 pr-3 pl-4 text-right align-middle"
                   style={{
                     fontFamily:
                       "ui-monospace, SFMono-Regular, Menlo, monospace",
                     fontWeight: 800,
-                    color:
-                      rank === 1 ? color : "rgba(255,255,255,0.35)",
+                    color: rank === 1 ? color : "rgba(255,255,255,0.35)",
                     fontSize: "11px",
                     letterSpacing: "0.05em",
                   }}
@@ -133,7 +150,7 @@ function Leaderboard({
                 <td className="py-2.5 align-middle">
                   <div className="flex items-center gap-2.5">
                     <div
-                      className="w-1 h-1 rounded-full shrink-0"
+                      className="h-1 w-1 shrink-0 rounded-full"
                       style={{
                         background: color,
                         opacity: 0.25 + weight * 0.75,
@@ -142,7 +159,7 @@ function Leaderboard({
                       }}
                     />
                     <div
-                      className="font-semibold truncate"
+                      className="truncate font-semibold"
                       style={{
                         color:
                           rank === 1
@@ -157,14 +174,13 @@ function Leaderboard({
                 </td>
                 {/* Count */}
                 <td
-                  className="px-3 py-2.5 align-middle text-right tabular-nums"
+                  className="px-3 py-2.5 text-right align-middle tabular-nums"
                   style={{
                     fontFamily:
                       "ui-monospace, SFMono-Regular, Menlo, monospace",
                     fontWeight: 700,
                     fontSize: rank === 1 ? "15px" : "13px",
-                    color:
-                      rank === 1 ? color : "rgba(255,255,255,0.82)",
+                    color: rank === 1 ? color : "rgba(255,255,255,0.82)",
                     letterSpacing: "0.02em",
                   }}
                 >
@@ -172,33 +188,32 @@ function Leaderboard({
                 </td>
                 {/* Pct */}
                 <td
-                  className="pl-3 pr-4 py-2.5 align-middle text-right w-16 tabular-nums"
+                  className="w-16 py-2.5 pr-4 pl-3 text-right align-middle tabular-nums"
                   style={{
                     fontFamily:
                       "ui-monospace, SFMono-Regular, Menlo, monospace",
                     fontWeight: 600,
                     fontSize: "11px",
-                    color:
-                      rank === 1 ? color : "rgba(255,255,255,0.35)",
+                    color: rank === 1 ? color : "rgba(255,255,255,0.35)",
                   }}
                 >
                   {pct.toFixed(1)}%
                 </td>
               </tr>
-            );
+            )
           })}
         </tbody>
       </table>
     </div>
-  );
+  )
 }
 
 export function WeaponMetaSection() {
-  const stats = useAccountStats();
-  const [mode, setMode] = useState<Mode>("allPvE");
-  const color = MODE_COLORS[mode];
+  const stats = useAccountStats()
+  const [mode, setMode] = useState<Mode>("allPvE")
+  const color = MODE_COLORS[mode]
 
-  const bucket = stats.data?.mergedAllCharacters?.results?.[mode]?.allTime;
+  const bucket = stats.data?.mergedAllCharacters?.results?.[mode]?.allTime
 
   const ranked = useMemo(() => {
     const rows = WEAPON_ARCHETYPES.map((a) => ({
@@ -207,10 +222,10 @@ export function WeaponMetaSection() {
       value: readStat(bucket, a.statKey),
     }))
       .filter((r) => r.value > 0)
-      .sort((a, b) => b.value - a.value);
-    const total = rows.reduce((s, r) => s + r.value, 0);
-    return { rows, total };
-  }, [bucket]);
+      .sort((a, b) => b.value - a.value)
+    const total = rows.reduce((s, r) => s + r.value, 0)
+    return { rows, total }
+  }, [bucket])
 
   const abilities = useMemo(() => {
     const rows = ABILITY_KILLS.map((a) => ({
@@ -219,38 +234,38 @@ export function WeaponMetaSection() {
       value: readStat(bucket, a.statKey),
     }))
       .filter((r) => r.value > 0)
-      .sort((a, b) => b.value - a.value);
-    const total = rows.reduce((s, r) => s + r.value, 0);
-    return { rows, total };
-  }, [bucket]);
+      .sort((a, b) => b.value - a.value)
+    const total = rows.reduce((s, r) => s + r.value, 0)
+    return { rows, total }
+  }, [bucket])
 
-  const kills = readStat(bucket, "kills");
-  const deaths = readStat(bucket, "deaths");
-  const kd = deaths > 0 ? kills / deaths : kills;
-  const secPlayed = readStat(bucket, "secondsPlayed");
-  const hours = Math.round(secPlayed / 3600);
-  const activities = readStat(bucket, "activitiesEntered");
-  const precisionKills = readStat(bucket, "precisionKills");
-  const precisionPct = kills > 0 ? (precisionKills / kills) * 100 : 0;
+  const kills = readStat(bucket, "kills")
+  const deaths = readStat(bucket, "deaths")
+  const kd = deaths > 0 ? kills / deaths : kills
+  const secPlayed = readStat(bucket, "secondsPlayed")
+  const hours = Math.round(secPlayed / 3600)
+  const activities = readStat(bucket, "activitiesEntered")
+  const precisionKills = readStat(bucket, "precisionKills")
+  const precisionPct = kills > 0 ? (precisionKills / kills) * 100 : 0
 
   return (
     <section className="space-y-3">
       {/* Header */}
-      <div className="flex items-center justify-between gap-3 flex-wrap">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-extrabold">Usage d'armes</h2>
-          <p className="text-xs text-bungie-muted mt-0.5">
+          <p className="text-bungie-muted mt-0.5 text-xs">
             Classement par kills · tiré de l'API Bungie
           </p>
         </div>
-        <div className="flex items-center gap-1 p-1 bg-black/30 border border-bungie-border rounded-full overflow-x-auto no-scrollbar">
+        <div className="border-bungie-border no-scrollbar flex items-center gap-1 overflow-x-auto rounded-full border bg-black/30 p-1">
           {(Object.keys(MODE_LABELS) as Mode[]).map((m) => (
             <button
               key={m}
               onClick={() => setMode(m)}
-              className={`px-3 h-7 rounded-full text-[11px] font-bold transition-all whitespace-nowrap ${
+              className={`h-7 rounded-full px-3 text-[11px] font-bold whitespace-nowrap transition-all ${
                 mode === m
-                  ? "text-black shadow-glow"
+                  ? "shadow-glow text-black"
                   : "text-bungie-text/70 hover:text-white"
               }`}
               style={mode === m ? { background: MODE_COLORS[m] } : undefined}
@@ -263,13 +278,17 @@ export function WeaponMetaSection() {
 
       {/* Summary */}
       <div
-        className="rounded-lg px-4 py-3 flex items-center gap-5 flex-wrap"
+        className="flex flex-wrap items-center gap-5 rounded-lg px-4 py-3"
         style={{
           background: "rgba(14,12,20,0.6)",
           border: `1px solid ${color}30`,
         }}
       >
-        <Summary label="Kills" value={kills.toLocaleString("fr-FR")} color={color} />
+        <Summary
+          label="Kills"
+          value={kills.toLocaleString("fr-FR")}
+          color={color}
+        />
         <Summary label="K / D" value={kd.toFixed(2)} color="#ffffff" />
         <Summary
           label="Précision"
@@ -288,7 +307,9 @@ export function WeaponMetaSection() {
         />
       </div>
 
-      {stats.isLoading && <p className="text-sm text-bungie-muted">Chargement…</p>}
+      {stats.isLoading && (
+        <p className="text-bungie-muted text-sm">Chargement…</p>
+      )}
 
       {!stats.isLoading && ranked.rows.length === 0 && (
         <div
@@ -322,11 +343,15 @@ export function WeaponMetaSection() {
             sub={`${abilities.total.toLocaleString("fr-FR")} kills`}
             color={color}
           />
-          <Leaderboard rows={abilities.rows} total={abilities.total} color={color} />
+          <Leaderboard
+            rows={abilities.rows}
+            total={abilities.total}
+            color={color}
+          />
         </div>
       )}
     </section>
-  );
+  )
 }
 
 function Summary({
@@ -334,23 +359,23 @@ function Summary({
   value,
   color,
 }: {
-  label: string;
-  value: string;
-  color: string;
+  label: string
+  value: string
+  color: string
 }) {
   return (
     <div className="flex items-baseline gap-2 whitespace-nowrap">
-      <span className="text-[9px] uppercase tracking-[0.22em] text-white/40 font-extrabold font-mono">
+      <span className="font-mono text-[9px] font-extrabold tracking-[0.22em] text-white/40 uppercase">
         {label}
       </span>
       <span
-        className="text-lg font-extrabold tabular-nums leading-none"
+        className="text-lg leading-none font-extrabold tabular-nums"
         style={{ color }}
       >
         {value}
       </span>
     </div>
-  );
+  )
 }
 
 function SectionHeader({
@@ -358,21 +383,21 @@ function SectionHeader({
   sub,
   color,
 }: {
-  title: string;
-  sub: string;
-  color: string;
+  title: string
+  sub: string
+  color: string
 }) {
   return (
     <div className="flex items-baseline justify-between gap-3 px-1">
       <span
-        className="text-[10px] uppercase tracking-[0.3em] font-extrabold font-mono"
+        className="font-mono text-[10px] font-extrabold tracking-[0.3em] uppercase"
         style={{ color }}
       >
         ◆ {title}
       </span>
-      <span className="text-[10px] font-mono font-extrabold tabular-nums text-white/40">
+      <span className="font-mono text-[10px] font-extrabold text-white/40 tabular-nums">
         {sub}
       </span>
     </div>
-  );
+  )
 }

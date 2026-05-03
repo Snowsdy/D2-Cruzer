@@ -1,17 +1,17 @@
-import { useEffect, useState, type ReactElement } from "react";
+import { useEffect, useState, type ReactElement } from "react"
 
 // Version string injected at build time via Vite `define`. See vite.config.ts.
-declare const __APP_VERSION__: string;
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import { startAuthFlow } from "@/api/oauth";
-import { useAuthStore } from "@/store/auth";
-import { LanguageSwitcher } from "@/components/language-switcher";
-import cruzerLogo from "@/assets/cruzer-logo.png";
-import bungieLogo from "@/assets/bungie-logo.png";
-import { LogoLoader } from "@/components/logo-loader";
-import { TitleBar } from "@/components/title-bar";
-import { Flag } from "@/components/flag";
+declare const __APP_VERSION__: string
+import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
+import { startAuthFlow } from "@/api/oauth"
+import { useAuthStore } from "@/store/auth"
+import { LanguageSwitcher } from "@/components/language-switcher"
+import cruzerLogo from "@/assets/cruzer-logo.png"
+import bungieLogo from "@/assets/bungie-logo.png"
+import { LogoLoader } from "@/components/logo-loader"
+import { TitleBar } from "@/components/title-bar"
+import { Flag } from "@/components/flag"
 import {
   IconInventory,
   IconScope,
@@ -19,13 +19,13 @@ import {
   IconCheck,
   IconNewspaper,
   IconWrench,
-} from "@/components/icon";
+} from "@/components/icon"
 
 type Feature = {
-  icon: ReactElement;
-  key: string;
-  descKey: string;
-};
+  icon: ReactElement
+  key: string
+  descKey: string
+}
 
 const FEATURES: Feature[] = [
   {
@@ -58,7 +58,7 @@ const FEATURES: Feature[] = [
     key: "tools",
     descKey: "login.feature.xur",
   },
-];
+]
 
 // Starfield generator — deterministic positions for CSS stars
 const STARS = Array.from({ length: 80 }, (_, i) => ({
@@ -67,53 +67,53 @@ const STARS = Array.from({ length: 80 }, (_, i) => ({
   size: (i % 3) + 1,
   delay: (i * 0.13) % 4,
   duration: 2 + ((i * 0.17) % 3),
-}));
+}))
 
 export function Login() {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const rememberMe = useAuthStore((s) => s.rememberMe);
-  const setRememberMe = useAuthStore((s) => s.setRememberMe);
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const rememberMe = useAuthStore((s) => s.rememberMe)
+  const setRememberMe = useAuthStore((s) => s.setRememberMe)
   // When auth lands from another window (main window finishing OAuth → the
   // overlay webview sees the shared Zustand/localStorage token arrive), jump
   // to the dashboard. Otherwise the overlay stays stuck on /login even
   // though the user is already authenticated.
-  const accessToken = useAuthStore((s) => s.accessToken);
+  const accessToken = useAuthStore((s) => s.accessToken)
   useEffect(() => {
     if (accessToken) {
-      navigate("/", { replace: true });
+      navigate("/", { replace: true })
     }
-  }, [accessToken, navigate]);
+  }, [accessToken, navigate])
 
   const handleLogin = async () => {
-    setError(null);
-    setLoading(true);
+    setError(null)
+    setLoading(true)
     try {
-      const url = await startAuthFlow();
+      const url = await startAuthFlow()
       try {
-        const { open } = await import("@tauri-apps/plugin-shell");
-        await open(url);
+        const { open } = await import("@tauri-apps/plugin-shell")
+        await open(url)
       } catch {
-        window.location.href = url;
+        window.location.href = url
       }
     } catch (e) {
-      setError((e as Error).message);
+      setError((e as Error).message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#05050a] flex flex-col">
+    <div className="relative flex min-h-screen w-full flex-col overflow-hidden bg-[#05050a]">
       {/* -------- Window controls bar -------- */}
       <div className="relative z-30">
         <TitleBar />
       </div>
 
       {/* -------- Animated starfield -------- */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="pointer-events-none absolute inset-0">
         {STARS.map((s, i) => (
           <span
             key={i}
@@ -125,7 +125,8 @@ export function Login() {
               height: s.size,
               opacity: 0.4,
               animation: `starTwinkle ${s.duration}s ease-in-out ${s.delay}s infinite`,
-              boxShadow: s.size > 1 ? "0 0 4px rgba(255,255,255,0.8)" : undefined,
+              boxShadow:
+                s.size > 1 ? "0 0 4px rgba(255,255,255,0.8)" : undefined,
             }}
           />
         ))}
@@ -133,7 +134,7 @@ export function Login() {
 
       {/* -------- Nebula layers -------- */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="pointer-events-none absolute inset-0"
         style={{
           background:
             "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(243,7,94,0.18) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 15% 90%, rgba(168,85,247,0.22) 0%, transparent 55%), radial-gradient(ellipse 45% 35% at 90% 10%, rgba(6,182,212,0.12) 0%, transparent 55%)",
@@ -141,17 +142,17 @@ export function Login() {
       />
 
       {/* -------- Top chrome (below TitleBar) -------- */}
-      <div className="absolute top-12.5 left-5 right-5 z-20 flex items-center justify-between">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 border border-bungie-border/60 backdrop-blur-sm">
+      <div className="absolute top-12.5 right-5 left-5 z-20 flex items-center justify-between">
+        <div className="border-bungie-border/60 flex items-center gap-2 rounded-full border bg-black/40 px-3 py-1.5 backdrop-blur-sm">
           <span
-            className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-live"
+            className="pulse-live h-1.5 w-1.5 rounded-full bg-emerald-400"
             style={{ boxShadow: "0 0 8px #34d399" }}
           />
-          <span className="text-[9px] uppercase tracking-[0.3em] font-extrabold text-white/70">
+          <span className="text-[9px] font-extrabold tracking-[0.3em] text-white/70 uppercase">
             Online
           </span>
           <span className="text-white/20">·</span>
-          <span className="text-[9px] uppercase tracking-[0.3em] font-mono text-white/50">
+          <span className="font-mono text-[9px] tracking-[0.3em] text-white/50 uppercase">
             v{__APP_VERSION__}
           </span>
         </div>
@@ -159,12 +160,12 @@ export function Login() {
       </div>
 
       {/* -------- Main split -------- */}
-      <div className="relative z-10 flex-1 grid lg:grid-cols-[1fr_1fr] gap-0 items-center">
+      <div className="relative z-10 grid flex-1 items-center gap-0 lg:grid-cols-[1fr_1fr]">
         {/* ============ LEFT — Hero ============ */}
-        <div className="flex items-center justify-center p-8 lg:p-12 relative">
-          <div className="max-w-xl w-full flex flex-col items-center text-center">
+        <div className="relative flex items-center justify-center p-8 lg:p-12">
+          <div className="flex w-full max-w-xl flex-col items-center text-center">
             {/* Top: logo + title side by side */}
-            <div className="flex items-center justify-center gap-5 mb-6">
+            <div className="mb-6 flex items-center justify-center gap-5">
               {loading ? (
                 <LogoLoader size="md" />
               ) : (
@@ -181,12 +182,12 @@ export function Login() {
                 />
               )}
               <div className="min-w-0 text-left">
-                <h1 className="glitch text-6xl lg:text-7xl font-black tracking-[-0.03em] leading-[0.9]">
+                <h1 className="glitch text-6xl leading-[0.9] font-black tracking-[-0.03em] lg:text-7xl">
                   <span data-text="CRUZER" className="text-gradient">
                     CRUZER
                   </span>
                 </h1>
-                <div className="flex items-center gap-2.5 mt-2">
+                <div className="mt-2 flex items-center gap-2.5">
                   <span
                     className="h-0.5 w-8"
                     style={{
@@ -194,21 +195,21 @@ export function Login() {
                         "linear-gradient(90deg, rgba(243,7,94,0.9), rgba(243,7,94,0))",
                     }}
                   />
-                  <span className="text-[11px] uppercase tracking-[0.5em] font-black text-bungie-accent">
+                  <span className="text-bungie-accent text-[11px] font-black tracking-[0.5em] uppercase">
                     Compagnon
                   </span>
                 </div>
               </div>
             </div>
 
-            <p className="text-[13px] text-white/70 leading-relaxed mb-8 max-w-md mx-auto">
-              {t("app.tagline")} — outils tactiques, inventaire live,
-              loot tables et actualités Bungie dans une appli portable.
+            <p className="mx-auto mb-8 max-w-md text-[13px] leading-relaxed text-white/70">
+              {t("app.tagline")} — outils tactiques, inventaire live, loot
+              tables et actualités Bungie dans une appli portable.
             </p>
 
             {/* Feature grid — all 6 visible */}
             <div className="hidden lg:block">
-              <div className="text-[10px] uppercase tracking-[0.3em] font-extrabold text-white/55 mb-3 flex items-center justify-center gap-2">
+              <div className="mb-3 flex items-center justify-center gap-2 text-[10px] font-extrabold tracking-[0.3em] text-white/55 uppercase">
                 <span className="h-px w-10 bg-linear-to-r from-transparent to-white/30" />
                 <span>Embarque avec</span>
                 <span className="h-px w-10 bg-linear-to-l from-transparent to-white/30" />
@@ -217,7 +218,7 @@ export function Login() {
                 {FEATURES.map((f, i) => (
                   <div
                     key={f.key}
-                    className="group flex items-center gap-3 p-3 rounded-lg transition-all hover:-translate-y-0.5 fade-in-up"
+                    className="group fade-in-up flex items-center gap-3 rounded-lg p-3 transition-all hover:-translate-y-0.5"
                     style={{
                       background:
                         "linear-gradient(135deg, rgba(20,12,30,0.6), rgba(7,7,13,0.4))",
@@ -226,7 +227,7 @@ export function Login() {
                     }}
                   >
                     <div
-                      className="w-11 h-11 rounded-md flex items-center justify-center shrink-0 text-bungie-accent group-hover:scale-110 transition-transform self-center"
+                      className="text-bungie-accent flex h-11 w-11 shrink-0 items-center justify-center self-center rounded-md transition-transform group-hover:scale-110"
                       style={{
                         background:
                           "linear-gradient(135deg, rgba(243,7,94,0.2), rgba(243,7,94,0.04))",
@@ -237,10 +238,10 @@ export function Login() {
                       {f.icon}
                     </div>
                     <div className="min-w-0 flex-1 text-left">
-                      <div className="text-[13px] font-extrabold uppercase tracking-wider text-white">
+                      <div className="text-[13px] font-extrabold tracking-wider text-white uppercase">
                         {t(`nav.${f.key}`)}
                       </div>
-                      <div className="text-[11px] text-white/65 mt-0.5 leading-snug line-clamp-2">
+                      <div className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-white/65">
                         {t(f.descKey)}
                       </div>
                     </div>
@@ -250,7 +251,7 @@ export function Login() {
 
               {/* Bottom stats strip */}
               <div
-                className="mt-6 flex items-center justify-between gap-4 px-4 py-3 rounded-lg"
+                className="mt-6 flex items-center justify-between gap-4 rounded-lg px-4 py-3"
                 style={{
                   background: "rgba(7,7,13,0.5)",
                   border: "1px solid rgba(243,7,94,0.15)",
@@ -268,9 +269,12 @@ export function Login() {
 
         {/* ============ RIGHT — Login card ============ */}
         <div className="flex items-center justify-center p-8 lg:p-14">
-          <div className="w-full max-w-lg fade-in-up" style={{ animationDelay: "0.2s" }}>
+          <div
+            className="fade-in-up w-full max-w-lg"
+            style={{ animationDelay: "0.2s" }}
+          >
             <div
-              className="relative rounded-xl overflow-hidden"
+              className="relative overflow-hidden rounded-xl"
               style={{
                 background:
                   "linear-gradient(145deg, rgba(20,12,30,0.9), rgba(7,7,13,0.85))",
@@ -289,13 +293,13 @@ export function Login() {
                 }}
               />
 
-              <div className="p-8 space-y-6">
+              <div className="space-y-6 p-8">
                 {/* Mini header */}
-                <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.28em] font-extrabold">
+                <div className="flex items-center justify-between text-[10px] font-extrabold tracking-[0.28em] uppercase">
                   <span className="text-white/70">Identification</span>
                   <span className="flex items-center gap-2 text-emerald-300">
                     <span
-                      className="w-1.5 h-1.5 rounded-full bg-emerald-400"
+                      className="h-1.5 w-1.5 rounded-full bg-emerald-400"
                       style={{ boxShadow: "0 0 6px #34d399" }}
                     />
                     Sécurisé
@@ -303,12 +307,13 @@ export function Login() {
                 </div>
 
                 <div>
-                  <div className="text-[26px] font-black text-white leading-tight">
+                  <div className="text-[26px] leading-tight font-black text-white">
                     Connecte-toi
                   </div>
-                  <div className="text-[11px] text-white/65 mt-1.5 leading-relaxed">
-                    Via ton compte <span className="text-white font-semibold">Bungie.net</span> ·
-                    OAuth 2.0 · aucun mot de passe n'est stocké.
+                  <div className="mt-1.5 text-[11px] leading-relaxed text-white/65">
+                    Via ton compte{" "}
+                    <span className="font-semibold text-white">Bungie.net</span>{" "}
+                    · OAuth 2.0 · aucun mot de passe n'est stocké.
                   </div>
                 </div>
 
@@ -316,7 +321,7 @@ export function Login() {
                 <button
                   onClick={handleLogin}
                   disabled={loading}
-                  className="relative w-full h-14 rounded-lg overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="group relative h-14 w-full overflow-hidden rounded-lg disabled:cursor-not-allowed disabled:opacity-50"
                   style={{
                     background:
                       "linear-gradient(135deg, #f3075e 0%, #c00650 50%, #a855f7 120%)",
@@ -325,7 +330,7 @@ export function Login() {
                   }}
                 >
                   <span
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
                     style={{
                       background:
                         "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
@@ -333,12 +338,12 @@ export function Login() {
                       animation: "shimmerBg 1.6s linear infinite",
                     }}
                   />
-                  <span className="relative flex items-center justify-center gap-3 text-white font-extrabold text-[13px] uppercase tracking-[0.22em] leading-none">
+                  <span className="relative flex items-center justify-center gap-3 text-[13px] leading-none font-extrabold tracking-[0.22em] text-white uppercase">
                     <span className="leading-none">Se connecter avec</span>
                     <img
                       src={bungieLogo}
                       alt="Bungie"
-                      className="shrink-0 block"
+                      className="block shrink-0"
                       style={{
                         filter:
                           "brightness(0) invert(1) drop-shadow(0 0 6px rgba(255,255,255,0.55))",
@@ -347,7 +352,7 @@ export function Login() {
                       }}
                     />
                     {loading && (
-                      <span className="text-[11px] opacity-80 normal-case tracking-normal leading-none">
+                      <span className="text-[11px] leading-none tracking-normal normal-case opacity-80">
                         · {t("auth.connecting")}
                       </span>
                     )}
@@ -361,7 +366,7 @@ export function Login() {
                         strokeWidth="2.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="group-hover:translate-x-1 transition-transform shrink-0"
+                        className="shrink-0 transition-transform group-hover:translate-x-1"
                       >
                         <path d="M5 12h14M13 6l6 6-6 6" />
                       </svg>
@@ -370,7 +375,7 @@ export function Login() {
                 </button>
 
                 {/* Remember toggle */}
-                <label className="flex items-center gap-3 cursor-pointer group select-none">
+                <label className="group flex cursor-pointer items-center gap-3 select-none">
                   <input
                     type="checkbox"
                     checked={rememberMe}
@@ -378,10 +383,10 @@ export function Login() {
                     className="peer sr-only"
                   />
                   <div
-                    className={`w-11 h-6 rounded-full relative transition-all ${
+                    className={`relative h-6 w-11 rounded-full transition-all ${
                       rememberMe
                         ? "bg-bungie-accent/90"
-                        : "bg-white/10 border border-bungie-border"
+                        : "border-bungie-border border bg-white/10"
                     }`}
                     style={
                       rememberMe
@@ -390,19 +395,19 @@ export function Login() {
                     }
                   >
                     <div
-                      className={`absolute top-0.75 w-4.5 h-4.5 rounded-full bg-white transition-all ${
+                      className={`absolute top-0.75 h-4.5 w-4.5 rounded-full bg-white transition-all ${
                         rememberMe ? "left-5.25" : "left-0.75"
                       }`}
                       style={{ boxShadow: "0 2px 6px rgba(0,0,0,0.4)" }}
                     />
                   </div>
-                  <span className="text-[14px] text-white/85 group-hover:text-white transition-colors">
+                  <span className="text-[14px] text-white/85 transition-colors group-hover:text-white">
                     {t("auth.rememberMe")}
                   </span>
                 </label>
 
                 {error && (
-                  <div className="text-[13px] text-red-300 border border-red-500/40 bg-red-500/5 rounded-md p-3.5 flex items-start gap-2.5 leading-relaxed">
+                  <div className="flex items-start gap-2.5 rounded-md border border-red-500/40 bg-red-500/5 p-3.5 text-[13px] leading-relaxed text-red-300">
                     <svg
                       width="16"
                       height="16"
@@ -410,7 +415,7 @@ export function Login() {
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
-                      className="shrink-0 mt-0.5"
+                      className="mt-0.5 shrink-0"
                     >
                       <circle cx="12" cy="12" r="9" />
                       <path d="M12 7v5M12 16h.01" />
@@ -421,7 +426,7 @@ export function Login() {
 
                 {/* Trust card */}
                 <div
-                  className="flex items-center gap-3 p-3.5 rounded-md"
+                  className="flex items-center gap-3 rounded-md p-3.5"
                   style={{
                     background: "rgba(52,211,153,0.06)",
                     border: "1px solid rgba(52,211,153,0.22)",
@@ -439,7 +444,7 @@ export function Login() {
                     <rect x="4" y="10" width="16" height="10" rx="2" />
                     <path d="M8 10V7a4 4 0 0 1 8 0v3" />
                   </svg>
-                  <p className="text-[12px] text-white/75 leading-relaxed">
+                  <p className="text-[12px] leading-relaxed text-white/75">
                     {t("auth.disclaimer")}
                   </p>
                 </div>
@@ -452,10 +457,10 @@ export function Login() {
                 {FEATURES.map((f) => (
                   <div
                     key={f.key}
-                    className="flex flex-col items-center gap-1 py-2.5 rounded-md bg-white/4 border border-bungie-border/50"
+                    className="border-bungie-border/50 flex flex-col items-center gap-1 rounded-md border bg-white/4 py-2.5"
                   >
                     <span className="text-bungie-accent">{f.icon}</span>
-                    <span className="text-[9px] uppercase tracking-widest text-white/50">
+                    <span className="text-[9px] tracking-widest text-white/50 uppercase">
                       {t(`nav.${f.key}`)}
                     </span>
                   </div>
@@ -464,7 +469,7 @@ export function Login() {
             </div>
 
             {/* Footer under card */}
-            <div className="mt-5 flex items-center justify-between text-[9px] uppercase tracking-[0.3em] text-white/25 font-extrabold">
+            <div className="mt-5 flex items-center justify-between text-[9px] font-extrabold tracking-[0.3em] text-white/25 uppercase">
               <span className="font-mono text-white/40">BUILD · PORTABLE</span>
               <span>{t("login.notAffiliated")}</span>
             </div>
@@ -480,23 +485,23 @@ export function Login() {
         }
       `}</style>
     </div>
-  );
+  )
 }
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div className="flex flex-col items-center">
       <div
-        className="text-[18px] font-black leading-none text-gradient"
+        className="text-gradient text-[18px] leading-none font-black"
         style={{ textShadow: "0 0 14px rgba(243,7,94,0.4)" }}
       >
         {value}
       </div>
-      <div className="text-[9px] uppercase tracking-[0.22em] font-bold text-white/45 mt-1">
+      <div className="mt-1 text-[9px] font-bold tracking-[0.22em] text-white/45 uppercase">
         {label}
       </div>
     </div>
-  );
+  )
 }
 
 function Divider() {
@@ -508,22 +513,22 @@ function Divider() {
           "linear-gradient(180deg, transparent, rgba(243,7,94,0.3), transparent)",
       }}
     />
-  );
+  )
 }
 
-const LANG_CODES = ["fr", "us", "es", "de", "it", "br", "jp", "kr", "ru", "cn"];
+const LANG_CODES = ["fr", "us", "es", "de", "it", "br", "jp", "kr", "ru", "cn"]
 
 function LangStat() {
   return (
-    <div className="flex flex-col items-center min-w-0">
+    <div className="flex min-w-0 flex-col items-center">
       <div className="flex items-center gap-0.75 leading-none">
         {LANG_CODES.map((c) => (
           <Flag key={c} code={c} size={11} />
         ))}
       </div>
-      <div className="text-[9px] uppercase tracking-[0.22em] font-bold text-white/45 mt-2">
+      <div className="mt-2 text-[9px] font-bold tracking-[0.22em] text-white/45 uppercase">
         10 Langues
       </div>
     </div>
-  );
+  )
 }

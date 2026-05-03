@@ -1,65 +1,59 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { createPortal } from "react-dom";
-import { useProfile } from "@/hooks/useProfile";
-import { useItemDef } from "@/hooks/useItemDef";
-import { toast } from "@/store/toast";
-import { ConfirmDialog } from "@/components/confirm-dialog";
-import { SK_BUILDS } from "@/constants/storageKeys";
-import type { DestinyItemComponent } from "bungie-api-ts/destiny2";
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { createPortal } from "react-dom"
+import { useProfile } from "@/hooks/useProfile"
+import { useItemDef } from "@/hooks/useItemDef"
+import { toast } from "@/store/toast"
+import { ConfirmDialog } from "@/components/confirm-dialog"
+import { SK_BUILDS } from "@/constants/storageKeys"
+import type { DestinyItemComponent } from "bungie-api-ts/destiny2"
 
 // ---------------------------------------------------------------------------
 // Schema
 // ---------------------------------------------------------------------------
 
-const STORAGE_KEY = SK_BUILDS;
-const BUILD_SCHEMA_VERSION = 2;
+const STORAGE_KEY = SK_BUILDS
+const BUILD_SCHEMA_VERSION = 2
 
-type ClassType = "Titan" | "Chasseur" | "Arcaniste";
-type Subclass =
-  | "Solaire"
-  | "Arc"
-  | "Vide"
-  | "Stasis"
-  | "Toile"
-  | "Prismatique";
+type ClassType = "Titan" | "Chasseur" | "Arcaniste"
+type Subclass = "Solaire" | "Arc" | "Vide" | "Stasis" | "Toile" | "Prismatique"
 
 export interface Build {
-  v: 2;
-  id: string;
-  name: string;
-  description: string;
-  className: ClassType;
-  subclass: Subclass;
-  tags: string[];
-  weapons: { kinetic?: number; energy?: number; power?: number };
+  v: 2
+  id: string
+  name: string
+  description: string
+  className: ClassType
+  subclass: Subclass
+  tags: string[]
+  weapons: { kinetic?: number; energy?: number; power?: number }
   armor: {
-    helmet?: number;
-    arms?: number;
-    chest?: number;
-    legs?: number;
-    class?: number;
-  };
-  subclassHash?: number;
-  subclassPlugs: number[];
-  createdAt: number;
-  updatedAt: number;
+    helmet?: number
+    arms?: number
+    chest?: number
+    legs?: number
+    class?: number
+  }
+  subclassHash?: number
+  subclassPlugs: number[]
+  createdAt: number
+  updatedAt: number
 }
 
 function loadBuilds(): Build[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter((b: { v?: number }) => b.v === BUILD_SCHEMA_VERSION);
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    return parsed.filter((b: { v?: number }) => b.v === BUILD_SCHEMA_VERSION)
   } catch {
-    return [];
+    return []
   }
 }
 
 function saveBuilds(builds: Build[]) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(builds));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(builds))
   } catch {
     /* ignore */
   }
@@ -79,13 +73,13 @@ const Buckets = {
   Legs: 20886954,
   ClassItem: 1585787867,
   Subclass: 3284755031,
-} as const;
+} as const
 
 const CLASS_ICON: Record<ClassType, string> = {
   Titan: "🛡️",
   Chasseur: "🗡️",
   Arcaniste: "✨",
-};
+}
 
 const SUBCLASS_COLOR: Record<Subclass, string> = {
   Solaire: "#f97316",
@@ -94,14 +88,14 @@ const SUBCLASS_COLOR: Record<Subclass, string> = {
   Stasis: "#38bdf8",
   Toile: "#34d399",
   Prismatique: "#f472b6",
-};
+}
 
 // Bungie classType → label
 const CLASS_BY_INT: Record<number, ClassType> = {
   0: "Titan",
   1: "Chasseur",
   2: "Arcaniste",
-};
+}
 
 // Bungie damageType → Subclass label
 const SUBCLASS_BY_DAMAGE: Record<number, Subclass> = {
@@ -110,10 +104,10 @@ const SUBCLASS_BY_DAMAGE: Record<number, Subclass> = {
   4: "Vide",
   6: "Stasis",
   7: "Toile",
-};
+}
 
 function newBuildId() {
-  return `b_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  return `b_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
 }
 
 // ---------------------------------------------------------------------------
@@ -127,33 +121,33 @@ function ItemChip({
   items,
   bucketLabel,
 }: {
-  label: string;
-  hash?: number;
-  onPick: (hash: number | undefined) => void;
-  items: DestinyItemComponent[];
-  bucketLabel: string;
+  label: string
+  hash?: number
+  onPick: (hash: number | undefined) => void
+  items: DestinyItemComponent[]
+  bucketLabel: string
 }) {
-  const [pickerOpen, setPickerOpen] = useState(false);
-  const def = useItemDef(hash);
-  const icon = def.data?.displayProperties?.icon;
-  const name = def.data?.displayProperties?.name;
-  const type = def.data?.itemTypeDisplayName;
-  const tier = def.data?.inventory?.tierType ?? 5;
-  const isExotic = tier === 6;
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const def = useItemDef(hash)
+  const icon = def.data?.displayProperties?.icon
+  const name = def.data?.displayProperties?.name
+  const type = def.data?.itemTypeDisplayName
+  const tier = def.data?.inventory?.tierType ?? 5
+  const isExotic = tier === 6
 
   return (
     <>
       <button
         type="button"
         onClick={() => setPickerOpen(true)}
-        className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-white/5 transition-colors text-left"
+        className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left transition-colors hover:bg-white/5"
         style={{
           background: "rgba(0,0,0,0.3)",
           border: `1px solid ${isExotic ? "rgba(206,165,46,0.5)" : "rgba(255,255,255,0.08)"}`,
         }}
       >
         <div
-          className="w-11 h-11 shrink-0 overflow-hidden"
+          className="h-11 w-11 shrink-0 overflow-hidden"
           style={{
             background: "rgba(7,7,13,0.6)",
             border: `1px solid ${isExotic ? "rgba(206,165,46,0.7)" : "rgba(255,255,255,0.12)"}`,
@@ -163,37 +157,41 @@ function ItemChip({
             <img
               src={`https://www.bungie.net${icon}`}
               alt=""
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-white/20 text-lg">
+            <div className="flex h-full w-full items-center justify-center text-lg text-white/20">
               +
             </div>
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="text-[9px] uppercase tracking-[0.22em] text-white/40 font-extrabold leading-none">
+          <div className="text-[9px] leading-none font-extrabold tracking-[0.22em] text-white/40 uppercase">
             {label}
           </div>
           <div
-            className={`text-[13px] font-bold truncate mt-0.5 ${
-              isExotic ? "text-amber-300" : hash ? "text-white" : "text-white/40"
+            className={`mt-0.5 truncate text-[13px] font-bold ${
+              isExotic
+                ? "text-amber-300"
+                : hash
+                  ? "text-white"
+                  : "text-white/40"
             }`}
           >
-            {hash ? name ?? "…" : "Aucun"}
+            {hash ? (name ?? "…") : "Aucun"}
           </div>
           {type && (
-            <div className="text-[10px] text-white/45 truncate">{type}</div>
+            <div className="truncate text-[10px] text-white/45">{type}</div>
           )}
         </div>
         {hash && (
           <button
             type="button"
             onClick={(e) => {
-              e.stopPropagation();
-              onPick(undefined);
+              e.stopPropagation()
+              onPick(undefined)
             }}
-            className="w-6 h-6 shrink-0 flex items-center justify-center text-white/40 hover:text-red-300 hover:bg-red-500/10 rounded"
+            className="flex h-6 w-6 shrink-0 items-center justify-center rounded text-white/40 hover:bg-red-500/10 hover:text-red-300"
             aria-label="Retirer"
           >
             ✕
@@ -208,13 +206,13 @@ function ItemChip({
           currentHash={hash}
           onClose={() => setPickerOpen(false)}
           onPick={(h) => {
-            onPick(h);
-            setPickerOpen(false);
+            onPick(h)
+            setPickerOpen(false)
           }}
         />
       )}
     </>
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -228,38 +226,38 @@ function ItemPickerModal({
   onClose,
   onPick,
 }: {
-  title: string;
-  items: DestinyItemComponent[];
-  currentHash?: number;
-  onClose: () => void;
-  onPick: (hash: number | undefined) => void;
+  title: string
+  items: DestinyItemComponent[]
+  currentHash?: number
+  onClose: () => void
+  onPick: (hash: number | undefined) => void
 }) {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("")
   // Dedupe by hash so multiple instances of the same roll collapse to one option.
   const uniq = useMemo(() => {
-    const seen = new Set<number>();
+    const seen = new Set<number>()
     return items.filter((it) => {
-      if (seen.has(it.itemHash)) return false;
-      seen.add(it.itemHash);
-      return true;
-    });
-  }, [items]);
+      if (seen.has(it.itemHash)) return false
+      seen.add(it.itemHash)
+      return true
+    })
+  }, [items])
 
-  if (typeof document === "undefined") return null;
+  if (typeof document === "undefined") return null
   return createPortal(
     <div
-      className="fixed inset-0 z-9998 flex items-center justify-center p-6 fade-in-fast"
+      className="fade-in-fast fixed inset-0 z-9998 flex items-center justify-center p-6"
       style={{ background: "rgba(0,0,0,0.78)", backdropFilter: "blur(6px)" }}
       onClick={onClose}
     >
       <div
-        className="w-full max-w-3xl max-h-[82vh] flex flex-col panel overflow-hidden"
+        className="panel flex max-h-[82vh] w-full max-w-3xl flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-bungie-border">
+        <div className="border-bungie-border flex items-center gap-3 border-b px-4 py-3">
           <div className="flex-1">
-            <div className="text-[10px] uppercase tracking-[0.25em] text-white/40 font-extrabold">
+            <div className="text-[10px] font-extrabold tracking-[0.25em] text-white/40 uppercase">
               Sélection
             </div>
             <div className="text-lg font-extrabold text-white">{title}</div>
@@ -269,11 +267,11 @@ function ItemPickerModal({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Rechercher…"
-            className="h-9 px-3 rounded-md bg-black/30 border border-bungie-border text-white text-sm focus:outline-none focus:border-bungie-accent w-60"
+            className="border-bungie-border focus:border-bungie-accent h-9 w-60 rounded-md border bg-black/30 px-3 text-sm text-white focus:outline-none"
           />
           <button
             onClick={onClose}
-            className="h-9 w-9 flex items-center justify-center rounded-md hover:bg-white/5 text-white/70 hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-md text-white/70 hover:bg-white/5 hover:text-white"
             aria-label="Fermer"
           >
             ✕
@@ -282,10 +280,10 @@ function ItemPickerModal({
 
         {/* Grid */}
         <div className="flex-1 overflow-y-auto p-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
             <button
               onClick={() => onPick(undefined)}
-              className="h-17 rounded-md border border-dashed border-white/15 flex items-center justify-center text-white/50 text-xs font-bold uppercase tracking-widest hover:border-white/40 hover:text-white"
+              className="flex h-17 items-center justify-center rounded-md border border-dashed border-white/15 text-xs font-bold tracking-widest text-white/50 uppercase hover:border-white/40 hover:text-white"
             >
               — Aucun —
             </button>
@@ -303,7 +301,7 @@ function ItemPickerModal({
       </div>
     </div>,
     document.body
-  );
+  )
 }
 
 function PickerTile({
@@ -312,33 +310,33 @@ function PickerTile({
   query,
   onPick,
 }: {
-  hash: number;
-  selected: boolean;
-  query: string;
-  onPick: () => void;
+  hash: number
+  selected: boolean
+  query: string
+  onPick: () => void
 }) {
-  const def = useItemDef(hash);
-  const name = def.data?.displayProperties?.name ?? "";
-  const icon = def.data?.displayProperties?.icon;
-  const watermark = def.data?.iconWatermark;
-  const type = def.data?.itemTypeDisplayName;
-  const tier = def.data?.inventory?.tierType ?? 5;
-  const isExotic = tier === 6;
+  const def = useItemDef(hash)
+  const name = def.data?.displayProperties?.name ?? ""
+  const icon = def.data?.displayProperties?.icon
+  const watermark = def.data?.iconWatermark
+  const type = def.data?.itemTypeDisplayName
+  const tier = def.data?.inventory?.tierType ?? 5
+  const isExotic = tier === 6
 
   // Client-side filter — hide items whose name doesn't match the search
-  if (query && !name.toLowerCase().includes(query.toLowerCase())) return null;
+  if (query && !name.toLowerCase().includes(query.toLowerCase())) return null
 
   return (
     <button
       onClick={onPick}
-      className={`flex items-center gap-2 p-1.5 rounded-md text-left transition-all ${
+      className={`flex items-center gap-2 rounded-md p-1.5 text-left transition-all ${
         selected
-          ? "bg-bungie-accent/15 border border-bungie-accent"
-          : "bg-white/3 border border-white/8 hover:border-bungie-accent/50 hover:bg-white/6"
+          ? "bg-bungie-accent/15 border-bungie-accent border"
+          : "hover:border-bungie-accent/50 border border-white/8 bg-white/3 hover:bg-white/6"
       }`}
     >
       <div
-        className="relative w-12 h-12 shrink-0 overflow-hidden"
+        className="relative h-12 w-12 shrink-0 overflow-hidden"
         style={{
           border: `1px solid ${isExotic ? "rgba(206,165,46,0.7)" : "rgba(255,255,255,0.14)"}`,
         }}
@@ -347,31 +345,31 @@ function PickerTile({
           <img
             src={`https://www.bungie.net${icon}`}
             alt=""
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
         )}
         {watermark && (
           <img
             src={`https://www.bungie.net${watermark}`}
             alt=""
-            className="absolute inset-0 w-full h-full pointer-events-none"
+            className="pointer-events-none absolute inset-0 h-full w-full"
           />
         )}
       </div>
       <div className="min-w-0 flex-1">
         <div
-          className={`text-[12px] font-bold truncate ${
+          className={`truncate text-[12px] font-bold ${
             isExotic ? "text-amber-300" : "text-white"
           }`}
         >
           {name || "…"}
         </div>
         {type && (
-          <div className="text-[10px] text-white/45 truncate">{type}</div>
+          <div className="truncate text-[10px] text-white/45">{type}</div>
         )}
       </div>
     </button>
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -383,13 +381,13 @@ function Chip({
   onRemove,
   color,
 }: {
-  value: string;
-  onRemove: () => void;
-  color?: string;
+  value: string
+  onRemove: () => void
+  color?: string
 }) {
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md border text-[11px] font-semibold"
+      className="inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-[11px] font-semibold"
       style={{
         background: color ?? "rgba(243,7,94,0.12)",
         borderColor: `${color ?? "rgba(243,7,94,0.4)"}80`,
@@ -399,12 +397,12 @@ function Chip({
       {value}
       <button
         onClick={onRemove}
-        className="text-white/55 hover:text-white text-[10px]"
+        className="text-[10px] text-white/55 hover:text-white"
       >
         ✕
       </button>
     </span>
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -416,20 +414,20 @@ function BuildRow({
   selected,
   onSelect,
 }: {
-  build: Build;
-  selected: boolean;
-  onSelect: () => void;
+  build: Build
+  selected: boolean
+  onSelect: () => void
 }) {
-  const col = SUBCLASS_COLOR[build.subclass];
+  const col = SUBCLASS_COLOR[build.subclass]
   const exoticDef = useItemDef(
     build.weapons.kinetic ?? build.weapons.energy ?? build.weapons.power
-  );
-  const icon = exoticDef.data?.displayProperties?.icon;
+  )
+  const icon = exoticDef.data?.displayProperties?.icon
 
   return (
     <button
       onClick={onSelect}
-      className="w-full text-left rounded-lg p-3 flex items-center gap-3 transition-all hover:-translate-y-0.5"
+      className="flex w-full items-center gap-3 rounded-lg p-3 text-left transition-all hover:-translate-y-0.5"
       style={{
         background: selected
           ? `linear-gradient(135deg, ${col}22, ${col}05)`
@@ -438,7 +436,7 @@ function BuildRow({
       }}
     >
       <div
-        className="w-11 h-11 rounded-md flex items-center justify-center text-lg shrink-0 overflow-hidden"
+        className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-md text-lg"
         style={{
           background: `${col}22`,
           border: `1px solid ${col}50`,
@@ -448,25 +446,27 @@ function BuildRow({
           <img
             src={`https://www.bungie.net${icon}`}
             alt=""
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
         ) : (
           CLASS_ICON[build.className]
         )}
       </div>
       <div className="min-w-0 flex-1">
-        <div className="font-bold text-white text-sm truncate">{build.name}</div>
-        <div className="text-[10px] uppercase tracking-widest text-white/50 mt-0.5 flex items-center gap-1.5">
+        <div className="truncate text-sm font-bold text-white">
+          {build.name}
+        </div>
+        <div className="mt-0.5 flex items-center gap-1.5 text-[10px] tracking-widest text-white/50 uppercase">
           <span>{build.className}</span>
           <span className="text-white/30">·</span>
           <span style={{ color: col }}>{build.subclass}</span>
         </div>
         {build.tags.length > 0 && (
-          <div className="flex items-center gap-1 mt-1">
+          <div className="mt-1 flex items-center gap-1">
             {build.tags.slice(0, 3).map((t, i) => (
               <span
                 key={i}
-                className="text-[9px] px-1 rounded-sm bg-white/5 text-white/50 font-bold uppercase"
+                className="rounded-sm bg-white/5 px-1 text-[9px] font-bold text-white/50 uppercase"
               >
                 {t}
               </span>
@@ -475,7 +475,7 @@ function BuildRow({
         )}
       </div>
     </button>
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -483,70 +483,81 @@ function BuildRow({
 // ---------------------------------------------------------------------------
 
 export function BuildCreator() {
-  const { profile, activeCharacterId } = useProfile();
-  const [builds, setBuilds] = useState<Build[]>(() => loadBuilds());
-  const [editing, setEditing] = useState<Build | null>(null);
-  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const { profile, activeCharacterId } = useProfile()
+  const [builds, setBuilds] = useState<Build[]>(() => loadBuilds())
+  const [editing, setEditing] = useState<Build | null>(null)
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
 
   useEffect(() => {
-    saveBuilds(builds);
-  }, [builds]);
+    saveBuilds(builds)
+  }, [builds])
 
   // Every item the user could pick from — character inventory + equipment + vault.
   const allItems = useMemo(() => {
-    const out: DestinyItemComponent[] = [];
-    if (!profile.data) return out;
-    const p = profile.data;
-    out.push(...(p.profileInventory?.data?.items ?? []));
+    const out: DestinyItemComponent[] = []
+    if (!profile.data) return out
+    const p = profile.data
+    out.push(...(p.profileInventory?.data?.items ?? []))
     for (const c of Object.values(p.characterInventories?.data ?? {})) {
-      out.push(...c.items);
+      out.push(...c.items)
     }
     for (const c of Object.values(p.characterEquipment?.data ?? {})) {
-      out.push(...c.items);
+      out.push(...c.items)
     }
-    return out;
-  }, [profile.data]);
+    return out
+  }, [profile.data])
 
-  const byBucket = useCallback((bucketHash: number) =>
-    allItems.filter((it) => it.bucketHash === bucketHash), [allItems]);
+  const byBucket = useCallback(
+    (bucketHash: number) =>
+      allItems.filter((it) => it.bucketHash === bucketHash),
+    [allItems]
+  )
 
-  const kineticItems = useMemo(() => byBucket(Buckets.Kinetic), [byBucket]);
-  const energyItems = useMemo(() => byBucket(Buckets.Energy), [byBucket]);
-  const powerItems = useMemo(() => byBucket(Buckets.Power), [byBucket]);
-  const helmetItems = useMemo(() => byBucket(Buckets.Helmet), [byBucket]);
-  const armsItems = useMemo(() => byBucket(Buckets.Arms), [byBucket]);
-  const chestItems = useMemo(() => byBucket(Buckets.Chest), [byBucket]);
-  const legsItems = useMemo(() => byBucket(Buckets.Legs), [byBucket]);
-  const classItems = useMemo(() => byBucket(Buckets.ClassItem), [byBucket]);
+  const kineticItems = useMemo(() => byBucket(Buckets.Kinetic), [byBucket])
+  const energyItems = useMemo(() => byBucket(Buckets.Energy), [byBucket])
+  const powerItems = useMemo(() => byBucket(Buckets.Power), [byBucket])
+  const helmetItems = useMemo(() => byBucket(Buckets.Helmet), [byBucket])
+  const armsItems = useMemo(() => byBucket(Buckets.Arms), [byBucket])
+  const chestItems = useMemo(() => byBucket(Buckets.Chest), [byBucket])
+  const legsItems = useMemo(() => byBucket(Buckets.Legs), [byBucket])
+  const classItems = useMemo(() => byBucket(Buckets.ClassItem), [byBucket])
 
   // Instance-id → itemHash map so we can resolve the subclass item equipped.
   const instanceMap = useMemo(() => {
-    const map = new Map<string, { itemHash: number; bucketHash?: number }>();
-    if (!profile.data) return map;
-    const push = (items?: { itemHash: number; itemInstanceId?: string; bucketHash?: number }[]) => {
+    const map = new Map<string, { itemHash: number; bucketHash?: number }>()
+    if (!profile.data) return map
+    const push = (
+      items?: {
+        itemHash: number
+        itemInstanceId?: string
+        bucketHash?: number
+      }[]
+    ) => {
       for (const it of items ?? []) {
         if (it.itemInstanceId) {
           map.set(it.itemInstanceId, {
             itemHash: it.itemHash,
             bucketHash: it.bucketHash,
-          });
+          })
         }
       }
-    };
-    push(profile.data.profileInventory?.data?.items);
-    for (const c of Object.values(profile.data.characterInventories?.data ?? {}))
-      push(c.items);
+    }
+    push(profile.data.profileInventory?.data?.items)
+    for (const c of Object.values(
+      profile.data.characterInventories?.data ?? {}
+    ))
+      push(c.items)
     for (const c of Object.values(profile.data.characterEquipment?.data ?? {}))
-      push(c.items);
-    return map;
-  }, [profile.data]);
+      push(c.items)
+    return map
+  }, [profile.data])
 
   // -------------------------------------------------------------------------
   // Actions
   // -------------------------------------------------------------------------
 
   const newBlank = () => {
-    const now = Date.now();
+    const now = Date.now()
     const b: Build = {
       v: 2,
       id: newBuildId(),
@@ -560,54 +571,56 @@ export function BuildCreator() {
       subclassPlugs: [],
       createdAt: now,
       updatedAt: now,
-    };
-    setBuilds((bs) => [b, ...bs]);
-    setEditing(b);
-    toast.success("Nouveau build créé");
-  };
+    }
+    setBuilds((bs) => [b, ...bs])
+    setEditing(b)
+    toast.success("Nouveau build créé")
+  }
 
   const captureCurrent = () => {
     if (!activeCharacterId) {
-      toast.error("Aucun personnage actif");
-      return;
+      toast.error("Aucun personnage actif")
+      return
     }
     const equip =
-      profile.data?.characterEquipment?.data?.[activeCharacterId]?.items ?? [];
+      profile.data?.characterEquipment?.data?.[activeCharacterId]?.items ?? []
     const getEquipped = (bucket: number) =>
-      equip.find((it) => it.bucketHash === bucket);
-    const char =
-      profile.data?.characters?.data?.[activeCharacterId];
-    const className: ClassType = char?.classType != null ? CLASS_BY_INT[char.classType] ?? "Titan" : "Titan";
+      equip.find((it) => it.bucketHash === bucket)
+    const char = profile.data?.characters?.data?.[activeCharacterId]
+    const className: ClassType =
+      char?.classType != null
+        ? (CLASS_BY_INT[char.classType] ?? "Titan")
+        : "Titan"
 
-    const subclassItem = getEquipped(Buckets.Subclass);
-    const subclassHash = subclassItem?.itemHash;
+    const subclassItem = getEquipped(Buckets.Subclass)
+    const subclassHash = subclassItem?.itemHash
 
     // Resolve equipped loadout to pull subclass plugs if available.
     const loadouts =
-      profile.data?.characterLoadouts?.data?.[activeCharacterId]?.loadouts ?? [];
-    let subclassPlugs: number[] = [];
+      profile.data?.characterLoadouts?.data?.[activeCharacterId]?.loadouts ?? []
+    let subclassPlugs: number[] = []
     if (subclassItem?.itemInstanceId) {
       // Use the current subclass's plugs from itemComponents.sockets if available
       const sockets =
         profile.data?.itemComponents?.sockets?.data?.[
           subclassItem.itemInstanceId
-        ]?.sockets ?? [];
+        ]?.sockets ?? []
       subclassPlugs = sockets
         .map((s) => s.plugHash)
-        .filter((h): h is number => typeof h === "number");
+        .filter((h): h is number => typeof h === "number")
     }
     // Fallback: check if any loadout has the same subclass item and read its plugs
     if (subclassPlugs.length === 0 && subclassItem?.itemInstanceId) {
       for (const l of loadouts) {
-        const sc = l.items?.[8];
+        const sc = l.items?.[8]
         if (sc?.itemInstanceId === subclassItem.itemInstanceId) {
-          subclassPlugs = sc.plugItemHashes ?? [];
-          break;
+          subclassPlugs = sc.plugItemHashes ?? []
+          break
         }
       }
     }
 
-    const now = Date.now();
+    const now = Date.now()
     const b: Build = {
       v: 2,
       id: newBuildId(),
@@ -632,62 +645,62 @@ export function BuildCreator() {
       subclassPlugs,
       createdAt: now,
       updatedAt: now,
-    };
-    setBuilds((bs) => [b, ...bs]);
-    setEditing(b);
-    toast.success("Équipement capturé");
+    }
+    setBuilds((bs) => [b, ...bs])
+    setEditing(b)
+    toast.success("Équipement capturé")
     // Mark variables as intentionally used (instanceMap enrichment reserved for future).
-    void instanceMap;
-    void SUBCLASS_BY_DAMAGE;
-  };
+    void instanceMap
+    void SUBCLASS_BY_DAMAGE
+  }
 
   const update = (patch: Partial<Build>) => {
-    if (!editing) return;
-    const next = { ...editing, ...patch, updatedAt: Date.now() };
-    setEditing(next);
-    setBuilds((bs) => bs.map((b) => (b.id === next.id ? next : b)));
-  };
+    if (!editing) return
+    const next = { ...editing, ...patch, updatedAt: Date.now() }
+    setEditing(next)
+    setBuilds((bs) => bs.map((b) => (b.id === next.id ? next : b)))
+  }
 
   const remove = (id: string) => {
-    setBuilds((bs) => bs.filter((b) => b.id !== id));
-    if (editing?.id === id) setEditing(null);
-    setDeleteConfirm(null);
-    toast.info("Build supprimé");
-  };
+    setBuilds((bs) => bs.filter((b) => b.id !== id))
+    if (editing?.id === id) setEditing(null)
+    setDeleteConfirm(null)
+    toast.info("Build supprimé")
+  }
 
   const exportJson = () => {
     const blob = new Blob([JSON.stringify(builds, null, 2)], {
       type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "cruzer-builds.json";
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success("Builds exportés");
-  };
+    })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = "cruzer-builds.json"
+    a.click()
+    URL.revokeObjectURL(url)
+    toast.success("Builds exportés")
+  }
 
   const importJson = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "application/json";
+    const input = document.createElement("input")
+    input.type = "file"
+    input.accept = "application/json"
     input.onchange = async () => {
-      const file = input.files?.[0];
-      if (!file) return;
+      const file = input.files?.[0]
+      if (!file) return
       try {
-        const text = await file.text();
-        const parsed = JSON.parse(text) as Build[];
-        if (!Array.isArray(parsed)) throw new Error("Format invalide");
-        const valid = parsed.filter((b) => b.v === BUILD_SCHEMA_VERSION);
-        setBuilds((bs) => [...valid, ...bs]);
-        toast.success(`${valid.length} build(s) importés`);
+        const text = await file.text()
+        const parsed = JSON.parse(text) as Build[]
+        if (!Array.isArray(parsed)) throw new Error("Format invalide")
+        const valid = parsed.filter((b) => b.v === BUILD_SCHEMA_VERSION)
+        setBuilds((bs) => [...valid, ...bs])
+        toast.success(`${valid.length} build(s) importés`)
       } catch (e) {
-        toast.error(`Import échoué : ${(e as Error).message}`);
+        toast.error(`Import échoué : ${(e as Error).message}`)
       }
-    };
-    input.click();
-  };
+    }
+    input.click()
+  }
 
   // -------------------------------------------------------------------------
   // Render
@@ -696,38 +709,38 @@ export function BuildCreator() {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="flex items-start justify-between gap-3 flex-wrap">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-2xl font-bold">🛠️ Mes builds</h2>
-          <p className="text-sm text-bungie-muted mt-1">
+          <p className="text-bungie-muted mt-1 text-sm">
             Crée, sauvegarde et compare tes builds · stockés sur cette clé.
           </p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={importJson}
-            className="h-9 px-3 rounded-md bg-white/5 hover:bg-white/10 border border-bungie-border text-white/85 text-xs font-bold uppercase tracking-wider transition-colors"
+            className="border-bungie-border h-9 rounded-md border bg-white/5 px-3 text-xs font-bold tracking-wider text-white/85 uppercase transition-colors hover:bg-white/10"
           >
             ↓ Importer
           </button>
           <button
             onClick={exportJson}
             disabled={!builds.length}
-            className="h-9 px-3 rounded-md bg-white/5 hover:bg-white/10 border border-bungie-border text-white/85 text-xs font-bold uppercase tracking-wider transition-colors disabled:opacity-40"
+            className="border-bungie-border h-9 rounded-md border bg-white/5 px-3 text-xs font-bold tracking-wider text-white/85 uppercase transition-colors hover:bg-white/10 disabled:opacity-40"
           >
             ↑ Exporter
           </button>
           <button
             onClick={captureCurrent}
             disabled={!activeCharacterId}
-            className="h-9 px-3 rounded-md bg-bungie-accent/15 hover:bg-bungie-accent/25 border border-bungie-accent/40 text-bungie-accent text-xs font-extrabold uppercase tracking-wider transition-colors disabled:opacity-40"
+            className="bg-bungie-accent/15 hover:bg-bungie-accent/25 border-bungie-accent/40 text-bungie-accent h-9 rounded-md border px-3 text-xs font-extrabold tracking-wider uppercase transition-colors disabled:opacity-40"
             title="Créer un build depuis mon équipement actuel"
           >
             📸 Capturer
           </button>
           <button
             onClick={newBlank}
-            className="h-9 px-3 rounded-md bg-bungie-accent text-black text-xs font-extrabold uppercase tracking-wider hover:brightness-110 transition"
+            className="bg-bungie-accent h-9 rounded-md px-3 text-xs font-extrabold tracking-wider text-black uppercase transition hover:brightness-110"
           >
             + Nouveau build
           </button>
@@ -735,11 +748,11 @@ export function BuildCreator() {
       </div>
 
       {/* Main layout */}
-      <div className="grid lg:grid-cols-[minmax(260px,340px)_1fr] gap-5">
+      <div className="grid gap-5 lg:grid-cols-[minmax(260px,340px)_1fr]">
         {/* Sidebar */}
         <div className="space-y-2">
           {builds.length === 0 ? (
-            <div className="panel p-4 text-center text-sm text-bungie-muted">
+            <div className="panel text-bungie-muted p-4 text-center text-sm">
               Aucun build. Clique « + Nouveau build » ou « 📸 Capturer » pour
               démarrer.
             </div>
@@ -774,7 +787,7 @@ export function BuildCreator() {
           />
         ) : (
           <div
-            className="rounded-lg p-10 text-center text-white/45 flex flex-col items-center gap-3"
+            className="flex flex-col items-center gap-3 rounded-lg p-10 text-center text-white/45"
             style={{
               background: "rgba(7,7,13,0.4)",
               border: "1px dashed rgba(255,255,255,0.1)",
@@ -801,7 +814,7 @@ export function BuildCreator() {
         />
       )}
     </div>
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -809,14 +822,14 @@ export function BuildCreator() {
 // ---------------------------------------------------------------------------
 
 interface PickerSets {
-  kinetic: DestinyItemComponent[];
-  energy: DestinyItemComponent[];
-  power: DestinyItemComponent[];
-  helmet: DestinyItemComponent[];
-  arms: DestinyItemComponent[];
-  chest: DestinyItemComponent[];
-  legs: DestinyItemComponent[];
-  classItem: DestinyItemComponent[];
+  kinetic: DestinyItemComponent[]
+  energy: DestinyItemComponent[]
+  power: DestinyItemComponent[]
+  helmet: DestinyItemComponent[]
+  arms: DestinyItemComponent[]
+  chest: DestinyItemComponent[]
+  legs: DestinyItemComponent[]
+  classItem: DestinyItemComponent[]
 }
 
 function BuildEditor({
@@ -825,18 +838,19 @@ function BuildEditor({
   onDelete,
   pickers,
 }: {
-  build: Build;
-  onUpdate: (patch: Partial<Build>) => void;
-  onDelete: () => void;
-  pickers: PickerSets;
+  build: Build
+  onUpdate: (patch: Partial<Build>) => void
+  onDelete: () => void
+  pickers: PickerSets
 }) {
-  const col = SUBCLASS_COLOR[build.subclass];
+  const col = SUBCLASS_COLOR[build.subclass]
 
   return (
     <div
-      className="rounded-lg p-5 space-y-5"
+      className="space-y-5 rounded-lg p-5"
       style={{
-        background: "linear-gradient(160deg, rgba(20,12,30,0.7), rgba(7,7,13,0.5))",
+        background:
+          "linear-gradient(160deg, rgba(20,12,30,0.7), rgba(7,7,13,0.5))",
         border: "1px solid rgba(243,7,94,0.2)",
       }}
     >
@@ -845,12 +859,12 @@ function BuildEditor({
         <input
           value={build.name}
           onChange={(e) => onUpdate({ name: e.target.value })}
-          className="flex-1 h-10 px-3 rounded-md bg-black/30 border border-bungie-border text-white font-bold text-lg focus:outline-none focus:border-bungie-accent"
+          className="border-bungie-border focus:border-bungie-accent h-10 flex-1 rounded-md border bg-black/30 px-3 text-lg font-bold text-white focus:outline-none"
           placeholder="Nom du build"
         />
         <button
           onClick={onDelete}
-          className="h-10 px-3 rounded-md bg-red-500/10 hover:bg-red-500/20 border border-red-500/40 text-red-300 text-xs font-bold"
+          className="h-10 rounded-md border border-red-500/40 bg-red-500/10 px-3 text-xs font-bold text-red-300 hover:bg-red-500/20"
         >
           Supprimer
         </button>
@@ -859,18 +873,18 @@ function BuildEditor({
       {/* Class + Subclass */}
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="text-[10px] uppercase tracking-widest font-extrabold text-white/55">
+          <label className="text-[10px] font-extrabold tracking-widest text-white/55 uppercase">
             Classe
           </label>
-          <div className="grid grid-cols-3 gap-1 mt-1">
+          <div className="mt-1 grid grid-cols-3 gap-1">
             {(["Titan", "Chasseur", "Arcaniste"] as ClassType[]).map((c) => (
               <button
                 key={c}
                 onClick={() => onUpdate({ className: c })}
-                className={`h-9 rounded-md text-xs font-bold uppercase tracking-wider border transition-colors ${
+                className={`h-9 rounded-md border text-xs font-bold tracking-wider uppercase transition-colors ${
                   build.className === c
                     ? "bg-bungie-accent/20 border-bungie-accent text-white"
-                    : "bg-white/5 border-bungie-border text-white/70 hover:border-white/30"
+                    : "border-bungie-border bg-white/5 text-white/70 hover:border-white/30"
                 }`}
               >
                 {CLASS_ICON[c]} {c}
@@ -879,15 +893,15 @@ function BuildEditor({
           </div>
         </div>
         <div>
-          <label className="text-[10px] uppercase tracking-widest font-extrabold text-white/55">
+          <label className="text-[10px] font-extrabold tracking-widest text-white/55 uppercase">
             Sous-classe
           </label>
-          <div className="grid grid-cols-3 gap-1 mt-1">
+          <div className="mt-1 grid grid-cols-3 gap-1">
             {(Object.keys(SUBCLASS_COLOR) as Subclass[]).map((s) => (
               <button
                 key={s}
                 onClick={() => onUpdate({ subclass: s })}
-                className="h-9 rounded-md text-xs font-bold uppercase tracking-wider border transition-colors"
+                className="h-9 rounded-md border text-xs font-bold tracking-wider uppercase transition-colors"
                 style={{
                   background:
                     build.subclass === s
@@ -897,7 +911,8 @@ function BuildEditor({
                     build.subclass === s
                       ? SUBCLASS_COLOR[s]
                       : "rgba(255,255,255,0.15)",
-                  color: build.subclass === s ? "#fff" : "rgba(255,255,255,0.7)",
+                  color:
+                    build.subclass === s ? "#fff" : "rgba(255,255,255,0.7)",
                 }}
               >
                 {s}
@@ -909,21 +924,21 @@ function BuildEditor({
 
       {/* Description */}
       <div>
-        <label className="text-[10px] uppercase tracking-widest font-extrabold text-white/55">
+        <label className="text-[10px] font-extrabold tracking-widest text-white/55 uppercase">
           Description / synergies
         </label>
         <textarea
           value={build.description}
           onChange={(e) => onUpdate({ description: e.target.value })}
           rows={3}
-          className="w-full mt-1 px-3 py-2 rounded-md bg-black/30 border border-bungie-border text-white text-[13px] focus:outline-none focus:border-bungie-accent resize-none"
+          className="border-bungie-border focus:border-bungie-accent mt-1 w-full resize-none rounded-md border bg-black/30 px-3 py-2 text-[13px] text-white focus:outline-none"
           placeholder="Comment ce build fonctionne, boucle de gameplay, situations idéales…"
         />
       </div>
 
       {/* Weapons */}
       <Panel title="Armes" accent={col}>
-        <div className="grid md:grid-cols-3 gap-2">
+        <div className="grid gap-2 md:grid-cols-3">
           <ItemChip
             label="Cinétique"
             bucketLabel="Cinétique"
@@ -956,7 +971,7 @@ function BuildEditor({
 
       {/* Armor */}
       <Panel title="Armure" accent={col}>
-        <div className="grid md:grid-cols-5 gap-2">
+        <div className="grid gap-2 md:grid-cols-5">
           <ItemChip
             label="Casque"
             bucketLabel="Casque"
@@ -997,7 +1012,7 @@ function BuildEditor({
 
       {/* Tags */}
       <Panel title="Tags" accent={col}>
-        <div className="flex items-center gap-1.5 flex-wrap">
+        <div className="flex flex-wrap items-center gap-1.5">
           {build.tags.map((v, i) => (
             <Chip
               key={i}
@@ -1011,25 +1026,23 @@ function BuildEditor({
             placeholder="+ PvE, Raid, GM, Contest…"
             onKeyDown={(e) => {
               if (e.key === "Enter" && e.currentTarget.value.trim()) {
-                const v = e.currentTarget.value.trim();
-                onUpdate({ tags: [...build.tags, v] });
-                e.currentTarget.value = "";
+                const v = e.currentTarget.value.trim()
+                onUpdate({ tags: [...build.tags, v] })
+                e.currentTarget.value = ""
               }
             }}
-            className="h-7 px-2 rounded-md bg-black/30 border border-bungie-border text-[11px] text-white focus:outline-none focus:border-bungie-accent min-w-45"
+            className="border-bungie-border focus:border-bungie-accent h-7 min-w-45 rounded-md border bg-black/30 px-2 text-[11px] text-white focus:outline-none"
           />
         </div>
       </Panel>
 
       {/* Footer meta */}
-      <div className="flex items-center justify-between text-[10px] uppercase tracking-widest font-bold text-white/30 pt-3 border-t border-white/5">
+      <div className="flex items-center justify-between border-t border-white/5 pt-3 text-[10px] font-bold tracking-widest text-white/30 uppercase">
         <span>ID · {build.id}</span>
-        <span>
-          Maj · {new Date(build.updatedAt).toLocaleString()}
-        </span>
+        <span>Maj · {new Date(build.updatedAt).toLocaleString()}</span>
       </div>
     </div>
-  );
+  )
 }
 
 function Panel({
@@ -1037,22 +1050,19 @@ function Panel({
   accent,
   children,
 }: {
-  title: string;
-  accent: string;
-  children: React.ReactNode;
+  title: string
+  accent: string
+  children: React.ReactNode
 }) {
   return (
     <div>
-      <div className="flex items-center gap-2 mb-2">
-        <div
-          className="w-1 h-4 rounded-sm"
-          style={{ background: accent }}
-        />
-        <label className="text-[10px] uppercase tracking-widest font-extrabold text-white/55">
+      <div className="mb-2 flex items-center gap-2">
+        <div className="h-4 w-1 rounded-sm" style={{ background: accent }} />
+        <label className="text-[10px] font-extrabold tracking-widest text-white/55 uppercase">
           {title}
         </label>
       </div>
       {children}
     </div>
-  );
+  )
 }

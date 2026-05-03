@@ -1,29 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useQueries, useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { invoke } from "@tauri-apps/api/core";
-import { useProfile } from "@/hooks/useProfile";
-import { useSelectedMembership } from "@/hooks/useProfile";
-import { getActivityHistory } from "@/api/activityStats";
-import { useAccountStats } from "@/hooks/useAccountStats";
-import { readStat } from "@/api/stats";
-import { useManifestStore } from "@/store/manifest";
-import { BungieIcon } from "@/components/bungie-icon";
-import { VendorHashes, getVendorDef } from "@/api/vendors";
-import { fmtHoursMinutes as fmtHours } from "@/utils/format";
-import { IconSparkle } from "@/components/icon";
-import { WeaponMetaSection } from "./WeaponMetaSection";
-import { CombatRecordsSection } from "./CombatRecords";
-import { ActivityCompletionsSection } from "./ActivityCompletions";
-import { GlobalDestinyStats } from "./GlobalDestinyStats";
+import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { useQueries, useQuery } from "@tanstack/react-query"
+import { Link } from "react-router-dom"
+import { invoke } from "@tauri-apps/api/core"
+import { useProfile } from "@/hooks/useProfile"
+import { useSelectedMembership } from "@/hooks/useProfile"
+import { getActivityHistory } from "@/api/activityStats"
+import { useAccountStats } from "@/hooks/useAccountStats"
+import { readStat } from "@/api/stats"
+import { useManifestStore } from "@/store/manifest"
+import { BungieIcon } from "@/components/bungie-icon"
+import { VendorHashes, getVendorDef } from "@/api/vendors"
+import { fmtHoursMinutes as fmtHours } from "@/utils/format"
+import { IconSparkle } from "@/components/icon"
+import { WeaponMetaSection } from "./WeaponMetaSection"
+import { CombatRecordsSection } from "./CombatRecords"
+import { ActivityCompletionsSection } from "./ActivityCompletions"
+import { GlobalDestinyStats } from "./GlobalDestinyStats"
 
 interface SteamPlaytime {
-  total_minutes: number;
-  two_weeks_minutes: number;
-  last_played: number;
-  account_id: string;
+  total_minutes: number
+  two_weeks_minutes: number
+  last_played: number
+  account_id: string
 }
 
 function useSteamPlaytime() {
@@ -31,43 +31,49 @@ function useSteamPlaytime() {
     queryKey: ["steamPlaytime"],
     queryFn: async () => {
       try {
-        return await invoke<SteamPlaytime | null>("steam_destiny2_playtime");
+        return await invoke<SteamPlaytime | null>("steam_destiny2_playtime")
       } catch {
-        return null;
+        return null
       }
     },
     staleTime: 5 * 60_000,
     refetchInterval: 5 * 60_000,
-  });
+  })
 }
 
-const HISTORY_COUNT = 250;
+const HISTORY_COUNT = 250
 
 function readActivityStat(
   values: Record<string, { basic: { value: number } }> | undefined,
   key: string
 ): number {
-  return values?.[key]?.basic?.value ?? 0;
+  return values?.[key]?.basic?.value ?? 0
 }
 
-type StatsTab = "trials" | "ironBanner" | "nightfall" | "crucible" | "gambit" | "playtime";
+type StatsTab =
+  | "trials"
+  | "ironBanner"
+  | "nightfall"
+  | "crucible"
+  | "gambit"
+  | "playtime"
 
 interface ModeConfig {
-  key: StatsTab;
-  labelKey: string;
+  key: StatsTab
+  labelKey: string
   /** Bungie DestinyActivityModeType values to pull history for. */
-  modes: number[];
-  accent: string;
-  accentBorder: string;
+  modes: number[]
+  accent: string
+  accentBorder: string
   /** CSS color used to tint the monochrome vendor crest. */
-  tint: string;
+  tint: string
   /** Damage type used as the visual identifier (color-matches the accent). */
-  iconHash: number;
+  iconHash: number
   /** Fallback symbol if the manifest icon isn't available. */
-  fallback: string;
-  flavour: "pvp" | "pve" | "gambit";
+  fallback: string
+  flavour: "pvp" | "pve" | "gambit"
   /** Possible keys into the Bungie account stats `mergedAllCharacters.results` (Bungie sometimes uses snake_case, sometimes camelCase). */
-  statsKeys: string[];
+  statsKeys: string[]
 }
 
 const MODES: ModeConfig[] = [
@@ -131,7 +137,7 @@ const MODES: ModeConfig[] = [
     flavour: "gambit",
     statsKeys: ["gambit", "pvecomp_gambit", "allPvECompetitive"],
   },
-];
+]
 
 function InlineTime({
   label,
@@ -139,14 +145,14 @@ function InlineTime({
   color,
   hint,
 }: {
-  label: string;
-  value: string;
-  color: string;
-  hint?: string;
+  label: string
+  value: string
+  color: string
+  hint?: string
 }) {
   return (
     <div
-      className="flex items-center gap-2 px-3 h-11 rounded-md"
+      className="flex h-11 items-center gap-2 rounded-md px-3"
       style={{
         background: "rgba(0,0,0,0.45)",
         border: `1px solid ${color}30`,
@@ -154,23 +160,23 @@ function InlineTime({
     >
       <div>
         <div
-          className="text-[8.5px] uppercase tracking-[0.22em] font-extrabold font-mono leading-none"
+          className="font-mono text-[8.5px] leading-none font-extrabold tracking-[0.22em] uppercase"
           style={{ color: `${color}cc` }}
         >
           {label}
         </div>
         <div
-          className="text-sm font-extrabold tabular-nums leading-none mt-1"
+          className="mt-1 text-sm leading-none font-extrabold tabular-nums"
           style={{ color }}
         >
           {value}
         </div>
       </div>
       {hint && (
-        <div className="text-[9px] text-white/35 leading-tight">{hint}</div>
+        <div className="text-[9px] leading-tight text-white/35">{hint}</div>
       )}
     </div>
-  );
+  )
 }
 
 function HeroStat({
@@ -179,45 +185,47 @@ function HeroStat({
   hint,
   accent,
 }: {
-  label: string;
-  value: string;
-  hint?: string;
-  accent?: string;
+  label: string
+  value: string
+  hint?: string
+  accent?: string
 }) {
   return (
-    <div className="min-w-0 bg-black/35 border border-white/10 rounded-md px-2.5 py-2">
-      <div className="text-[8.5px] uppercase tracking-widest text-white/45 font-extrabold font-mono leading-none">
+    <div className="min-w-0 rounded-md border border-white/10 bg-black/35 px-2.5 py-2">
+      <div className="font-mono text-[8.5px] leading-none font-extrabold tracking-widest text-white/45 uppercase">
         {label}
       </div>
       <div
-        className={`text-[17px] font-extrabold tabular-nums mt-1 truncate leading-none ${accent ?? "text-white"}`}
+        className={`mt-1 truncate text-[17px] leading-none font-extrabold tabular-nums ${accent ?? "text-white"}`}
       >
         {value}
       </div>
       {hint && (
-        <div className="text-[9.5px] text-white/45 truncate mt-0.5 leading-tight">
+        <div className="mt-0.5 truncate text-[9.5px] leading-tight text-white/45">
           {hint}
         </div>
       )}
     </div>
-  );
+  )
 }
 
 function PlaytimeHero() {
-  const { profile } = useProfile();
-  const accountStats = useAccountStats();
-  const manifest = useManifestStore((s) => s.manifest);
-  const steamQuery = useSteamPlaytime();
-  const steamMinutes = steamQuery.data?.total_minutes ?? 0;
-  const steamSeconds = steamMinutes * 60;
-  const chars = profile.data?.characters?.data;
+  const { profile } = useProfile()
+  const accountStats = useAccountStats()
+  const manifest = useManifestStore((s) => s.manifest)
+  const steamQuery = useSteamPlaytime()
+  const steamMinutes = steamQuery.data?.total_minutes ?? 0
+  const steamSeconds = steamMinutes * 60
+  const chars = profile.data?.characters?.data
 
   const charsArr = useMemo(() => {
-    if (!chars) return [];
+    if (!chars) return []
     return Object.values(chars).sort(
-      (a, b) => (Number(b.minutesPlayedTotal) || 0) - (Number(a.minutesPlayedTotal) || 0)
-    );
-  }, [chars]);
+      (a, b) =>
+        (Number(b.minutesPlayedTotal) || 0) -
+        (Number(a.minutesPlayedTotal) || 0)
+    )
+  }, [chars])
 
   // Canonical total: sum each character's `minutesPlayedTotal` (what the
   // Bungie profile endpoint returns — same number Wasted on Destiny shows).
@@ -227,32 +235,41 @@ function PlaytimeHero() {
     return charsArr.reduce(
       (acc, c) => acc + (Number(c.minutesPlayedTotal) || 0) * 60,
       0
-    );
-  }, [charsArr]);
+    )
+  }, [charsArr])
 
-  const days = totalSeconds / 86400;
+  const days = totalSeconds / 86400
 
   const firstLogin = useMemo(() => {
-    if (!charsArr.length) return null;
+    if (!charsArr.length) return null
     return charsArr
       .map((c) => new Date(c.dateLastPlayed))
-      .sort((a, b) => a.getTime() - b.getTime())[0];
-  }, [charsArr]);
+      .sort((a, b) => a.getTime() - b.getTime())[0]
+  }, [charsArr])
 
   const lastLogin = useMemo(() => {
-    if (!charsArr.length) return null;
+    if (!charsArr.length) return null
     return charsArr
       .map((c) => new Date(c.dateLastPlayed))
-      .sort((a, b) => b.getTime() - a.getTime())[0];
-  }, [charsArr]);
+      .sort((a, b) => b.getTime() - a.getTime())[0]
+  }, [charsArr])
 
   const modeBreakdown = useMemo(() => {
     const r = accountStats.data?.mergedAllCharacters?.results as
-      | Record<string, { allTime?: Record<string, { basic?: { value: number } }> } | undefined>
-      | undefined;
-    if (!r) return [];
+      | Record<
+          string,
+          | { allTime?: Record<string, { basic?: { value: number } }> }
+          | undefined
+        >
+      | undefined
+    if (!r) return []
     const rows = [
-      { key: "pvp", label: "Épreuve", keys: ["allPvP"], color: "bg-red-400/70" },
+      {
+        key: "pvp",
+        label: "Épreuve",
+        keys: ["allPvP"],
+        color: "bg-red-400/70",
+      },
       {
         key: "trials",
         label: "Trials of Osiris",
@@ -297,48 +314,48 @@ function PlaytimeHero() {
       },
     ]
       .map((row) => {
-        let seconds = 0;
+        let seconds = 0
         for (const k of row.keys) {
-          const s = readStat(r[k]?.allTime, "secondsPlayed");
+          const s = readStat(r[k]?.allTime, "secondsPlayed")
           if (s > 0) {
-            seconds = s;
-            break;
+            seconds = s
+            break
           }
         }
-        return { ...row, seconds };
+        return { ...row, seconds }
       })
-      .filter((x) => x.seconds > 0);
-    rows.sort((a, b) => b.seconds - a.seconds);
-    return rows;
-  }, [accountStats.data]);
+      .filter((x) => x.seconds > 0)
+    rows.sort((a, b) => b.seconds - a.seconds)
+    return rows
+  }, [accountStats.data])
 
   // Aggregate combat stats across all available PvE + PvP modes.
   const combat = useMemo(() => {
-    const r = accountStats.data?.mergedAllCharacters?.results;
-    if (!r) return null;
-    const pvpAll = r.allPvP?.allTime;
-    const pveAll = r.allPvE?.allTime;
-    const kills = readStat(pvpAll, "kills") + readStat(pveAll, "kills");
-    const deaths = readStat(pvpAll, "deaths") + readStat(pveAll, "deaths");
-    const assists = readStat(pvpAll, "assists") + readStat(pveAll, "assists");
+    const r = accountStats.data?.mergedAllCharacters?.results
+    if (!r) return null
+    const pvpAll = r.allPvP?.allTime
+    const pveAll = r.allPvE?.allTime
+    const kills = readStat(pvpAll, "kills") + readStat(pveAll, "kills")
+    const deaths = readStat(pvpAll, "deaths") + readStat(pveAll, "deaths")
+    const assists = readStat(pvpAll, "assists") + readStat(pveAll, "assists")
     const precisionKills =
-      readStat(pvpAll, "precisionKills") + readStat(pveAll, "precisionKills");
+      readStat(pvpAll, "precisionKills") + readStat(pveAll, "precisionKills")
     const activitiesCleared =
       readStat(pvpAll, "activitiesCleared") +
-      readStat(pveAll, "activitiesCleared");
+      readStat(pveAll, "activitiesCleared")
     const activitiesEntered =
       readStat(pvpAll, "activitiesEntered") +
-      readStat(pveAll, "activitiesEntered");
+      readStat(pveAll, "activitiesEntered")
     const bestSingleGame = Math.max(
       readStat(pvpAll, "bestSingleGameKills"),
       readStat(pveAll, "bestSingleGameKills")
-    );
+    )
     const orbsDropped =
-      readStat(pvpAll, "orbsDropped") + readStat(pveAll, "orbsDropped");
+      readStat(pvpAll, "orbsDropped") + readStat(pveAll, "orbsDropped")
     const resurrectionsGranted =
       readStat(pvpAll, "resurrectionsGranted") +
-      readStat(pveAll, "resurrectionsGranted");
-    const publicEvents = readStat(pveAll, "publicEventsCompleted");
+      readStat(pveAll, "resurrectionsGranted")
+    const publicEvents = readStat(pveAll, "publicEventsCompleted")
     return {
       kills,
       deaths,
@@ -353,21 +370,22 @@ function PlaytimeHero() {
       orbsDropped,
       resurrectionsGranted,
       publicEvents,
-    };
-  }, [accountStats.data]);
+    }
+  }, [accountStats.data])
 
-  const maxMode = Math.max(1, ...modeBreakdown.map((x) => x.seconds));
-  const bgEmblem = charsArr[0]?.emblemBackgroundPath;
-  const classDefs = manifest?.DestinyClassDefinition ?? {};
+  const maxMode = Math.max(1, ...modeBreakdown.map((x) => x.seconds))
+  const bgEmblem = charsArr[0]?.emblemBackgroundPath
+  const classDefs = manifest?.DestinyClassDefinition ?? {}
   const fmtDate = (d: Date) =>
-    new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(d);
+    new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(d)
 
-  const afkSeconds = steamSeconds > 0 ? Math.max(0, steamSeconds - totalSeconds) : 0;
-  const afkPct = steamSeconds > 0 ? (afkSeconds / steamSeconds) * 100 : 0;
+  const afkSeconds =
+    steamSeconds > 0 ? Math.max(0, steamSeconds - totalSeconds) : 0
+  const afkPct = steamSeconds > 0 ? (afkSeconds / steamSeconds) * 100 : 0
 
   return (
     <div
-      className="relative rounded-xl overflow-hidden border border-emerald-500/40 shadow-[0_0_24px_rgba(16,185,129,0.12)]"
+      className="relative overflow-hidden rounded-xl border border-emerald-500/40 shadow-[0_0_24px_rgba(16,185,129,0.12)]"
       style={{
         backgroundImage: bgEmblem
           ? `linear-gradient(90deg, rgba(7,7,13,0.97) 0%, rgba(7,7,13,0.85) 45%, rgba(7,7,13,0.55) 100%), url(https://www.bungie.net${bgEmblem})`
@@ -377,26 +395,26 @@ function PlaytimeHero() {
       }}
     >
       {/* Compact top row — big number + inline Steam/AFK + last login */}
-      <div className="relative flex items-center gap-5 px-5 py-4 flex-wrap md:flex-nowrap">
-        <span className="w-11 h-11 rounded-md bg-emerald-400/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shrink-0">
+      <div className="relative flex flex-wrap items-center gap-5 px-5 py-4 md:flex-nowrap">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-emerald-400/40 bg-emerald-400/20 text-emerald-300">
           <IconSparkle size={22} />
         </span>
         <div className="min-w-0 shrink-0">
-          <div className="text-[9px] uppercase tracking-[0.26em] font-extrabold text-emerald-300 font-mono">
+          <div className="font-mono text-[9px] font-extrabold tracking-[0.26em] text-emerald-300 uppercase">
             Temps de jeu — Bungie
           </div>
-          <div className="text-3xl font-extrabold tabular-nums leading-none text-white mt-0.5">
+          <div className="mt-0.5 text-3xl leading-none font-extrabold text-white tabular-nums">
             {totalSeconds > 0 ? fmtHours(totalSeconds) : "—"}
           </div>
           {days >= 1 && (
-            <div className="text-[10px] text-emerald-300/75 tabular-nums mt-1">
+            <div className="mt-1 text-[10px] text-emerald-300/75 tabular-nums">
               ≈ {days.toFixed(1)} jours en jeu
             </div>
           )}
         </div>
 
         {/* Inline Steam vs Bungie vs AFK chips */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex flex-wrap items-center gap-2">
           <InlineTime
             label="Steam"
             value={steamMinutes > 0 ? fmtHours(steamSeconds) : "—"}
@@ -413,20 +431,20 @@ function PlaytimeHero() {
 
         <div className="flex-1" />
 
-        <div className="flex gap-4 text-[10px] shrink-0">
+        <div className="flex shrink-0 gap-4 text-[10px]">
           <div>
-            <div className="uppercase tracking-widest text-white/45 font-semibold">
+            <div className="font-semibold tracking-widest text-white/45 uppercase">
               Premier login
             </div>
-            <div className="text-sm font-bold text-white/90 mt-0.5">
+            <div className="mt-0.5 text-sm font-bold text-white/90">
               {firstLogin ? fmtDate(firstLogin) : "—"}
             </div>
           </div>
           <div>
-            <div className="uppercase tracking-widest text-white/45 font-semibold">
+            <div className="font-semibold tracking-widest text-white/45 uppercase">
               Dernier login
             </div>
-            <div className="text-sm font-bold text-white/90 mt-0.5">
+            <div className="mt-0.5 text-sm font-bold text-white/90">
               {lastLogin ? fmtDate(lastLogin) : "—"}
             </div>
           </div>
@@ -435,11 +453,11 @@ function PlaytimeHero() {
 
       {/* Combat summary */}
       {combat && combat.activitiesEntered > 0 && (
-        <div className="relative px-5 pb-3 pt-1">
-          <div className="text-[9px] uppercase tracking-[0.25em] font-extrabold font-mono text-emerald-300/80 mb-2">
+        <div className="relative px-5 pt-1 pb-3">
+          <div className="mb-2 font-mono text-[9px] font-extrabold tracking-[0.25em] text-emerald-300/80 uppercase">
             Combat — à vie
           </div>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+          <div className="grid grid-cols-3 gap-2 md:grid-cols-6">
             <HeroStat
               label="K/D"
               value={combat.kd.toFixed(2)}
@@ -479,30 +497,36 @@ function PlaytimeHero() {
       {/* Mode breakdown */}
       {modeBreakdown.length > 0 && (
         <div className="relative px-5 pb-3">
-          <div className="text-[9px] uppercase tracking-[0.25em] font-extrabold font-mono text-emerald-300/80 mb-2">
+          <div className="mb-2 font-mono text-[9px] font-extrabold tracking-[0.25em] text-emerald-300/80 uppercase">
             Par mode
           </div>
-          <div className="grid md:grid-cols-2 gap-x-5 gap-y-2">
+          <div className="grid gap-x-5 gap-y-2 md:grid-cols-2">
             {modeBreakdown.map((row) => {
-              const pct = (row.seconds / maxMode) * 100;
-              const sharePct = totalSeconds ? (row.seconds / totalSeconds) * 100 : 0;
+              const pct = (row.seconds / maxMode) * 100
+              const sharePct = totalSeconds
+                ? (row.seconds / totalSeconds) * 100
+                : 0
               return (
                 <div key={row.key}>
-                  <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="font-semibold text-white">{row.label}</span>
+                  <div className="mb-1 flex items-center justify-between text-xs">
+                    <span className="font-semibold text-white">
+                      {row.label}
+                    </span>
                     <span className="text-bungie-muted tabular-nums">
                       {fmtHours(row.seconds)} ·{" "}
-                      <span className="text-emerald-300">{sharePct.toFixed(1)}%</span>
+                      <span className="text-emerald-300">
+                        {sharePct.toFixed(1)}%
+                      </span>
                     </span>
                   </div>
-                  <div className="h-2 bg-black/50 border border-white/5 rounded-full overflow-hidden">
+                  <div className="h-2 overflow-hidden rounded-full border border-white/5 bg-black/50">
                     <div
                       className={`${row.color} h-full rounded-full transition-all`}
                       style={{ width: `${pct}%` }}
                     />
                   </div>
                 </div>
-              );
+              )
             })}
           </div>
         </div>
@@ -510,16 +534,17 @@ function PlaytimeHero() {
 
       {/* Per-character breakdown */}
       {charsArr.length > 0 && (
-        <div className="relative px-5 pb-4 pt-1">
-          <div className="text-[9px] uppercase tracking-[0.25em] font-extrabold font-mono text-emerald-300/80 mb-2">
-            Par personnage · {charsArr.length} {charsArr.length > 1 ? "Gardiens" : "Gardien"}
+        <div className="relative px-5 pt-1 pb-4">
+          <div className="mb-2 font-mono text-[9px] font-extrabold tracking-[0.25em] text-emerald-300/80 uppercase">
+            Par personnage · {charsArr.length}{" "}
+            {charsArr.length > 1 ? "Gardiens" : "Gardien"}
           </div>
-          <div className="grid md:grid-cols-3 gap-2">
+          <div className="grid gap-2 md:grid-cols-3">
             {charsArr.map((c) => {
-              const secs = (Number(c.minutesPlayedTotal) || 0) * 60;
-              const share = totalSeconds ? (secs / totalSeconds) * 100 : 0;
+              const secs = (Number(c.minutesPlayedTotal) || 0) * 60
+              const share = totalSeconds ? (secs / totalSeconds) * 100 : 0
               const className =
-                classDefs[c.classHash]?.displayProperties?.name ?? "?";
+                classDefs[c.classHash]?.displayProperties?.name ?? "?"
               return (
                 <div
                   key={c.characterId}
@@ -538,11 +563,11 @@ function PlaytimeHero() {
                       <img
                         src={`https://www.bungie.net${c.emblemPath}`}
                         alt=""
-                        className="w-9 h-9 rounded border border-white/15 bg-black/40 shrink-0"
+                        className="h-9 w-9 shrink-0 rounded border border-white/15 bg-black/40"
                       />
                     )}
                     <div className="min-w-0">
-                      <div className="text-sm font-bold truncate text-white">
+                      <div className="truncate text-sm font-bold text-white">
                         {className}
                       </div>
                       <div className="text-[10px] text-white/70 tabular-nums">
@@ -551,38 +576,38 @@ function PlaytimeHero() {
                     </div>
                   </div>
                   <div className="mt-2 flex items-baseline justify-between gap-2">
-                    <div className="text-lg font-extrabold tabular-nums text-emerald-300">
+                    <div className="text-lg font-extrabold text-emerald-300 tabular-nums">
                       {fmtHours(secs)}
                     </div>
                     <div className="text-[10px] text-white/50 tabular-nums">
                       {share.toFixed(1)}%
                     </div>
                   </div>
-                  <div className="mt-1.5 h-1 bg-black/50 rounded-full overflow-hidden">
+                  <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-black/50">
                     <div
-                      className="bg-emerald-400/70 h-full"
+                      className="h-full bg-emerald-400/70"
                       style={{ width: `${Math.min(100, share)}%` }}
                     />
                   </div>
                 </div>
-              );
+              )
             })}
           </div>
         </div>
       )}
     </div>
-  );
+  )
 }
 
 function ModeCardGrid() {
-  const { t, i18n } = useTranslation();
-  const membership = useSelectedMembership();
-  const { profile } = useProfile();
-  const locale = i18n.resolvedLanguage ?? "en";
+  const { t, i18n } = useTranslation()
+  const membership = useSelectedMembership()
+  const { profile } = useProfile()
+  const locale = i18n.resolvedLanguage ?? "en"
   const characterIds = useMemo(() => {
-    const d = profile.data?.characters?.data;
-    return d ? Object.keys(d) : [];
-  }, [profile.data]);
+    const d = profile.data?.characters?.data
+    return d ? Object.keys(d) : []
+  }, [profile.data])
 
   // Fetch banner art from each vendor def.
   const vendorDefs = useQueries({
@@ -592,7 +617,7 @@ function ModeCardGrid() {
       staleTime: Infinity,
       gcTime: Infinity,
     })),
-  });
+  })
 
   // Aggregate activity history per mode × character. More reliable than
   // /Stats/ for per-mode (Bungie's character-stats endpoint sometimes omits
@@ -622,67 +647,69 @@ function ModeCardGrid() {
         }))
       )
     ),
-  });
+  })
 
   // Map results back to mode keys via index math.
   const modeAggregates = useMemo(() => {
     const agg = new Map<
       string,
       { matches: number; kills: number; deaths: number; seconds: number }
-    >();
-    let idx = 0;
+    >()
+    let idx = 0
     for (const m of MODES) {
-      const seen = new Set<string>();
+      const seen = new Set<string>()
       let matches = 0,
         kills = 0,
         deaths = 0,
-        seconds = 0;
+        seconds = 0
       for (const _cid of characterIds) {
         for (const _mode of m.modes) {
-          const q = historyQueries[idx++];
+          const q = historyQueries[idx++]
           for (const a of q?.data?.activities ?? []) {
-            const id = a.activityDetails.instanceId;
-            if (seen.has(id)) continue;
-            seen.add(id);
-            matches += 1;
-            kills += readActivityStat(a.values, "kills");
-            deaths += readActivityStat(a.values, "deaths");
-            seconds += readActivityStat(a.values, "activityDurationSeconds");
+            const id = a.activityDetails.instanceId
+            if (seen.has(id)) continue
+            seen.add(id)
+            matches += 1
+            kills += readActivityStat(a.values, "kills")
+            deaths += readActivityStat(a.values, "deaths")
+            seconds += readActivityStat(a.values, "activityDurationSeconds")
           }
         }
       }
-      agg.set(m.key, { matches, kills, deaths, seconds });
+      agg.set(m.key, { matches, kills, deaths, seconds })
     }
-    return agg;
-  }, [historyQueries, characterIds]);
+    return agg
+  }, [historyQueries, characterIds])
 
   // Pull richer stats per mode from the aggregate account stats
   // (kills, deaths, winrate, precision) — /Stats/ has these ready.
-  const accountStats = useAccountStats();
+  const accountStats = useAccountStats()
   const modeStats = useMemo(() => {
-    const r = accountStats.data?.mergedAllCharacters?.results;
+    const r = accountStats.data?.mergedAllCharacters?.results
     const out = new Map<
       string,
       {
-        kills: number;
-        deaths: number;
-        assists: number;
-        precisionKills: number;
-        entered: number;
-        won: number;
+        kills: number
+        deaths: number
+        assists: number
+        precisionKills: number
+        entered: number
+        won: number
       }
-    >();
-    if (!r) return out;
+    >()
+    if (!r) return out
     for (const m of MODES) {
-      let entry;
+      let entry
       for (const k of m.statsKeys) {
-        const b = (r as Record<string, { allTime?: Parameters<typeof readStat>[0] }>)[k]?.allTime;
+        const b = (
+          r as Record<string, { allTime?: Parameters<typeof readStat>[0] }>
+        )[k]?.allTime
         if (b) {
-          entry = b;
-          break;
+          entry = b
+          break
         }
       }
-      if (!entry) continue;
+      if (!entry) continue
       out.set(m.key, {
         kills: readStat(entry, "kills"),
         deaths: readStat(entry, "deaths"),
@@ -690,41 +717,41 @@ function ModeCardGrid() {
         precisionKills: readStat(entry, "precisionKills"),
         entered: readStat(entry, "activitiesEntered"),
         won: readStat(entry, "activitiesWon"),
-      });
+      })
     }
-    return out;
-  }, [accountStats.data]);
+    return out
+  }, [accountStats.data])
 
   return (
-    <div className="stagger grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+    <div className="stagger grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
       {MODES.map((m, i) => {
-        const banner = vendorDefs[i]?.data?.displayProperties?.largeIcon;
+        const banner = vendorDefs[i]?.data?.displayProperties?.largeIcon
         const agg = modeAggregates.get(m.key) ?? {
           matches: 0,
           kills: 0,
           deaths: 0,
           seconds: 0,
-        };
-        const s = modeStats.get(m.key);
+        }
+        const s = modeStats.get(m.key)
         // Prefer the richer account-stats numbers when available, fall back to
         // history aggregate counts (which only cover the last HISTORY_COUNT).
-        const kills = s?.kills ?? agg.kills;
-        const deaths = s?.deaths ?? agg.deaths;
-        const assists = s?.assists ?? 0;
-        const kd = deaths > 0 ? kills / deaths : kills;
-        const kda = deaths > 0 ? (kills + assists) / deaths : kills + assists;
+        const kills = s?.kills ?? agg.kills
+        const deaths = s?.deaths ?? agg.deaths
+        const assists = s?.assists ?? 0
+        const kd = deaths > 0 ? kills / deaths : kills
+        const kda = deaths > 0 ? (kills + assists) / deaths : kills + assists
         const precisionPct =
-          kills > 0 && s?.precisionKills ? (s.precisionKills / kills) * 100 : 0;
-        const activities = s?.entered ?? agg.matches;
-        const won = s?.won ?? 0;
-        const winrate = activities > 0 ? (won / activities) * 100 : 0;
-        const hours = Math.floor(agg.seconds / 3600);
-        const hasData = kills + deaths + activities > 0;
+          kills > 0 && s?.precisionKills ? (s.precisionKills / kills) * 100 : 0
+        const activities = s?.entered ?? agg.matches
+        const won = s?.won ?? 0
+        const winrate = activities > 0 ? (won / activities) * 100 : 0
+        const hours = Math.floor(agg.seconds / 3600)
+        const hasData = kills + deaths + activities > 0
 
         return (
           <div
             key={m.key}
-            className="relative rounded-lg overflow-hidden transition-all hover:-translate-y-0.5"
+            className="relative overflow-hidden rounded-lg transition-all hover:-translate-y-0.5"
             style={{
               backgroundImage: banner
                 ? `linear-gradient(135deg, rgba(7,7,13,0.95) 0%, rgba(7,7,13,0.65) 55%, rgba(7,7,13,0.35) 100%), url(https://www.bungie.net${banner})`
@@ -737,14 +764,14 @@ function ModeCardGrid() {
           >
             {/* Left tier stripe */}
             <div
-              className="absolute left-0 top-3 bottom-3 w-0.5"
+              className="absolute top-3 bottom-3 left-0 w-0.5"
               style={{
                 background: `linear-gradient(180deg, ${m.tint}, transparent)`,
                 boxShadow: `0 0 10px ${m.tint}`,
               }}
             />
 
-            <div className="relative p-4 flex flex-col gap-3">
+            <div className="relative flex flex-col gap-3 p-4">
               {/* Header */}
               <div className="flex items-center gap-3">
                 <BungieIcon
@@ -756,12 +783,12 @@ function ModeCardGrid() {
                     <span className="text-2xl leading-none">{m.fallback}</span>
                   }
                 />
-                <div className="flex-1 min-w-0">
-                  <div className="font-extrabold text-[15px] text-white drop-shadow leading-tight truncate">
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-[15px] leading-tight font-extrabold text-white drop-shadow">
                     {t(m.labelKey)}
                   </div>
                   <div
-                    className="text-[9px] uppercase tracking-[0.22em] font-extrabold mt-0.5"
+                    className="mt-0.5 text-[9px] font-extrabold tracking-[0.22em] uppercase"
                     style={{ color: m.tint }}
                   >
                     {m.flavour === "pve"
@@ -769,13 +796,14 @@ function ModeCardGrid() {
                       : m.flavour === "gambit"
                         ? "Gambit"
                         : "PvP"}
-                    {hasData && ` · ${hours}h · ${activities.toLocaleString("fr-FR")} activités`}
+                    {hasData &&
+                      ` · ${hours}h · ${activities.toLocaleString("fr-FR")} activités`}
                   </div>
                 </div>
               </div>
 
               {!hasData ? (
-                <div className="text-[11px] text-white/45 italic py-2">
+                <div className="py-2 text-[11px] text-white/45 italic">
                   Pas encore joué ce mode.
                 </div>
               ) : (
@@ -809,28 +837,28 @@ function ModeCardGrid() {
                   </div>
 
                   {/* Secondary stats — kills / deaths / assists */}
-                  <div className="flex items-center justify-between gap-2 text-[10px] font-mono font-extrabold tabular-nums pt-2 border-t border-white/5">
+                  <div className="flex items-center justify-between gap-2 border-t border-white/5 pt-2 font-mono text-[10px] font-extrabold tabular-nums">
                     <span className="text-emerald-300">
-                      <span className="text-white/40 uppercase tracking-widest mr-1">
+                      <span className="mr-1 tracking-widest text-white/40 uppercase">
                         K
                       </span>
                       {kills.toLocaleString("fr-FR")}
                     </span>
                     <span className="text-red-300">
-                      <span className="text-white/40 uppercase tracking-widest mr-1">
+                      <span className="mr-1 tracking-widest text-white/40 uppercase">
                         D
                       </span>
                       {deaths.toLocaleString("fr-FR")}
                     </span>
                     <span className="text-blue-300">
-                      <span className="text-white/40 uppercase tracking-widest mr-1">
+                      <span className="mr-1 tracking-widest text-white/40 uppercase">
                         A
                       </span>
                       {assists.toLocaleString("fr-FR")}
                     </span>
                     {m.flavour === "pvp" && won > 0 && (
                       <span className="text-amber-300">
-                        <span className="text-white/40 uppercase tracking-widest mr-1">
+                        <span className="mr-1 tracking-widest text-white/40 uppercase">
                           W
                         </span>
                         {won.toLocaleString("fr-FR")}
@@ -841,10 +869,10 @@ function ModeCardGrid() {
               )}
             </div>
           </div>
-        );
+        )
       })}
     </div>
-  );
+  )
 }
 
 function PrimaryChip({
@@ -853,10 +881,10 @@ function PrimaryChip({
   color,
   big,
 }: {
-  label: string;
-  value: string;
-  color: string;
-  big?: boolean;
+  label: string
+  value: string
+  color: string
+  big?: boolean
 }) {
   return (
     <div
@@ -866,31 +894,31 @@ function PrimaryChip({
         border: `1px solid ${color}30`,
       }}
     >
-      <div className="text-[8.5px] uppercase tracking-[0.22em] text-white/40 font-extrabold font-mono leading-none">
+      <div className="font-mono text-[8.5px] leading-none font-extrabold tracking-[0.22em] text-white/40 uppercase">
         {label}
       </div>
       <div
-        className={`${big ? "text-[22px]" : "text-[17px]"} font-extrabold tabular-nums leading-none mt-1`}
+        className={`${big ? "text-[22px]" : "text-[17px]"} mt-1 leading-none font-extrabold tabular-nums`}
         style={{ color }}
       >
         {value}
       </div>
     </div>
-  );
+  )
 }
 
-type SectionTab = "overview" | "weapons" | "activities" | "records";
+type SectionTab = "overview" | "weapons" | "activities" | "records"
 
 const SECTION_TABS: { key: SectionTab; label: string; icon: string }[] = [
   { key: "overview", label: "Vue d'ensemble", icon: "◆" },
   { key: "weapons", label: "Armes", icon: "⚔" },
   { key: "activities", label: "Activités", icon: "🏆" },
   { key: "records", label: "Records", icon: "★" },
-];
+]
 
 export function StatsView() {
-  const { t } = useTranslation();
-  const [tab, setTab] = useState<SectionTab>("overview");
+  const { t } = useTranslation()
+  const [tab, setTab] = useState<SectionTab>("overview")
 
   return (
     <div className="space-y-5">
@@ -900,10 +928,10 @@ export function StatsView() {
         </Link>
       </div>
 
-      <div className="flex items-end justify-between gap-4 flex-wrap">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold">{t("stats.title")}</h1>
-          <p className="text-sm text-bungie-muted mt-1">
+          <p className="text-bungie-muted mt-1 text-sm">
             {t("stats.subtitle")}
           </p>
         </div>
@@ -916,14 +944,14 @@ export function StatsView() {
       <PlaytimeHero />
 
       {/* Section tabs */}
-      <div className="flex items-center gap-1 p-1 bg-black/30 border border-bungie-border rounded-full w-fit">
+      <div className="border-bungie-border flex w-fit items-center gap-1 rounded-full border bg-black/30 p-1">
         {SECTION_TABS.map((s) => (
           <button
             key={s.key}
             onClick={() => setTab(s.key)}
-            className={`flex items-center gap-1.5 px-4 h-9 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+            className={`flex h-9 items-center gap-1.5 rounded-full px-4 text-xs font-bold tracking-wider uppercase transition-all ${
               tab === s.key
-                ? "bg-bungie-accent text-black shadow-glow"
+                ? "bg-bungie-accent shadow-glow text-black"
                 : "text-bungie-text/70 hover:text-white"
             }`}
           >
@@ -939,5 +967,5 @@ export function StatsView() {
       {tab === "activities" && <ActivityCompletionsSection />}
       {tab === "records" && <CombatRecordsSection />}
     </div>
-  );
+  )
 }

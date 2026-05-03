@@ -1,6 +1,6 @@
-import { bungieGet } from "./bungie";
-import type { DestinyProfileResponse } from "bungie-api-ts/destiny2";
-import type { UserMembershipData, UserInfoCard } from "bungie-api-ts/user";
+import { bungieGet } from "./bungie"
+import type { DestinyProfileResponse } from "bungie-api-ts/destiny2"
+import type { UserMembershipData, UserInfoCard } from "bungie-api-ts/user"
 
 // Component codes — https://bungie-net.github.io/multi/schema_Destiny-DestinyComponentType.html
 export const Components = {
@@ -18,24 +18,24 @@ export const Components = {
   ItemStats: 304,
   PresentationNodes: 700,
   Records: 900,
-} as const;
+} as const
 
 export async function getCurrentUserMemberships(): Promise<UserMembershipData> {
-  return bungieGet<UserMembershipData>("/User/GetMembershipsForCurrentUser/");
+  return bungieGet<UserMembershipData>("/User/GetMembershipsForCurrentUser/")
 }
 
 // Picks the primary Destiny membership (cross-save primary if set, else first)
 export function primaryMembership(
   memberships: UserMembershipData
 ): UserInfoCard | null {
-  const ds = memberships.destinyMemberships;
-  if (!ds || ds.length === 0) return null;
-  const primaryId = memberships.primaryMembershipId;
+  const ds = memberships.destinyMemberships
+  if (!ds || ds.length === 0) return null
+  const primaryId = memberships.primaryMembershipId
   if (primaryId) {
-    const match = ds.find((m) => m.membershipId === primaryId);
-    if (match) return match;
+    const match = ds.find((m) => m.membershipId === primaryId)
+    if (match) return match
   }
-  return ds[0];
+  return ds[0]
 }
 
 /**
@@ -48,14 +48,14 @@ export function resolveMembership(
   memberships: UserMembershipData | undefined,
   selectedId: string | null
 ): UserInfoCard | null {
-  if (!memberships) return null;
+  if (!memberships) return null
   if (selectedId) {
     const match = memberships.destinyMemberships?.find(
       (m) => m.membershipId === selectedId
-    );
-    if (match) return match;
+    )
+    if (match) return match
   }
-  return primaryMembership(memberships);
+  return primaryMembership(memberships)
 }
 
 export async function getProfile(
@@ -69,5 +69,5 @@ export async function getProfile(
 ): Promise<DestinyProfileResponse> {
   return bungieGet<DestinyProfileResponse>(
     `/Destiny2/${membershipType}/Profile/${membershipId}/?components=${components.join(",")}`
-  );
+  )
 }

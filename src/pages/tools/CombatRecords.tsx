@@ -3,68 +3,68 @@
  * Grouped by theme for readability (Kills, Distance, Combat).
  */
 
-import { useMemo } from "react";
-import { useAccountStats } from "@/hooks/useAccountStats";
-import { readStat } from "@/api/stats";
+import { useMemo } from "react"
+import { useAccountStats } from "@/hooks/useAccountStats"
+import { readStat } from "@/api/stats"
 
 interface Row {
-  label: string;
-  value: string;
-  hint?: string;
+  label: string
+  value: string
+  hint?: string
 }
 
 interface Group {
-  title: string;
-  accent: string;
-  rows: Row[];
+  title: string
+  accent: string
+  rows: Row[]
 }
 
 export function CombatRecordsSection() {
-  const stats = useAccountStats();
+  const stats = useAccountStats()
 
   const groups = useMemo<Group[]>(() => {
-    const r = stats.data?.mergedAllCharacters?.results;
-    if (!r) return [];
-    const pvp = r.allPvP?.allTime;
-    const pve = r.allPvE?.allTime;
-    const tr = r.trialsOfOsiris?.allTime;
-    const ib = r.ironBanner?.allTime;
+    const r = stats.data?.mergedAllCharacters?.results
+    if (!r) return []
+    const pvp = r.allPvP?.allTime
+    const pve = r.allPvE?.allTime
+    const tr = r.trialsOfOsiris?.allTime
+    const ib = r.ironBanner?.allTime
 
     const bestPvPKills = Math.max(
       readStat(pvp, "bestSingleGameKills"),
       readStat(tr, "bestSingleGameKills"),
       readStat(ib, "bestSingleGameKills")
-    );
-    const bestPvEKills = readStat(pve, "bestSingleGameKills");
+    )
+    const bestPvEKills = readStat(pve, "bestSingleGameKills")
     const longestSpreePvP = Math.max(
       readStat(pvp, "longestKillSpree"),
       readStat(tr, "longestKillSpree"),
       readStat(ib, "longestKillSpree")
-    );
-    const longestSpreePvE = readStat(pve, "longestKillSpree");
+    )
+    const longestSpreePvE = readStat(pve, "longestKillSpree")
     const longestDistPvP = Math.max(
       readStat(pvp, "longestKillDistance"),
       readStat(tr, "longestKillDistance")
-    );
-    const longestDistPvE = readStat(pve, "longestKillDistance");
+    )
+    const longestDistPvE = readStat(pve, "longestKillDistance")
     const longestLife = Math.max(
       readStat(pvp, "longestSingleLife"),
       readStat(pve, "longestSingleLife")
-    );
+    )
     const bestScorePvP = Math.max(
       readStat(pvp, "bestSingleGameScore"),
       readStat(tr, "bestSingleGameScore"),
       readStat(ib, "bestSingleGameScore")
-    );
+    )
     const orbsDropped =
-      readStat(pvp, "orbsDropped") + readStat(pve, "orbsDropped");
+      readStat(pvp, "orbsDropped") + readStat(pve, "orbsDropped")
     const resurrections =
       readStat(pvp, "resurrectionsPerformed") +
-      readStat(pve, "resurrectionsPerformed");
-    const assists = readStat(pvp, "assists") + readStat(pve, "assists");
-    const suicides = readStat(pvp, "suicides") + readStat(pve, "suicides");
-    const averageLifespan = readStat(pvp, "averageLifespan");
-    const combatRating = readStat(pvp, "combatRating");
+      readStat(pve, "resurrectionsPerformed")
+    const assists = readStat(pvp, "assists") + readStat(pve, "assists")
+    const suicides = readStat(pvp, "suicides") + readStat(pve, "suicides")
+    const averageLifespan = readStat(pvp, "averageLifespan")
+    const combatRating = readStat(pvp, "combatRating")
 
     return [
       {
@@ -137,7 +137,8 @@ export function CombatRecordsSection() {
           },
           {
             label: "Espérance de vie PvP",
-            value: averageLifespan > 0 ? `${Math.round(averageLifespan)} s` : "—",
+            value:
+              averageLifespan > 0 ? `${Math.round(averageLifespan)} s` : "—",
           },
           {
             label: "Combat rating",
@@ -151,41 +152,41 @@ export function CombatRecordsSection() {
           },
         ].filter((x) => x.value !== "—"),
       },
-    ].filter((g) => g.rows.length > 0);
-  }, [stats.data]);
+    ].filter((g) => g.rows.length > 0)
+  }, [stats.data])
 
   if (stats.isLoading) {
     return (
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold">Records personnels</h2>
-        <p className="text-sm text-bungie-muted">Chargement…</p>
+        <p className="text-bungie-muted text-sm">Chargement…</p>
       </section>
-    );
+    )
   }
 
-  if (groups.length === 0) return null;
+  if (groups.length === 0) return null
 
   return (
     <section className="space-y-3">
       <div>
         <h2 className="text-xl font-extrabold">Records personnels</h2>
-        <p className="text-xs text-bungie-muted mt-0.5">
+        <p className="text-bungie-muted mt-0.5 text-xs">
           Bests et cumuls calculés depuis l'API Bungie — toutes saisons.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-3">
+      <div className="grid gap-3 md:grid-cols-3">
         {groups.map((g) => (
           <div
             key={g.title}
-            className="rounded-lg overflow-hidden"
+            className="overflow-hidden rounded-lg"
             style={{
               background: "rgba(10,8,16,0.6)",
               border: `1px solid ${g.accent}25`,
             }}
           >
             <div
-              className="px-3 py-2 text-[10px] uppercase tracking-[0.25em] font-extrabold font-mono"
+              className="px-3 py-2 font-mono text-[10px] font-extrabold tracking-[0.25em] uppercase"
               style={{
                 color: g.accent,
                 borderBottom: `1px solid ${g.accent}20`,
@@ -201,17 +202,17 @@ export function CombatRecordsSection() {
                   className="flex items-center justify-between gap-3 px-3 py-2.5"
                 >
                   <div className="min-w-0">
-                    <div className="text-[12px] font-semibold text-white/85 truncate">
+                    <div className="truncate text-[12px] font-semibold text-white/85">
                       {row.label}
                     </div>
                     {row.hint && (
-                      <div className="text-[10px] text-white/40 mt-0.5 truncate">
+                      <div className="mt-0.5 truncate text-[10px] text-white/40">
                         {row.hint}
                       </div>
                     )}
                   </div>
                   <div
-                    className="text-base font-extrabold tabular-nums leading-none shrink-0"
+                    className="shrink-0 text-base leading-none font-extrabold tabular-nums"
                     style={{ color: g.accent }}
                   >
                     {row.value}
@@ -223,5 +224,5 @@ export function CombatRecordsSection() {
         ))}
       </div>
     </section>
-  );
+  )
 }

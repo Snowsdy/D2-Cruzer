@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
-import { NavLink, Link, Outlet, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { useQueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "@/store/auth";
-import { useManifestStore } from "@/store/manifest";
-import { LanguageSwitcher } from "./language-switcher";
-import { CharacterSelector } from "./character-selector";
-import { SearchBar } from "./search-bar";
-import { RefreshButton } from "./refresh-button";
-import { ToastHost } from "./toast-host";
-import { MaintenanceBanner } from "./maintenance-banner";
-import { UpdateBanner } from "./update-banner";
-import { AppStatusBanner } from "./app-status-banner";
-import { SeasonBadge } from "./season-badge";
-import { LivePlayersBadge } from "./live-player-badge";
-import { TitleBar } from "./title-bar";
-import { ConfirmDialog } from "./confirm-dialog";
-import { WhatsNewModal } from "./whats-new-modal";
-import { useProfileItemPrefetch } from "../hooks/useProfileItemPrefetch";
-import { useTokenKeepAlive } from "../hooks/useTokenKeepAlive";
+import { useEffect, useState } from "react"
+import { NavLink, Link, Outlet, useLocation } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+import { useQueryClient } from "@tanstack/react-query"
+import { useAuthStore } from "@/store/auth"
+import { useManifestStore } from "@/store/manifest"
+import { LanguageSwitcher } from "./language-switcher"
+import { CharacterSelector } from "./character-selector"
+import { SearchBar } from "./search-bar"
+import { RefreshButton } from "./refresh-button"
+import { ToastHost } from "./toast-host"
+import { MaintenanceBanner } from "./maintenance-banner"
+import { UpdateBanner } from "./update-banner"
+import { AppStatusBanner } from "./app-status-banner"
+import { SeasonBadge } from "./season-badge"
+import { LivePlayersBadge } from "./live-player-badge"
+import { TitleBar } from "./title-bar"
+import { ConfirmDialog } from "./confirm-dialog"
+import { WhatsNewModal } from "./whats-new-modal"
+import { useProfileItemPrefetch } from "../hooks/useProfileItemPrefetch"
+import { useTokenKeepAlive } from "../hooks/useTokenKeepAlive"
 // Note: catalog prefetch is intentionally NOT run at Layout boot anymore —
 // it used to download ~40 MB before the user even opened /database, which
 // made cold-start feel sluggish on low-spec machines. The Database page
 // now kicks off its own fetch on navigation.
-import { useAppSettings } from "@/hooks/useAppSettings";
-import cruzerLogo from "@/assets/cruzer-logo.png";
+import { useAppSettings } from "@/hooks/useAppSettings"
+import cruzerLogo from "@/assets/cruzer-logo.png"
 import {
   IconHome,
   IconInventory,
@@ -38,9 +38,9 @@ import {
   IconBook,
   IconBot,
   IconGear,
-} from "./icon";
-import d2Icon from "@/assets/d2-icon-white.png";
-import marathonIcon from "@/assets/marathon-icon-white.png";
+} from "./icon"
+import d2Icon from "@/assets/d2-icon-white.png"
+import marathonIcon from "@/assets/marathon-icon-white.png"
 
 function NavItem({
   to,
@@ -48,25 +48,25 @@ function NavItem({
   icon,
   children,
 }: {
-  to: string;
-  end?: boolean;
-  icon?: React.ReactNode;
-  children: React.ReactNode;
+  to: string
+  end?: boolean
+  icon?: React.ReactNode
+  children: React.ReactNode
 }) {
   return (
     <NavLink to={to} end={end}>
       {({ isActive }) => (
         <span
           className={[
-            "relative group px-3 h-8 inline-flex items-center gap-1.5 text-[12.5px] rounded-md transition-all whitespace-nowrap",
+            "group relative inline-flex h-8 items-center gap-1.5 rounded-md px-3 text-[12.5px] whitespace-nowrap transition-all",
             isActive
-              ? "text-white font-semibold bg-white/4"
-              : "text-bungie-text/60 hover:text-white hover:bg-white/2",
+              ? "bg-white/4 font-semibold text-white"
+              : "text-bungie-text/60 hover:bg-white/2 hover:text-white",
           ].join(" ")}
         >
           {icon && (
             <span
-              className={`inline-flex items-center justify-center w-3.5 h-3.5 transition-colors ${
+              className={`inline-flex h-3.5 w-3.5 items-center justify-center transition-colors ${
                 isActive
                   ? "text-bungie-accent"
                   : "text-bungie-text/55 group-hover:text-white"
@@ -77,49 +77,49 @@ function NavItem({
           )}
           <span>{children}</span>
           {isActive && (
-            <span className="absolute left-2.5 right-2.5 -bottom-2.25 h-0.5 rounded-full bg-bungie-accent shadow-[0_0_10px_rgba(243,7,94,0.9)]" />
+            <span className="bg-bungie-accent absolute right-2.5 -bottom-2.25 left-2.5 h-0.5 rounded-full shadow-[0_0_10px_rgba(243,7,94,0.9)]" />
           )}
         </span>
       )}
     </NavLink>
-  );
+  )
 }
 
 export function Layout() {
-  const { t, i18n } = useTranslation();
-  const clearAuth = useAuthStore((s) => s.clear);
-  const qc = useQueryClient();
-  const [confirmLogout, setConfirmLogout] = useState(false);
+  const { t, i18n } = useTranslation()
+  const clearAuth = useAuthStore((s) => s.clear)
+  const qc = useQueryClient()
+  const [confirmLogout, setConfirmLogout] = useState(false)
   const doLogout = () => {
-    clearAuth();
+    clearAuth()
     // Clear React Query cache completely — no stale data from the old account
     // bleeds into the next login.
-    qc.clear();
-    setConfirmLogout(false);
-  };
-  const loadManifest = useManifestStore((s) => s.load);
-  const location = useLocation();
-  const isMarathon = location.pathname.startsWith("/marathon");
+    qc.clear()
+    setConfirmLogout(false)
+  }
+  const loadManifest = useManifestStore((s) => s.load)
+  const location = useLocation()
+  const isMarathon = location.pathname.startsWith("/marathon")
 
   // Prefetch every item def visible on the profile so Dashboard, Inventory,
   // Vendors, LootModal etc. all render instantly with cached icons/names.
   // (Internally short-circuits in the overlay window to avoid duplicate fetches.)
-  useProfileItemPrefetch();
+  useProfileItemPrefetch()
 
   // Keep the Bungie OAuth access token fresh in the background so idle
   // sessions never hit "error 99 — please sign in to continue".
-  useTokenKeepAlive();
+  useTokenKeepAlive()
 
   // Apply persisted user settings app-wide: compact mode CSS class, global
   // keyboard shortcuts (Ctrl+I / Ctrl+L / F5 / F10), reset-time notifications.
-  useAppSettings();
+  useAppSettings()
 
   useEffect(() => {
-    loadManifest(i18n.resolvedLanguage);
-  }, [i18n.resolvedLanguage, loadManifest]);
+    loadManifest(i18n.resolvedLanguage)
+  }, [i18n.resolvedLanguage, loadManifest])
 
   return (
-    <div className="h-full flex flex-col bg-bungie-bg">
+    <div className="bg-bungie-bg flex h-full flex-col">
       {/* -------------------------------------------------------------- */}
       {/* Top bar — 2 compact rows                                        */}
       {/* -------------------------------------------------------------- */}
@@ -127,55 +127,55 @@ export function Layout() {
       <UpdateBanner />
       <AppStatusBanner />
       <MaintenanceBanner />
-      <header className="sticky top-0 z-30 backdrop-blur-xl bg-bungie-bg/85">
+      <header className="bg-bungie-bg/85 sticky top-0 z-30 backdrop-blur-xl">
         {/* Thin accent gradient line at the very top for premium feel */}
-        <div className="h-px bg-linear-to-r from-transparent via-bungie-accent/50 to-transparent" />
+        <div className="via-bungie-accent/50 h-px bg-linear-to-r from-transparent to-transparent" />
 
         {/* ========== ROW 1 — Brand + nav + status + actions ========== */}
-        <div className="flex items-center gap-4 px-5 h-13 border-b border-bungie-border/30">
+        <div className="border-bungie-border/30 flex h-13 items-center gap-4 border-b px-5">
           {/* Brand */}
           <Link
             to="/"
-            className="flex items-center gap-2.5 shrink-0 group pr-1"
+            className="group flex shrink-0 items-center gap-2.5 pr-1"
             title="Cruzer Compagnon"
           >
             <img
               src={cruzerLogo}
               alt="Cruzer"
-              className="w-7 h-7 drop-shadow-[0_0_12px_rgba(243,7,94,0.6)] transition-transform group-hover:scale-110"
+              className="h-7 w-7 drop-shadow-[0_0_12px_rgba(243,7,94,0.6)] transition-transform group-hover:scale-110"
             />
-            <span className="hidden lg:inline text-[11px] font-bold tracking-[0.28em] text-white/90 uppercase">
+            <span className="hidden text-[11px] font-bold tracking-[0.28em] text-white/90 uppercase lg:inline">
               Cruzer
             </span>
           </Link>
 
           {/* D2 ↔ Marathon game switch — prominent, pill-shaped */}
-          <div className="hidden md:flex items-center bg-bungie-panel/50 border border-bungie-border/50 rounded-full p-0.5 shrink-0">
+          <div className="bg-bungie-panel/50 border-bungie-border/50 hidden shrink-0 items-center rounded-full border p-0.5 md:flex">
             <NavLink
               to="/"
               end
               title="Destiny 2"
-              className={`h-7 px-2 rounded-full flex items-center justify-center transition-all ${
+              className={`flex h-7 items-center justify-center rounded-full px-2 transition-all ${
                 !isMarathon
                   ? "bg-bungie-accent/15 shadow-[inset_0_0_0_1px_rgba(243,7,94,0.35)]"
                   : "opacity-50 hover:opacity-100"
               }`}
             >
-              <img src={d2Icon} alt="Destiny 2" className="w-3.5 h-3.5" />
+              <img src={d2Icon} alt="Destiny 2" className="h-3.5 w-3.5" />
             </NavLink>
             <NavLink
               to="/marathon"
               title="Marathon"
-              className={`relative h-7 px-2 rounded-full flex items-center justify-center transition-all ${
+              className={`relative flex h-7 items-center justify-center rounded-full px-2 transition-all ${
                 isMarathon
                   ? "bg-[#c7ff00]/15 shadow-[inset_0_0_0_1px_rgba(199,255,0,0.35)]"
                   : "opacity-50 hover:opacity-100"
               }`}
             >
-              <img src={marathonIcon} alt="Marathon" className="w-3.5 h-3.5" />
+              <img src={marathonIcon} alt="Marathon" className="h-3.5 w-3.5" />
               {!isMarathon && (
                 <span
-                  className="absolute top-0.5 right-0.5 w-1 h-1 rounded-full bg-[#c7ff00] animate-pulse"
+                  className="absolute top-0.5 right-0.5 h-1 w-1 animate-pulse rounded-full bg-[#c7ff00]"
                   title={t("nav.soon")}
                 />
               )}
@@ -184,7 +184,7 @@ export function Layout() {
 
           {/* Primary nav — inline, single row */}
           {!isMarathon ? (
-            <nav className="flex items-center flex-1 min-w-0 overflow-x-auto no-scrollbar gap-0.5">
+            <nav className="no-scrollbar flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto">
               <NavItem to="/" end icon={<IconHome size={13} />}>
                 {t("nav.dashboard")}
               </NavItem>
@@ -210,7 +210,7 @@ export function Layout() {
                 {t("nav.database", "Database")}
               </NavItem>
               <div className="flex-1" />
-              <div className="w-px h-4 bg-bungie-border/60 mx-1.5" />
+              <div className="bg-bungie-border/60 mx-1.5 h-4 w-px" />
               <NavItem to="/bot" icon={<IconBot size={13} />}>
                 {t("nav.bot", "Bot")}
               </NavItem>
@@ -219,8 +219,8 @@ export function Layout() {
               </NavItem>
             </nav>
           ) : (
-            <nav className="flex items-center flex-1 min-w-0 gap-2">
-              <span className="text-[10px] uppercase tracking-[0.25em] text-[#c7ff00] font-bold px-3 py-1 rounded-full border border-[#c7ff00]/40 bg-[#c7ff00]/5">
+            <nav className="flex min-w-0 flex-1 items-center gap-2">
+              <span className="rounded-full border border-[#c7ff00]/40 bg-[#c7ff00]/5 px-3 py-1 text-[10px] font-bold tracking-[0.25em] text-[#c7ff00] uppercase">
                 ◉ API · En attente
               </span>
               <NavItem to="/news" icon={<IconNewspaper size={13} />}>
@@ -230,26 +230,26 @@ export function Layout() {
           )}
 
           {/* Right cluster — status pills + utilities */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex shrink-0 items-center gap-2">
             {!isMarathon && (
-              <div className="hidden xl:flex items-center gap-1.5">
+              <div className="hidden items-center gap-1.5 xl:flex">
                 <LivePlayersBadge />
                 <SeasonBadge />
               </div>
             )}
 
             {/* Utility cluster */}
-            <div className="flex items-center gap-0.5 bg-bungie-panel/50 border border-bungie-border/50 rounded-full p-0.5">
+            <div className="bg-bungie-panel/50 border-bungie-border/50 flex items-center gap-0.5 rounded-full border p-0.5">
               <RefreshButton />
               <LanguageSwitcher />
               <NavLink
                 to="/settings"
                 title={t("nav.settings")}
                 className={({ isActive }) =>
-                  `w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
+                  `flex h-7 w-7 items-center justify-center rounded-full transition-colors ${
                     isActive
                       ? "bg-bungie-accent/15 text-bungie-accent"
-                      : "text-bungie-muted hover:text-white hover:bg-white/5"
+                      : "text-bungie-muted hover:bg-white/5 hover:text-white"
                   }`
                 }
               >
@@ -258,7 +258,7 @@ export function Layout() {
               <button
                 onClick={() => setConfirmLogout(true)}
                 title={t("auth.logout")}
-                className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-red-500/10 text-bungie-muted hover:text-red-400 transition-colors"
+                className="text-bungie-muted flex h-7 w-7 items-center justify-center rounded-full transition-colors hover:bg-red-500/10 hover:text-red-400"
               >
                 <IconLogout size={14} />
               </button>
@@ -268,16 +268,16 @@ export function Layout() {
 
         {/* ========== ROW 2 — Characters + status (narrow) + search (D2) ========== */}
         {!isMarathon && (
-          <div className="flex items-center gap-4 px-5 h-11 border-b border-bungie-border/40 bg-linear-to-r from-bungie-panel/10 via-bungie-panel/20 to-bungie-panel/10">
-            <div className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.3em] text-bungie-muted font-extrabold shrink-0">
-              <span className="w-1 h-1 rounded-full bg-bungie-accent shadow-[0_0_6px_rgba(243,7,94,0.8)]" />
+          <div className="border-bungie-border/40 from-bungie-panel/10 via-bungie-panel/20 to-bungie-panel/10 flex h-11 items-center gap-4 border-b bg-linear-to-r px-5">
+            <div className="text-bungie-muted flex shrink-0 items-center gap-1.5 text-[9px] font-extrabold tracking-[0.3em] uppercase">
+              <span className="bg-bungie-accent h-1 w-1 rounded-full shadow-[0_0_6px_rgba(243,7,94,0.8)]" />
               {t("layout.guardians")}
             </div>
-            <div className="flex-1 min-w-0 overflow-x-auto no-scrollbar">
+            <div className="no-scrollbar min-w-0 flex-1 overflow-x-auto">
               <CharacterSelector horizontal />
             </div>
             {/* Compact status pills on smaller viewports (shown when hidden above) */}
-            <div className="flex xl:hidden items-center gap-1.5 shrink-0">
+            <div className="flex shrink-0 items-center gap-1.5 xl:hidden">
               <LivePlayersBadge />
               <SeasonBadge />
             </div>
@@ -288,7 +288,7 @@ export function Layout() {
 
       {/* Main content */}
       <main className="flex-1 overflow-auto">
-        <div className="max-w-400 mx-auto px-5 py-6">
+        <div className="mx-auto max-w-400 px-5 py-6">
           <Outlet />
         </div>
       </main>
@@ -306,5 +306,5 @@ export function Layout() {
         onCancel={() => setConfirmLogout(false)}
       />
     </div>
-  );
+  )
 }

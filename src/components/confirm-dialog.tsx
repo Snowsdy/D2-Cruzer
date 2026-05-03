@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { createPortal } from "react-dom";
-import { useTranslation } from "react-i18next";
+import { useEffect } from "react"
+import { createPortal } from "react-dom"
+import { useTranslation } from "react-i18next"
 
-type Variant = "danger" | "primary";
+type Variant = "danger" | "primary"
 
 export function ConfirmDialog({
   open,
@@ -14,42 +14,44 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: {
-  open: boolean;
-  title: string;
-  message: string;
-  confirmLabel?: string;
-  cancelLabel?: string;
-  variant?: Variant;
-  onConfirm: () => void;
-  onCancel: () => void;
+  open: boolean
+  title: string
+  message: string
+  confirmLabel?: string
+  cancelLabel?: string
+  variant?: Variant
+  onConfirm: () => void
+  onCancel: () => void
 }) {
-  const { t } = useTranslation();
-  const effectiveConfirmLabel = confirmLabel ?? t("common.confirm");
-  const effectiveCancelLabel = cancelLabel ?? t("common.cancel");
+  const { t } = useTranslation()
+  const effectiveConfirmLabel = confirmLabel ?? t("common.confirm")
+  const effectiveCancelLabel = cancelLabel ?? t("common.cancel")
   useEffect(() => {
-    if (!open) return;
+    if (!open) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onCancel();
-      if (e.key === "Enter") onConfirm();
-    };
-    document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+      if (e.key === "Escape") onCancel()
+      if (e.key === "Enter") onConfirm()
+    }
+    document.addEventListener("keydown", onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
     return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [open, onCancel, onConfirm]);
+      document.removeEventListener("keydown", onKey)
+      document.body.style.overflow = prev
+    }
+  }, [open, onCancel, onConfirm])
 
-  if (!open) return null;
+  if (!open) return null
 
-  const accent = variant === "danger" ? "#ef4444" : "#f3075e";
-  const accentBg = variant === "danger" ? "rgba(239,68,68,0.14)" : "rgba(243,7,94,0.14)";
-  const accentBorder = variant === "danger" ? "rgba(239,68,68,0.55)" : "rgba(243,7,94,0.55)";
+  const accent = variant === "danger" ? "#ef4444" : "#f3075e"
+  const accentBg =
+    variant === "danger" ? "rgba(239,68,68,0.14)" : "rgba(243,7,94,0.14)"
+  const accentBorder =
+    variant === "danger" ? "rgba(239,68,68,0.55)" : "rgba(243,7,94,0.55)"
   const confirmCls =
     variant === "danger"
       ? "bg-red-500 hover:bg-red-400 text-white"
-      : "bg-bungie-accent hover:brightness-110 text-black";
+      : "bg-bungie-accent hover:brightness-110 text-black"
 
   const IconWarning = (
     <svg
@@ -66,7 +68,7 @@ export function ConfirmDialog({
       <line x1="12" y1="9" x2="12" y2="13" />
       <line x1="12" y1="17" x2="12.01" y2="17" />
     </svg>
-  );
+  )
   const IconQuestion = (
     <svg
       width="30"
@@ -82,7 +84,7 @@ export function ConfirmDialog({
       <path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3" />
       <line x1="12" y1="17" x2="12.01" y2="17" />
     </svg>
-  );
+  )
 
   const node = (
     <div
@@ -96,7 +98,7 @@ export function ConfirmDialog({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md rounded-xl overflow-hidden fade-in-scale"
+        className="fade-in-scale w-full max-w-md overflow-hidden rounded-xl"
         style={{
           background:
             "linear-gradient(180deg, rgba(22,14,30,0.96) 0%, rgba(7,7,13,0.96) 100%)",
@@ -116,7 +118,7 @@ export function ConfirmDialog({
         <div className="px-7 pt-8 pb-6 text-center">
           {/* Big icon */}
           <div
-            className="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-5"
+            className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full"
             style={{
               background: accentBg,
               border: `1.5px solid ${accentBorder}`,
@@ -128,29 +130,27 @@ export function ConfirmDialog({
           </div>
 
           {/* Title */}
-          <h2 className="text-2xl font-black text-white tracking-tight leading-tight">
+          <h2 className="text-2xl leading-tight font-black tracking-tight text-white">
             {title}
           </h2>
 
           {/* Message */}
-          <p className="mt-3 text-[13px] text-white/70 leading-relaxed max-w-sm mx-auto">
+          <p className="mx-auto mt-3 max-w-sm text-[13px] leading-relaxed text-white/70">
             {message}
           </p>
         </div>
 
         {/* Actions */}
-        <div
-          className="px-7 pb-7 pt-1 grid grid-cols-2 gap-3"
-        >
+        <div className="grid grid-cols-2 gap-3 px-7 pt-1 pb-7">
           <button
             onClick={onCancel}
-            className="h-11 rounded-md bg-white/5 hover:bg-white/10 border border-bungie-border text-white/85 text-[13px] font-bold uppercase tracking-wider transition-colors"
+            className="border-bungie-border h-11 rounded-md border bg-white/5 text-[13px] font-bold tracking-wider text-white/85 uppercase transition-colors hover:bg-white/10"
           >
             {effectiveCancelLabel}
           </button>
           <button
             onClick={onConfirm}
-            className={`h-11 rounded-md text-[13px] font-extrabold uppercase tracking-wider transition-all ${confirmCls}`}
+            className={`h-11 rounded-md text-[13px] font-extrabold tracking-wider uppercase transition-all ${confirmCls}`}
             style={{
               boxShadow: `0 10px 24px -8px ${accent}90`,
             }}
@@ -160,18 +160,18 @@ export function ConfirmDialog({
         </div>
 
         {/* Footer hint */}
-        <div className="px-7 pb-4 text-center text-[9px] uppercase tracking-[0.28em] font-bold text-white/30">
-          <kbd className="px-1 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-white/60">
+        <div className="px-7 pb-4 text-center text-[9px] font-bold tracking-[0.28em] text-white/30 uppercase">
+          <kbd className="rounded border border-white/10 bg-white/5 px-1 py-0.5 font-mono text-[9px] text-white/60">
             Esc
           </kbd>{" "}
           {t("confirm.hint.esc")} ·{" "}
-          <kbd className="px-1 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-white/60">
+          <kbd className="rounded border border-white/10 bg-white/5 px-1 py-0.5 font-mono text-[9px] text-white/60">
             Enter
           </kbd>{" "}
           {t("confirm.hint.enter")}
         </div>
       </div>
     </div>
-  );
-  return createPortal(node, document.body);
+  )
+  return createPortal(node, document.body)
 }

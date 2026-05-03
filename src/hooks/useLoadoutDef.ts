@@ -1,23 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
-import { useTranslation } from "react-i18next";
-import { bungieGet } from "@/api/bungie";
+import { useQuery } from "@tanstack/react-query"
+import { useTranslation } from "react-i18next"
+import { bungieGet } from "@/api/bungie"
 
 interface LoadoutNameDef {
-  name: string;
-  hash: number;
+  name: string
+  hash: number
 }
 interface LoadoutColorDef {
-  colorImagePath: string;
-  hash: number;
+  colorImagePath: string
+  hash: number
 }
 interface LoadoutIconDef {
-  iconImagePath: string;
-  hash: number;
+  iconImagePath: string
+  hash: number
 }
 
 export function useLoadoutName(hash: number | undefined) {
-  const { i18n } = useTranslation();
-  const locale = i18n.resolvedLanguage ?? "en";
+  const { i18n } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? "en"
   return useQuery<LoadoutNameDef | null>({
     queryKey: ["loadoutName", hash, locale],
     queryFn: () =>
@@ -28,7 +28,7 @@ export function useLoadoutName(hash: number | undefined) {
     enabled: !!hash,
     staleTime: Infinity,
     gcTime: Infinity,
-  });
+  })
 }
 
 export function useLoadoutColor(hash: number | undefined) {
@@ -42,7 +42,7 @@ export function useLoadoutColor(hash: number | undefined) {
     enabled: !!hash,
     staleTime: Infinity,
     gcTime: Infinity,
-  });
+  })
 }
 
 export function useLoadoutIcon(hash: number | undefined) {
@@ -56,5 +56,5 @@ export function useLoadoutIcon(hash: number | undefined) {
     enabled: !!hash,
     staleTime: Infinity,
     gcTime: Infinity,
-  });
+  })
 }

@@ -19,7 +19,7 @@ export const STAT_HASHES = {
   Discipline: 1735777505,
   Intellect: 144602215,
   Strength: 4244567218,
-} as const;
+} as const
 
 // In-game Edge of Fate display order.
 export const ARMOR_STAT_ORDER: number[] = [
@@ -29,35 +29,35 @@ export const ARMOR_STAT_ORDER: number[] = [
   STAT_HASHES.Grenade,
   STAT_HASHES.Super,
   STAT_HASHES.Melee,
-];
+]
 
 /** Highest achievable value for a single armor stat across a full set. */
-export const ARMOR_STAT_MAX = 200;
+export const ARMOR_STAT_MAX = 200
 /** Per-piece soft cap (legendary armor tops out around 30 per stat today). */
-export const ARMOR_STAT_PER_PIECE_MAX = 30;
+export const ARMOR_STAT_PER_PIECE_MAX = 30
 /** How many points make one armor tier (unchanged). */
-export const ARMOR_TIER_STEP = 10;
+export const ARMOR_TIER_STEP = 10
 
 /** Returns the tier (0-20) for a given per-stat total. */
 export function armorTier(value: number): number {
-  return Math.max(0, Math.min(20, Math.floor(value / ARMOR_TIER_STEP)));
+  return Math.max(0, Math.min(20, Math.floor(value / ARMOR_TIER_STEP)))
 }
 
-const ARMOR_STAT_SET = new Set(ARMOR_STAT_ORDER);
+const ARMOR_STAT_SET = new Set(ARMOR_STAT_ORDER)
 
 export interface StatValues {
-  [statHash: number]: { value: number };
+  [statHash: number]: { value: number }
 }
 
 export function sumArmorStats(stats: StatValues | undefined): number {
-  if (!stats) return 0;
-  let total = 0;
+  if (!stats) return 0
+  let total = 0
   for (const h of ARMOR_STAT_ORDER) {
-    total += stats[h]?.value ?? 0;
+    total += stats[h]?.value ?? 0
   }
-  return total;
+  return total
 }
 
 export function isArmorStat(hash: number): boolean {
-  return ARMOR_STAT_SET.has(hash);
+  return ARMOR_STAT_SET.has(hash)
 }

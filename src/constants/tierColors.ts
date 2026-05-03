@@ -6,7 +6,7 @@
  * maps with slightly different values and keys (by number, by Tailwind
  * class vs. by raw rgba). Keyed by `inventory.tierType` (2–6).
  */
-import { TIER } from "./bungieHashes";
+import { TIER } from "./bungieHashes"
 
 /** Tailwind border classes (`border-*`) keyed by tierType. */
 export const TIER_BORDER_CLASS: Record<number, string> = {
@@ -15,7 +15,7 @@ export const TIER_BORDER_CLASS: Record<number, string> = {
   [TIER.Rare]: "border-blue-500",
   [TIER.Legendary]: "border-purple-500",
   [TIER.Exotic]: "border-yellow-400",
-};
+}
 
 /** Tailwind text classes for item names keyed by tierType. */
 export const TIER_TEXT_CLASS: Record<number, string> = {
@@ -24,7 +24,7 @@ export const TIER_TEXT_CLASS: Record<number, string> = {
   [TIER.Rare]: "text-blue-400",
   [TIER.Legendary]: "text-purple-400",
   [TIER.Exotic]: "text-yellow-300",
-};
+}
 
 /** Raw rgba border colors (for inline styles / SVGs). */
 export const TIER_BORDER_RGBA: Record<number, string> = {
@@ -33,13 +33,13 @@ export const TIER_BORDER_RGBA: Record<number, string> = {
   [TIER.Rare]: "rgba(59,130,246,0.65)",
   [TIER.Legendary]: "rgba(168,85,247,0.65)",
   [TIER.Exotic]: "rgba(250,204,21,0.85)",
-};
+}
 
 /** Outer glow (box-shadow) values keyed by tierType — Exotic only by default. */
 export const TIER_GLOW: Record<number, string> = {
   [TIER.Legendary]: "0 0 10px rgba(168,85,247,0.35)",
   [TIER.Exotic]: "0 0 14px rgba(250,204,21,0.55)",
-};
+}
 
 /** Human-readable rarity names (English). */
 export const TIER_NAME: Record<number, string> = {
@@ -48,4 +48,4 @@ export const TIER_NAME: Record<number, string> = {
   [TIER.Rare]: "Rare",
   [TIER.Legendary]: "Legendary",
   [TIER.Exotic]: "Exotic",
-};
+}

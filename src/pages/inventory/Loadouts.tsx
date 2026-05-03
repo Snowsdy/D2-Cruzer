@@ -1,71 +1,73 @@
-import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
-import { createPortal } from "react-dom";
-import { useTranslation } from "react-i18next";
-import { invoke } from "@tauri-apps/api/core";
-import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
-import { getItemDef } from "@/api/itemDef";
-import { useProfile, useSelectedMembership } from "@/hooks/useProfile";
-import { useItemDef } from "@/hooks/useItemDef";
+import { useCallback, useMemo, useRef, useState, type ReactNode } from "react"
+import { createPortal } from "react-dom"
+import { useTranslation } from "react-i18next"
+import { invoke } from "@tauri-apps/api/core"
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query"
+import { getItemDef } from "@/api/itemDef"
+import { useProfile, useSelectedMembership } from "@/hooks/useProfile"
+import { useItemDef } from "@/hooks/useItemDef"
 import {
   useLoadoutName,
   useLoadoutColor,
   useLoadoutIcon,
-} from "@/hooks/useLoadoutDef";
-import { useAuthStore } from "@/store/auth";
-import { toast } from "@/store/toast";
-import { ConfirmDialog } from "@/components/confirm-dialog";
+} from "@/hooks/useLoadoutDef"
+import { useAuthStore } from "@/store/auth"
+import { toast } from "@/store/toast"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import type {
   DestinyLoadoutComponent,
   DestinyLoadoutItemComponent,
   DestinyProfileResponse,
   DestinyInventoryItemDefinition,
-} from "bungie-api-ts/destiny2";
+} from "bungie-api-ts/destiny2"
 
-const API_KEY = import.meta.env.VITE_BUNGIE_API_KEY as string;
+const API_KEY = import.meta.env.VITE_BUNGIE_API_KEY as string
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
 interface InstanceInfo {
-  itemHash: number;
-  bucketHash?: number;
-  power?: number;
+  itemHash: number
+  bucketHash?: number
+  power?: number
 }
 
 function buildInstanceMap(
   profile: DestinyProfileResponse | undefined
 ): Map<string, InstanceInfo> {
-  const map = new Map<string, InstanceInfo>();
-  if (!profile) return map;
+  const map = new Map<string, InstanceInfo>()
+  if (!profile) return map
 
-  const push = (items?: { itemHash: number; itemInstanceId?: string; bucketHash?: number }[]) => {
-    if (!items) return;
+  const push = (
+    items?: { itemHash: number; itemInstanceId?: string; bucketHash?: number }[]
+  ) => {
+    if (!items) return
     for (const it of items) {
       if (it.itemInstanceId) {
         map.set(it.itemInstanceId, {
           itemHash: it.itemHash,
           bucketHash: it.bucketHash,
-        });
+        })
       }
-    }
-  };
-
-  push(profile.profileInventory?.data?.items);
-  const invs = profile.characterInventories?.data ?? {};
-  for (const c of Object.values(invs)) push(c.items);
-  const eqs = profile.characterEquipment?.data ?? {};
-  for (const c of Object.values(eqs)) push(c.items);
-
-  const instances = profile.itemComponents?.instances?.data ?? {};
-  for (const [id, info] of map) {
-    const inst = instances[id];
-    if (inst?.primaryStat?.value) {
-      info.power = inst.primaryStat.value;
     }
   }
 
-  return map;
+  push(profile.profileInventory?.data?.items)
+  const invs = profile.characterInventories?.data ?? {}
+  for (const c of Object.values(invs)) push(c.items)
+  const eqs = profile.characterEquipment?.data ?? {}
+  for (const c of Object.values(eqs)) push(c.items)
+
+  const instances = profile.itemComponents?.instances?.data ?? {}
+  for (const [id, info] of map) {
+    const inst = instances[id]
+    if (inst?.primaryStat?.value) {
+      info.power = inst.primaryStat.value
+    }
+  }
+
+  return map
 }
 
 // Element hash → accent color / short label
@@ -77,27 +79,27 @@ const DAMAGE_META: Record<number, { color: string; label: string }> = {
   151347233: { color: "#4d88ff", label: "Stasis" },
   2122313384: { color: "#35c19f", label: "Toile" },
   1067729826: { color: "#f0e668", label: "Prismatique" },
-};
+}
 function dmgMeta(hash?: number) {
-  return hash ? DAMAGE_META[hash] : undefined;
+  return hash ? DAMAGE_META[hash] : undefined
 }
 
 const TIER_BORDER: Record<number, string> = {
   6: "rgba(206,165,46,0.85)",
   5: "rgba(126,38,153,0.75)",
   4: "rgba(81,108,186,0.7)",
-};
+}
 const TIER_GLOW: Record<number, string> = {
   6: "rgba(206,165,46,0.25)",
   5: "rgba(126,38,153,0.2)",
-};
+}
 const TIER_NAME_COLOR: Record<number, string> = {
   6: "#ceaf2e", // Exotic gold
   5: "#a855e0", // Legendary purple
   4: "#5a7dd0", // Rare blue
   3: "#3c9142", // Uncommon green
   2: "#c3bcb4", // Common white
-};
+}
 
 // ---------------------------------------------------------------------------
 // HoverCard — portal-based rich tooltip that escapes card clip-paths.
@@ -107,23 +109,23 @@ function HoverCard({
   children,
   content,
 }: {
-  children: ReactNode;
-  content: ReactNode | null;
+  children: ReactNode
+  content: ReactNode | null
 }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [rect, setRect] = useState<DOMRect | null>(null);
+  const ref = useRef<HTMLSpanElement>(null)
+  const [rect, setRect] = useState<DOMRect | null>(null)
 
   const show = useCallback(() => {
-    if (ref.current) setRect(ref.current.getBoundingClientRect());
-  }, []);
-  const hide = useCallback(() => setRect(null), []);
+    if (ref.current) setRect(ref.current.getBoundingClientRect())
+  }, [])
+  const hide = useCallback(() => setRect(null), [])
 
   if (!content) {
     return (
       <span ref={ref} className="contents">
         {children}
       </span>
-    );
+    )
   }
   return (
     <span
@@ -149,15 +151,15 @@ function HoverCard({
           document.body
         )}
     </span>
-  );
+  )
 }
 
 function TooltipShell({
   borderColor,
   children,
 }: {
-  borderColor?: string;
-  children: ReactNode;
+  borderColor?: string
+  children: ReactNode
 }) {
   return (
     <div
@@ -171,26 +173,22 @@ function TooltipShell({
     >
       {children}
     </div>
-  );
+  )
 }
 
-function ItemHoverContent({
-  def,
-}: {
-  def?: DestinyInventoryItemDefinition;
-}) {
-  if (!def) return null;
-  const name = def.displayProperties?.name;
-  if (!name) return null;
-  const icon = def.displayProperties?.icon;
-  const typeName = def.itemTypeDisplayName;
-  const tier = def.inventory?.tierType ?? 5;
-  const tierName = def.inventory?.tierTypeName;
-  const dmgHash = def.defaultDamageTypeHash ?? def.damageTypeHashes?.[0];
-  const dmg = dmgMeta(dmgHash);
-  const flavor = def.flavorText || def.displayProperties?.description;
-  const nameColor = TIER_NAME_COLOR[tier] ?? "#fff";
-  const borderColor = TIER_BORDER[tier] ?? "rgba(255,255,255,0.2)";
+function ItemHoverContent({ def }: { def?: DestinyInventoryItemDefinition }) {
+  if (!def) return null
+  const name = def.displayProperties?.name
+  if (!name) return null
+  const icon = def.displayProperties?.icon
+  const typeName = def.itemTypeDisplayName
+  const tier = def.inventory?.tierType ?? 5
+  const tierName = def.inventory?.tierTypeName
+  const dmgHash = def.defaultDamageTypeHash ?? def.damageTypeHashes?.[0]
+  const dmg = dmgMeta(dmgHash)
+  const flavor = def.flavorText || def.displayProperties?.description
+  const nameColor = TIER_NAME_COLOR[tier] ?? "#fff"
+  const borderColor = TIER_BORDER[tier] ?? "rgba(255,255,255,0.2)"
 
   return (
     <TooltipShell borderColor={borderColor}>
@@ -199,18 +197,18 @@ function ItemHoverContent({
           <img
             src={`https://www.bungie.net${icon}`}
             alt=""
-            className="w-10 h-10 shrink-0"
+            className="h-10 w-10 shrink-0"
             style={{ border: `1px solid ${borderColor}` }}
           />
         )}
         <div className="min-w-0 flex-1">
           <div
-            className="font-extrabold text-[13px] leading-tight"
+            className="text-[13px] leading-tight font-extrabold"
             style={{ color: nameColor }}
           >
             {name}
           </div>
-          <div className="mt-0.5 text-[10px] uppercase tracking-widest text-white/55 font-semibold flex items-center flex-wrap gap-x-1.5">
+          <div className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-[10px] font-semibold tracking-widest text-white/55 uppercase">
             {tierName && <span>{tierName}</span>}
             {typeName && (
               <>
@@ -230,27 +228,27 @@ function ItemHoverContent({
         </div>
       </div>
       {flavor && (
-        <div className="mt-2 pt-2 text-[11px] leading-snug text-white/70 italic border-t border-white/10">
+        <div className="mt-2 border-t border-white/10 pt-2 text-[11px] leading-snug text-white/70 italic">
           {flavor}
         </div>
       )}
     </TooltipShell>
-  );
+  )
 }
 
 function PlugHoverContent({
   def,
   accent,
 }: {
-  def?: DestinyInventoryItemDefinition;
-  accent?: string;
+  def?: DestinyInventoryItemDefinition
+  accent?: string
 }) {
-  if (!def) return null;
-  const name = def.displayProperties?.name;
-  if (!name) return null;
-  const icon = def.displayProperties?.icon;
-  const typeName = def.itemTypeDisplayName;
-  const desc = def.displayProperties?.description;
+  if (!def) return null
+  const name = def.displayProperties?.name
+  if (!name) return null
+  const icon = def.displayProperties?.icon
+  const typeName = def.itemTypeDisplayName
+  const desc = def.displayProperties?.description
   return (
     <TooltipShell borderColor={accent ?? "rgba(255,255,255,0.2)"}>
       <div className="flex items-start gap-2">
@@ -258,30 +256,30 @@ function PlugHoverContent({
           <img
             src={`https://www.bungie.net${icon}`}
             alt=""
-            className="w-9 h-9 shrink-0"
+            className="h-9 w-9 shrink-0"
             style={{
               border: `1px solid ${accent ?? "rgba(255,255,255,0.2)"}`,
             }}
           />
         )}
         <div className="min-w-0 flex-1">
-          <div className="font-extrabold text-[13px] leading-tight text-white">
+          <div className="text-[13px] leading-tight font-extrabold text-white">
             {name}
           </div>
           {typeName && (
-            <div className="mt-0.5 text-[10px] uppercase tracking-widest text-white/55 font-semibold">
+            <div className="mt-0.5 text-[10px] font-semibold tracking-widest text-white/55 uppercase">
               {typeName}
             </div>
           )}
         </div>
       </div>
       {desc && (
-        <div className="mt-2 pt-2 text-[11px] leading-snug text-white/70 border-t border-white/10 whitespace-pre-line">
+        <div className="mt-2 border-t border-white/10 pt-2 text-[11px] leading-snug whitespace-pre-line text-white/70">
           {desc}
         </div>
       )}
     </TooltipShell>
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -292,17 +290,20 @@ function ItemTile({
   hash,
   size = 44,
 }: {
-  hash: number | undefined;
-  size?: number;
+  hash: number | undefined
+  size?: number
 }) {
-  const def = useItemDef(hash);
-  const icon = def.data?.displayProperties?.icon;
-  const watermark = def.data?.iconWatermark;
-  const tier = def.data?.inventory?.tierType ?? 5;
-  const dmgHash = def.data?.defaultDamageTypeHash ?? def.data?.damageTypeHashes?.[0];
-  const dmg = dmgMeta(dmgHash);
-  const border = icon ? TIER_BORDER[tier] ?? "rgba(255,255,255,0.14)" : "rgba(255,255,255,0.06)";
-  const glow = icon ? TIER_GLOW[tier] : undefined;
+  const def = useItemDef(hash)
+  const icon = def.data?.displayProperties?.icon
+  const watermark = def.data?.iconWatermark
+  const tier = def.data?.inventory?.tierType ?? 5
+  const dmgHash =
+    def.data?.defaultDamageTypeHash ?? def.data?.damageTypeHashes?.[0]
+  const dmg = dmgMeta(dmgHash)
+  const border = icon
+    ? (TIER_BORDER[tier] ?? "rgba(255,255,255,0.14)")
+    : "rgba(255,255,255,0.06)"
+  const glow = icon ? TIER_GLOW[tier] : undefined
 
   return (
     <HoverCard content={<ItemHoverContent def={def.data} />}>
@@ -315,7 +316,7 @@ function ItemTile({
         }}
       >
         <div
-          className="w-full h-full overflow-hidden"
+          className="h-full w-full overflow-hidden"
           style={{
             border: `1px solid ${border}`,
             background: icon
@@ -328,13 +329,13 @@ function ItemTile({
               <img
                 src={`https://www.bungie.net${icon}`}
                 alt=""
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
               {watermark && (
                 <img
                   src={`https://www.bungie.net${watermark}`}
                   alt=""
-                  className="absolute inset-0 w-full h-full pointer-events-none"
+                  className="pointer-events-none absolute inset-0 h-full w-full"
                 />
               )}
             </>
@@ -342,7 +343,7 @@ function ItemTile({
         </div>
         {icon && dmg && dmgHash !== 3373582085 && (
           <div
-            className="absolute -top-1 -left-1 rounded-full z-10"
+            className="absolute -top-1 -left-1 z-10 rounded-full"
             style={{
               width: Math.max(9, size * 0.2),
               height: Math.max(9, size * 0.2),
@@ -354,41 +355,41 @@ function ItemTile({
         )}
       </div>
     </HoverCard>
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
 // WeaponRow — icon + detailed inline text
 // ---------------------------------------------------------------------------
 
-const WEAPON_SLOT_LABELS = ["Cinétique", "Énergie", "Lourde"];
+const WEAPON_SLOT_LABELS = ["Cinétique", "Énergie", "Lourde"]
 
 function WeaponRow({
   hash,
   slotIndex,
 }: {
-  hash: number | undefined;
-  slotIndex: number;
+  hash: number | undefined
+  slotIndex: number
 }) {
-  const def = useItemDef(hash);
-  const d = def.data;
-  const dmgHash = d?.defaultDamageTypeHash ?? d?.damageTypeHashes?.[0];
-  const dmg = dmgMeta(dmgHash);
-  const tier = d?.inventory?.tierType ?? 5;
-  const isExotic = tier === 6;
+  const def = useItemDef(hash)
+  const d = def.data
+  const dmgHash = d?.defaultDamageTypeHash ?? d?.damageTypeHashes?.[0]
+  const dmg = dmgMeta(dmgHash)
+  const tier = d?.inventory?.tierType ?? 5
+  const isExotic = tier === 6
 
   return (
     <div className="flex items-center gap-2.5">
       <ItemTile hash={hash} size={40} />
       <div className="min-w-0 flex-1">
         <div
-          className={`text-[13px] font-bold leading-tight truncate ${
+          className={`truncate text-[13px] leading-tight font-bold ${
             isExotic ? "text-amber-300" : "text-white"
           }`}
         >
           {d?.displayProperties?.name ?? (hash ? "…" : "—")}
         </div>
-        <div className="text-[10px] uppercase tracking-[0.12em] text-white/45 font-semibold leading-tight truncate flex items-center gap-1.5 mt-0.5">
+        <div className="mt-0.5 flex items-center gap-1.5 truncate text-[10px] leading-tight font-semibold tracking-[0.12em] text-white/45 uppercase">
           <span>{WEAPON_SLOT_LABELS[slotIndex]}</span>
           {d?.itemTypeDisplayName && (
             <>
@@ -407,7 +408,7 @@ function WeaponRow({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -422,40 +423,40 @@ function LoadoutCard({
   instanceMap,
   onRefresh,
 }: {
-  loadout: DestinyLoadoutComponent;
-  index: number;
-  characterId: string;
-  membershipType: number;
-  instanceMap: Map<string, InstanceInfo>;
-  onRefresh: () => void;
+  loadout: DestinyLoadoutComponent
+  index: number
+  characterId: string
+  membershipType: number
+  instanceMap: Map<string, InstanceInfo>
+  onRefresh: () => void
 }) {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.resolvedLanguage ?? "en";
-  const [confirmClear, setConfirmClear] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
-  const empty = !loadout.nameHash && !loadout.colorHash && !loadout.iconHash;
+  const { t, i18n } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? "en"
+  const [confirmClear, setConfirmClear] = useState(false)
+  const [selectedSlot, setSelectedSlot] = useState<number | null>(null)
+  const empty = !loadout.nameHash && !loadout.colorHash && !loadout.iconHash
 
-  const nameDef = useLoadoutName(loadout.nameHash);
-  const colorDef = useLoadoutColor(loadout.colorHash);
-  const iconDef = useLoadoutIcon(loadout.iconHash);
-  const resolvedName = nameDef.data?.name;
-  const colorPath = colorDef.data?.colorImagePath;
-  const iconPath = iconDef.data?.iconImagePath;
+  const nameDef = useLoadoutName(loadout.nameHash)
+  const colorDef = useLoadoutColor(loadout.colorHash)
+  const iconDef = useLoadoutIcon(loadout.iconHash)
+  const resolvedName = nameDef.data?.name
+  const colorPath = colorDef.data?.colorImagePath
+  const iconPath = iconDef.data?.iconImagePath
 
   const items = useMemo(() => {
     return loadout.items ?? []
-  }, [loadout.items]);
+  }, [loadout.items])
 
   const resolved = useMemo(
     () =>
       items.map((it: DestinyLoadoutItemComponent) => {
         const ref = it.itemInstanceId
           ? instanceMap.get(it.itemInstanceId)
-          : undefined;
-        return { hash: ref?.itemHash, power: ref?.power };
+          : undefined
+        return { hash: ref?.itemHash, power: ref?.power }
       }),
     [items, instanceMap]
-  );
+  )
 
   // Batch-fetch all 9 main slot item defs.
   const defQueries = useQueries({
@@ -466,29 +467,29 @@ function LoadoutCard({
       staleTime: Infinity,
       gcTime: Infinity,
     })),
-  });
+  })
 
   // Detect exotic armor / weapon in the loadout (skip subclass slot 8).
   const exoticHash = useMemo(() => {
     for (let i = 0; i < resolved.length; i++) {
-      if (i === 8) continue;
+      if (i === 8) continue
       if (defQueries[i]?.data?.inventory?.tierType === 6) {
-        return resolved[i].hash;
+        return resolved[i].hash
       }
     }
-    return undefined;
-  }, [defQueries, resolved]);
+    return undefined
+  }, [defQueries, resolved])
 
   // Subclass meta (name + element color)
-  const subclassDef = defQueries[8]?.data;
-  const subclassName = subclassDef?.displayProperties?.name;
+  const subclassDef = defQueries[8]?.data
+  const subclassName = subclassDef?.displayProperties?.name
   const subclassDmgHash =
-    subclassDef?.defaultDamageTypeHash ?? subclassDef?.damageTypeHashes?.[0];
-  const subclassDmg = dmgMeta(subclassDmgHash);
+    subclassDef?.defaultDamageTypeHash ?? subclassDef?.damageTypeHashes?.[0]
+  const subclassDmg = dmgMeta(subclassDmgHash)
 
   // Fetch subclass plug defs (aspects / fragments / abilities)
   const subclassPlugs = useMemo(() => {
-    return items[8]?.plugItemHashes ?? [];
+    return items[8]?.plugItemHashes ?? []
   }, [items])
 
   const subclassPlugQueries = useQueries({
@@ -499,25 +500,25 @@ function LoadoutCard({
       staleTime: Infinity,
       gcTime: Infinity,
     })),
-  });
+  })
 
   interface PlugInfo {
-    name: string;
-    icon?: string;
-    hash?: number;
+    name: string
+    icon?: string
+    hash?: number
   }
 
   // Flat array of [slotIndex, plugHash] pairs so we can resolve each plug
   // individually while remembering which item slot it came from.
   const slotPlugPairs = useMemo(() => {
-    const pairs: { slot: number; hash: number }[] = [];
+    const pairs: { slot: number; hash: number }[] = []
     for (let s = 0; s < 8; s++) {
       for (const h of items[s]?.plugItemHashes ?? []) {
-        pairs.push({ slot: s, hash: h });
+        pairs.push({ slot: s, hash: h })
       }
     }
-    return pairs;
-  }, [items]);
+    return pairs
+  }, [items])
 
   const slotPlugQueries = useQueries({
     queries: slotPlugPairs.map(({ hash }) => ({
@@ -527,7 +528,7 @@ function LoadoutCard({
       staleTime: Infinity,
       gcTime: Infinity,
     })),
-  });
+  })
 
   /**
    * A plug is a "real" mod (not a random roll / intrinsic / cosmetic) when it
@@ -535,52 +536,52 @@ function LoadoutCard({
    * intrinsic frame, masterwork, or shader.
    */
   const modsPerSlot = useMemo(() => {
-    const perSlot: PlugInfo[][] = [[], [], [], [], [], [], [], []];
+    const perSlot: PlugInfo[][] = [[], [], [], [], [], [], [], []]
     slotPlugPairs.forEach(({ slot, hash }, i) => {
-      const d = slotPlugQueries[i]?.data;
-      if (!d) return;
-      const cats = d.itemCategoryHashes ?? [];
-      if (!cats.includes(59)) return;
-      const cat = (d.plug?.plugCategoryIdentifier ?? "").toLowerCase();
+      const d = slotPlugQueries[i]?.data
+      if (!d) return
+      const cats = d.itemCategoryHashes ?? []
+      if (!cats.includes(59)) return
+      const cat = (d.plug?.plugCategoryIdentifier ?? "").toLowerCase()
       if (
         cat.includes("intrinsic") ||
         cat.includes("masterwork") ||
         cat.includes("shader") ||
         cat.includes("empty")
       )
-        return;
-      const name = d.displayProperties?.name ?? "";
-      const lname = name.toLowerCase();
-      if (!name || lname.includes("vide") || lname.includes("empty")) return;
-      perSlot[slot].push({ name, icon: d.displayProperties?.icon, hash });
-    });
-    return perSlot;
-  }, [slotPlugPairs, slotPlugQueries]);
+        return
+      const name = d.displayProperties?.name ?? ""
+      const lname = name.toLowerCase()
+      if (!name || lname.includes("vide") || lname.includes("empty")) return
+      perSlot[slot].push({ name, icon: d.displayProperties?.icon, hash })
+    })
+    return perSlot
+  }, [slotPlugPairs, slotPlugQueries])
 
   const subclassBreakdown = useMemo(() => {
-    const aspects: PlugInfo[] = [];
-    const fragments: PlugInfo[] = [];
-    let grenade: PlugInfo | undefined;
-    let melee: PlugInfo | undefined;
-    let classAbility: PlugInfo | undefined;
-    let movement: PlugInfo | undefined;
-    let superPlug: PlugInfo | undefined;
+    const aspects: PlugInfo[] = []
+    const fragments: PlugInfo[] = []
+    let grenade: PlugInfo | undefined
+    let melee: PlugInfo | undefined
+    let classAbility: PlugInfo | undefined
+    let movement: PlugInfo | undefined
+    let superPlug: PlugInfo | undefined
     subclassPlugQueries.forEach((q, i) => {
-      const d = q.data;
-      if (!d) return;
-      const cat = (d.plug?.plugCategoryIdentifier ?? "").toLowerCase();
-      const name = d.displayProperties?.name ?? "";
-      const icon = d.displayProperties?.icon;
-      const info: PlugInfo = { name, icon, hash: subclassPlugs[i] };
-      if (cat.includes("aspect")) aspects.push(info);
-      else if (cat.includes("fragment")) fragments.push(info);
-      else if (cat.includes("grenade")) grenade = info;
-      else if (cat.includes("melee")) melee = info;
+      const d = q.data
+      if (!d) return
+      const cat = (d.plug?.plugCategoryIdentifier ?? "").toLowerCase()
+      const name = d.displayProperties?.name ?? ""
+      const icon = d.displayProperties?.icon
+      const info: PlugInfo = { name, icon, hash: subclassPlugs[i] }
+      if (cat.includes("aspect")) aspects.push(info)
+      else if (cat.includes("fragment")) fragments.push(info)
+      else if (cat.includes("grenade")) grenade = info
+      else if (cat.includes("melee")) melee = info
       else if (cat.includes("class_ability") || cat.includes("classability"))
-        classAbility = info;
-      else if (cat.includes("movement")) movement = info;
-      else if (cat.includes("super")) superPlug = info;
-    });
+        classAbility = info
+      else if (cat.includes("movement")) movement = info
+      else if (cat.includes("super")) superPlug = info
+    })
     return {
       aspects,
       fragments,
@@ -589,46 +590,46 @@ function LoadoutCard({
       classAbility,
       movement,
       superPlug,
-    };
-  }, [subclassPlugQueries, subclassPlugs]);
+    }
+  }, [subclassPlugQueries, subclassPlugs])
 
   // Aggregates
   const armorPowers = resolved
     .slice(3, 8)
     .map((r) => r.power)
-    .filter((p): p is number => typeof p === "number");
+    .filter((p): p is number => typeof p === "number")
   const avgPower = armorPowers.length
     ? Math.round(armorPowers.reduce((a, b) => a + b, 0) / armorPowers.length)
-    : undefined;
-  const unresolved = resolved.filter((r) => !r.hash).length;
+    : undefined
+  const unresolved = resolved.filter((r) => !r.hash).length
 
   const withToken = () => {
-    const token = useAuthStore.getState().accessToken;
-    if (!token) throw new Error("Non authentifié");
-    return token;
-  };
+    const token = useAuthStore.getState().accessToken
+    if (!token) throw new Error("Non authentifié")
+    return token
+  }
 
   const equipMut = useMutation({
     mutationFn: async () => {
-      const token = withToken();
+      const token = withToken()
       await invoke("equip_loadout", {
         apiKey: API_KEY,
         accessToken: token,
         loadoutIndex: index,
         characterId,
         membershipType,
-      });
+      })
     },
     onSuccess: () => {
-      toast.success(`Loadout ${index + 1} équipé en jeu`);
-      onRefresh();
+      toast.success(`Loadout ${index + 1} équipé en jeu`)
+      onRefresh()
     },
     onError: (e) => toast.error(`Échec équipement: ${(e as Error).message}`),
-  });
+  })
 
   const snapshotMut = useMutation({
     mutationFn: async () => {
-      const token = withToken();
+      const token = withToken()
       await invoke("snapshot_loadout", {
         apiKey: API_KEY,
         accessToken: token,
@@ -638,36 +639,36 @@ function LoadoutCard({
         colorHash: loadout.colorHash ?? null,
         iconHash: loadout.iconHash ?? null,
         nameHash: loadout.nameHash ?? null,
-      });
+      })
     },
     onSuccess: () => {
-      toast.success(`Loadout ${index + 1} écrasé avec l'équipement actuel`);
-      onRefresh();
+      toast.success(`Loadout ${index + 1} écrasé avec l'équipement actuel`)
+      onRefresh()
     },
     onError: (e) => toast.error(`Échec MAJ: ${(e as Error).message}`),
-  });
+  })
 
   const clearMut = useMutation({
     mutationFn: async () => {
-      const token = withToken();
+      const token = withToken()
       await invoke("clear_loadout", {
         apiKey: API_KEY,
         accessToken: token,
         loadoutIndex: index,
         characterId,
         membershipType,
-      });
+      })
     },
     onSuccess: () => {
-      toast.success(`Loadout ${index + 1} effacé`);
-      setConfirmClear(false);
-      onRefresh();
+      toast.success(`Loadout ${index + 1} effacé`)
+      setConfirmClear(false)
+      onRefresh()
     },
     onError: (e) => toast.error(`Échec: ${(e as Error).message}`),
-  });
+  })
 
   const pending =
-    equipMut.isPending || snapshotMut.isPending || clearMut.isPending;
+    equipMut.isPending || snapshotMut.isPending || clearMut.isPending
 
   // ---------------------------------------------------------------------------
   // EMPTY STATE
@@ -675,7 +676,7 @@ function LoadoutCard({
   if (empty) {
     return (
       <div
-        className="relative flex flex-col min-h-65 overflow-hidden"
+        className="relative flex min-h-65 flex-col overflow-hidden"
         style={{
           clipPath:
             "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)",
@@ -684,40 +685,41 @@ function LoadoutCard({
           border: "1px dashed rgba(255,255,255,0.1)",
         }}
       >
-        <div className="absolute top-3 right-3 text-[9px] uppercase tracking-[0.3em] text-white/30 font-mono font-extrabold">
+        <div className="absolute top-3 right-3 font-mono text-[9px] font-extrabold tracking-[0.3em] text-white/30 uppercase">
           #{String(index + 1).padStart(2, "0")}
         </div>
-        <div className="flex-1 flex flex-col items-center justify-center gap-3 p-6">
+        <div className="flex flex-1 flex-col items-center justify-center gap-3 p-6">
           <div
-            className="w-14 h-14 flex items-center justify-center text-2xl text-white/25"
+            className="flex h-14 w-14 items-center justify-center text-2xl text-white/25"
             style={{
-              clipPath: "polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%)",
+              clipPath:
+                "polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%)",
               border: "1px dashed rgba(255,255,255,0.15)",
               background: "rgba(255,255,255,0.02)",
             }}
           >
             +
           </div>
-          <div className="text-[11px] uppercase tracking-[0.2em] text-white/35 font-bold text-center">
+          <div className="text-center text-[11px] font-bold tracking-[0.2em] text-white/35 uppercase">
             {t("loadouts.empty")}
           </div>
         </div>
         <button
           onClick={() => snapshotMut.mutate()}
           disabled={pending}
-          className="h-10 border-t border-white/5 text-[11px] font-extrabold uppercase tracking-[0.2em] text-bungie-accent hover:bg-bungie-accent/10 transition-colors disabled:opacity-50"
+          className="text-bungie-accent hover:bg-bungie-accent/10 h-10 border-t border-white/5 text-[11px] font-extrabold tracking-[0.2em] uppercase transition-colors disabled:opacity-50"
         >
           {snapshotMut.isPending ? "…" : "+ Enregistrer équipement actuel"}
         </button>
       </div>
-    );
+    )
   }
 
   // ---------------------------------------------------------------------------
   // POPULATED CARD
   // ---------------------------------------------------------------------------
 
-  const accentColor = subclassDmg?.color ?? "#f3075e";
+  const accentColor = subclassDmg?.color ?? "#f3075e"
 
   return (
     <>
@@ -733,7 +735,7 @@ function LoadoutCard({
       >
         {/* Left element accent stripe */}
         <div
-          className="absolute left-0 top-3 bottom-3 w-0.5 z-10 transition-all group-hover:w-0.75"
+          className="absolute top-3 bottom-3 left-0 z-10 w-0.5 transition-all group-hover:w-0.75"
           style={{
             background: `linear-gradient(180deg, ${accentColor}, transparent)`,
             boxShadow: `0 0 10px ${accentColor}`,
@@ -741,15 +743,15 @@ function LoadoutCard({
         />
 
         {/* ============== HERO ============== */}
-        <div className="relative px-4 pt-3.5 pb-3 flex items-start gap-3">
+        <div className="relative flex items-start gap-3 px-4 pt-3.5 pb-3">
           {/* Slot number — monospaced */}
-          <div className="absolute top-2 right-3 text-[9px] uppercase tracking-[0.3em] font-mono font-extrabold text-white/35">
+          <div className="absolute top-2 right-3 font-mono text-[9px] font-extrabold tracking-[0.3em] text-white/35 uppercase">
             SLOT / {String(index + 1).padStart(2, "0")}
           </div>
 
           {/* Color + icon diamond */}
           <div
-            className="relative w-13 h-13 shrink-0 overflow-hidden"
+            className="relative h-13 w-13 shrink-0 overflow-hidden"
             style={{
               clipPath:
                 "polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%)",
@@ -766,7 +768,7 @@ function LoadoutCard({
               <img
                 src={`https://www.bungie.net${iconPath}`}
                 alt=""
-                className="absolute inset-0 m-auto w-8 h-8"
+                className="absolute inset-0 m-auto h-8 w-8"
                 style={{
                   filter:
                     "drop-shadow(0 1px 2px rgba(0,0,0,0.9)) brightness(1.7) contrast(1.15)",
@@ -777,10 +779,10 @@ function LoadoutCard({
 
           {/* Name & meta */}
           <div className="min-w-0 flex-1 pr-12">
-            <div className="font-extrabold text-[17px] leading-tight text-white truncate">
+            <div className="truncate text-[17px] leading-tight font-extrabold text-white">
               {resolvedName || `Loadout ${index + 1}`}
             </div>
-            <div className="mt-1.5 flex items-center gap-2 text-[10px] uppercase tracking-[0.14em] font-bold">
+            <div className="mt-1.5 flex items-center gap-2 text-[10px] font-bold tracking-[0.14em] uppercase">
               {avgPower != null && (
                 <span className="flex items-center gap-0.5 text-amber-300">
                   <span className="text-[11px]">◆</span>
@@ -790,18 +792,19 @@ function LoadoutCard({
               {subclassDmg && (
                 <>
                   <span className="text-white/25">│</span>
-                  <span style={{ color: subclassDmg.color }} className="font-bold">
+                  <span
+                    style={{ color: subclassDmg.color }}
+                    className="font-bold"
+                  >
                     {subclassDmg.label}
                   </span>
                 </>
               )}
               <span className="text-white/25">│</span>
-              <span className="text-white/55 font-mono">
-                {items.length}/9
-              </span>
+              <span className="font-mono text-white/55">{items.length}/9</span>
               {unresolved > 0 && (
                 <span
-                  className="text-amber-300/80 ml-auto"
+                  className="ml-auto text-amber-300/80"
                   title={`${unresolved} objet(s) non trouvé(s) dans l'inventaire`}
                 >
                   ⚠ {unresolved}
@@ -817,16 +820,14 @@ function LoadoutCard({
         <Section title="Armes">
           <div className="space-y-1">
             {[0, 1, 2].map((i) => {
-              const isOpen = selectedSlot === i;
-              const mods = modsPerSlot[i] ?? [];
+              const isOpen = selectedSlot === i
+              const mods = modsPerSlot[i] ?? []
               return (
                 <div key={i}>
                   <button
                     type="button"
-                    onClick={() =>
-                      setSelectedSlot(isOpen ? null : i)
-                    }
-                    className={`w-full text-left rounded-md px-2 py-1.5 -mx-2 transition-colors ${
+                    onClick={() => setSelectedSlot(isOpen ? null : i)}
+                    className={`-mx-2 w-full rounded-md px-2 py-1.5 text-left transition-colors ${
                       isOpen
                         ? "bg-white/5 ring-1 ring-white/10"
                         : "hover:bg-white/3"
@@ -836,7 +837,7 @@ function LoadoutCard({
                       <WeaponRow hash={resolved[i]?.hash} slotIndex={i} />
                       {mods.length > 0 && (
                         <span
-                          className="text-[9px] uppercase tracking-[0.2em] text-white/40 font-mono font-bold shrink-0"
+                          className="shrink-0 font-mono text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase"
                           aria-hidden
                         >
                           {isOpen ? "▾" : "▸"} {mods.length}
@@ -848,7 +849,7 @@ function LoadoutCard({
                     <ModDrawer mods={mods} color="#8b92a5" />
                   )}
                 </div>
-              );
+              )
             })}
           </div>
         </Section>
@@ -859,8 +860,8 @@ function LoadoutCard({
         <Section title="Armure">
           <div className="flex items-center gap-1.5">
             {[3, 4, 5, 6, 7].map((i) => {
-              const isOpen = selectedSlot === i;
-              const mods = modsPerSlot[i] ?? [];
+              const isOpen = selectedSlot === i
+              const mods = modsPerSlot[i] ?? []
               return (
                 <button
                   key={i}
@@ -871,7 +872,7 @@ function LoadoutCard({
                   <ItemTile hash={resolved[i]?.hash} size={36} />
                   {mods.length > 0 && (
                     <span
-                      className="absolute -bottom-1 -right-1 min-w-3.5 h-3.5 px-1 rounded-full bg-bungie-accent text-black text-[9px] font-extrabold flex items-center justify-center leading-none"
+                      className="bg-bungie-accent absolute -right-1 -bottom-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full px-1 text-[9px] leading-none font-extrabold text-black"
                       style={{ fontFamily: "monospace" }}
                     >
                       {mods.length}
@@ -879,24 +880,21 @@ function LoadoutCard({
                   )}
                   {isOpen && (
                     <div
-                      className="absolute inset-0 pointer-events-none"
+                      className="pointer-events-none absolute inset-0"
                       style={{
                         boxShadow: "0 0 0 2px #f3075e inset",
                       }}
                     />
                   )}
                 </button>
-              );
+              )
             })}
           </div>
           {selectedSlot != null &&
             selectedSlot >= 3 &&
             selectedSlot < 8 &&
             (modsPerSlot[selectedSlot]?.length ?? 0) > 0 && (
-              <ModDrawer
-                mods={modsPerSlot[selectedSlot]}
-                color="#a78bfa"
-              />
+              <ModDrawer mods={modsPerSlot[selectedSlot]} color="#a78bfa" />
             )}
           {exoticHash && <ExoticCallout hash={exoticHash} />}
         </Section>
@@ -906,26 +904,26 @@ function LoadoutCard({
         {/* ============== SUBCLASS ============== */}
         <Section title="Doctrine">
           {(() => {
-            const isOpen = selectedSlot === 8;
+            const isOpen = selectedSlot === 8
             const hasAbilities =
               !!subclassBreakdown.grenade ||
               !!subclassBreakdown.melee ||
-              !!subclassBreakdown.movement;
+              !!subclassBreakdown.movement
             const abilityCount =
               (subclassBreakdown.grenade ? 1 : 0) +
               (subclassBreakdown.melee ? 1 : 0) +
-              (subclassBreakdown.movement ? 1 : 0);
+              (subclassBreakdown.movement ? 1 : 0)
             const hasDetails =
               hasAbilities ||
               subclassBreakdown.aspects.length > 0 ||
-              subclassBreakdown.fragments.length > 0;
+              subclassBreakdown.fragments.length > 0
             return (
               <>
                 <button
                   type="button"
                   disabled={!hasDetails}
                   onClick={() => setSelectedSlot(isOpen ? null : 8)}
-                  className={`w-full text-left rounded-md px-2 py-1.5 -mx-2 transition-colors ${
+                  className={`-mx-2 w-full rounded-md px-2 py-1.5 text-left transition-colors ${
                     isOpen
                       ? "bg-white/5 ring-1 ring-white/10"
                       : hasDetails
@@ -936,11 +934,11 @@ function LoadoutCard({
                   <div className="flex items-center gap-3">
                     <ItemTile hash={resolved[8]?.hash} size={44} />
                     <div className="min-w-0 flex-1">
-                      <div className="text-[9px] uppercase tracking-[0.2em] text-white/35 font-mono font-bold leading-none">
+                      <div className="font-mono text-[9px] leading-none font-bold tracking-[0.2em] text-white/35 uppercase">
                         Super
                       </div>
                       <div
-                        className="text-[14px] font-extrabold leading-tight truncate mt-0.5"
+                        className="mt-0.5 truncate text-[14px] leading-tight font-extrabold"
                         style={{ color: subclassDmg?.color ?? "#fff" }}
                       >
                         {subclassBreakdown.superPlug?.name ??
@@ -949,9 +947,12 @@ function LoadoutCard({
                       </div>
                     </div>
                     {hasDetails && (
-                      <div className="flex items-center gap-2 shrink-0 text-[9px] uppercase tracking-[0.15em] font-mono font-bold text-white/45">
+                      <div className="flex shrink-0 items-center gap-2 font-mono text-[9px] font-bold tracking-[0.15em] text-white/45 uppercase">
                         {abilityCount > 0 && (
-                          <span>{abilityCount}<span className="text-white/30">c</span></span>
+                          <span>
+                            {abilityCount}
+                            <span className="text-white/30">c</span>
+                          </span>
                         )}
                         {subclassBreakdown.aspects.length > 0 && (
                           <span>
@@ -965,7 +966,9 @@ function LoadoutCard({
                             <span className="text-white/30">f</span>
                           </span>
                         )}
-                        <span className="text-white/50">{isOpen ? "▾" : "▸"}</span>
+                        <span className="text-white/50">
+                          {isOpen ? "▾" : "▸"}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -973,7 +976,7 @@ function LoadoutCard({
 
                 {isOpen && hasDetails && (
                   <div
-                    className="mt-2 px-2 py-2 rounded-md space-y-2.5"
+                    className="mt-2 space-y-2.5 rounded-md px-2 py-2"
                     style={{
                       background: "rgba(0,0,0,0.35)",
                       border: `1px solid ${accentColor}22`,
@@ -1045,7 +1048,7 @@ function LoadoutCard({
                   </div>
                 )}
               </>
-            );
+            )
           })()}
         </Section>
 
@@ -1054,20 +1057,25 @@ function LoadoutCard({
 
         {/* ============== ACTION BAR ============== */}
         <div
-          className="grid grid-cols-[1fr_auto_auto] border-t mt-auto"
+          className="mt-auto grid grid-cols-[1fr_auto_auto] border-t"
           style={{ borderColor: "rgba(255,255,255,0.06)" }}
         >
           <button
             onClick={() => equipMut.mutate()}
             disabled={pending}
-            className="h-11 flex items-center justify-center gap-2 bg-bungie-accent hover:brightness-110 text-black text-[12px] font-extrabold uppercase tracking-[0.22em] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-bungie-accent flex h-11 items-center justify-center gap-2 text-[12px] font-extrabold tracking-[0.22em] text-black uppercase transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
             title="Équiper ce loadout en jeu"
           >
             {equipMut.isPending ? (
               "…"
             ) : (
               <>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
                   <path d="M8 5v14l11-7z" />
                 </svg>
                 <span>Appliquer</span>
@@ -1077,7 +1085,7 @@ function LoadoutCard({
           <button
             onClick={() => snapshotMut.mutate()}
             disabled={pending}
-            className="h-11 w-11 flex items-center justify-center text-white/60 hover:text-bungie-accent hover:bg-white/5 border-l border-white/5 transition-colors disabled:opacity-40"
+            className="hover:text-bungie-accent flex h-11 w-11 items-center justify-center border-l border-white/5 text-white/60 transition-colors hover:bg-white/5 disabled:opacity-40"
             title="Écraser avec l'équipement actuel"
           >
             {snapshotMut.isPending ? (
@@ -1102,7 +1110,7 @@ function LoadoutCard({
           <button
             onClick={() => setConfirmClear(true)}
             disabled={pending}
-            className="h-11 w-11 flex items-center justify-center text-white/45 hover:text-red-300 hover:bg-red-500/10 border-l border-white/5 transition-colors disabled:opacity-40"
+            className="flex h-11 w-11 items-center justify-center border-l border-white/5 text-white/45 transition-colors hover:bg-red-500/10 hover:text-red-300 disabled:opacity-40"
             title="Effacer ce slot"
           >
             <svg
@@ -1134,7 +1142,7 @@ function LoadoutCard({
         onCancel={() => setConfirmClear(false)}
       />
     </>
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -1145,40 +1153,40 @@ function Section({
   title,
   children,
 }: {
-  title: string;
-  children: React.ReactNode;
+  title: string
+  children: React.ReactNode
 }) {
   return (
     <div className="px-4 py-2">
-      <div className="text-[9px] uppercase tracking-[0.3em] text-white/35 font-extrabold font-mono mb-1.5 flex items-center gap-2">
+      <div className="mb-1.5 flex items-center gap-2 font-mono text-[9px] font-extrabold tracking-[0.3em] text-white/35 uppercase">
         <span>{title}</span>
-        <div className="flex-1 h-px bg-white/5" />
+        <div className="h-px flex-1 bg-white/5" />
       </div>
       {children}
     </div>
-  );
+  )
 }
 
 function SubLabel({ title, count }: { title: string; count?: number }) {
   return (
-    <div className="text-[8.5px] uppercase tracking-[0.22em] text-white/30 font-extrabold font-mono mb-1 flex items-center gap-1.5">
+    <div className="mb-1 flex items-center gap-1.5 font-mono text-[8.5px] font-extrabold tracking-[0.22em] text-white/30 uppercase">
       <span>{title}</span>
       {count != null && <span className="text-white/45">·</span>}
       {count != null && <span className="text-white/45">{count}</span>}
     </div>
-  );
+  )
 }
 
 function ModDrawer({
   mods,
   color,
 }: {
-  mods: { name: string; icon?: string }[];
-  color: string;
+  mods: { name: string; icon?: string }[]
+  color: string
 }) {
   return (
     <div
-      className="mt-2 px-2 py-2 rounded-md"
+      className="mt-2 rounded-md px-2 py-2"
       style={{
         background: "rgba(0,0,0,0.35)",
         border: `1px solid ${color}22`,
@@ -1191,19 +1199,19 @@ function ModDrawer({
         ))}
       </div>
     </div>
-  );
+  )
 }
 
 function Divider() {
   return (
     <div
-      className="h-px mx-4"
+      className="mx-4 h-px"
       style={{
         background:
           "linear-gradient(90deg, transparent, rgba(255,255,255,0.08) 20%, rgba(255,255,255,0.08) 80%, transparent)",
       }}
     />
-  );
+  )
 }
 
 function AbilitySlot({
@@ -1212,13 +1220,13 @@ function AbilitySlot({
   color,
   compact,
 }: {
-  label?: string;
-  info?: { name: string; icon?: string; hash?: number };
-  color: string;
-  compact?: boolean;
+  label?: string
+  info?: { name: string; icon?: string; hash?: number }
+  color: string
+  compact?: boolean
 }) {
-  const iconSize = compact ? 26 : 30;
-  const def = useItemDef(info?.hash);
+  const iconSize = compact ? 26 : 30
+  const def = useItemDef(info?.hash)
   return (
     <HoverCard
       content={
@@ -1226,14 +1234,14 @@ function AbilitySlot({
       }
     >
       <div
-        className="flex flex-col items-center gap-0.5 py-1 px-1 rounded-sm min-w-0"
+        className="flex min-w-0 flex-col items-center gap-0.5 rounded-sm px-1 py-1"
         style={{
           background: "rgba(255,255,255,0.015)",
           border: `1px solid ${info ? `${color}28` : "rgba(255,255,255,0.04)"}`,
         }}
       >
         <div
-          className="overflow-hidden shrink-0"
+          className="shrink-0 overflow-hidden"
           style={{
             width: iconSize,
             height: iconSize,
@@ -1245,34 +1253,34 @@ function AbilitySlot({
             <img
               src={`https://www.bungie.net${info.icon}`}
               alt=""
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
             />
           )}
         </div>
         {label && !compact && (
-          <div className="text-[7.5px] uppercase tracking-[0.18em] text-white/35 font-extrabold leading-none mt-0.5">
+          <div className="mt-0.5 text-[7.5px] leading-none font-extrabold tracking-[0.18em] text-white/35 uppercase">
             {label}
           </div>
         )}
         {info?.name && (
-          <div className="text-[9px] font-semibold text-white/85 leading-tight text-center truncate w-full mt-0.5">
+          <div className="mt-0.5 w-full truncate text-center text-[9px] leading-tight font-semibold text-white/85">
             {info.name}
           </div>
         )}
       </div>
     </HoverCard>
-  );
+  )
 }
 
 function ExoticCallout({ hash }: { hash: number }) {
-  const def = useItemDef(hash);
-  if (!def.data) return null;
-  const name = def.data.displayProperties?.name;
-  const icon = def.data.displayProperties?.icon;
-  const typeName = def.data.itemTypeDisplayName;
+  const def = useItemDef(hash)
+  if (!def.data) return null
+  const name = def.data.displayProperties?.name
+  const icon = def.data.displayProperties?.icon
+  const typeName = def.data.itemTypeDisplayName
   return (
     <div
-      className="flex items-center gap-2 px-2 py-1.5 mt-2"
+      className="mt-2 flex items-center gap-2 px-2 py-1.5"
       style={{
         background:
           "linear-gradient(90deg, rgba(206,165,46,0.16), rgba(206,165,46,0.02))",
@@ -1283,19 +1291,19 @@ function ExoticCallout({ hash }: { hash: number }) {
         <img
           src={`https://www.bungie.net${icon}`}
           alt=""
-          className="w-7 h-7"
+          className="h-7 w-7"
           style={{ border: "1px solid rgba(206,165,46,0.5)" }}
         />
       )}
       <div className="min-w-0 flex-1">
-        <div className="text-[8px] uppercase tracking-[0.25em] text-amber-300/85 font-mono font-extrabold flex items-center gap-1">
+        <div className="flex items-center gap-1 font-mono text-[8px] font-extrabold tracking-[0.25em] text-amber-300/85 uppercase">
           <span>★ Exotique</span>
           {typeName && <span className="text-amber-200/55">· {typeName}</span>}
         </div>
-        <div className="text-[12px] font-bold text-white truncate">{name}</div>
+        <div className="truncate text-[12px] font-bold text-white">{name}</div>
       </div>
     </div>
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -1303,57 +1311,57 @@ function ExoticCallout({ hash }: { hash: number }) {
 // ---------------------------------------------------------------------------
 
 export function Loadouts() {
-  const { t } = useTranslation();
-  const { profile, activeCharacterId } = useProfile();
-  const membership = useSelectedMembership();
-  const qc = useQueryClient();
+  const { t } = useTranslation()
+  const { profile, activeCharacterId } = useProfile()
+  const membership = useSelectedMembership()
+  const qc = useQueryClient()
 
   const instanceMap = useMemo(
     () => buildInstanceMap(profile.data),
     [profile.data]
-  );
+  )
 
   const onRefresh = () => {
-    qc.invalidateQueries({ queryKey: ["profile"] });
-  };
+    qc.invalidateQueries({ queryKey: ["profile"] })
+  }
 
   if (profile.isLoading) {
-    return <p className="text-bungie-muted">{t("common.loading")}</p>;
+    return <p className="text-bungie-muted">{t("common.loading")}</p>
   }
   if (!activeCharacterId) {
-    return <p className="text-bungie-muted">{t("inventory.noCharacter")}</p>;
+    return <p className="text-bungie-muted">{t("inventory.noCharacter")}</p>
   }
 
   const raw =
-    profile.data?.characterLoadouts?.data?.[activeCharacterId]?.loadouts;
+    profile.data?.characterLoadouts?.data?.[activeCharacterId]?.loadouts
   const loadouts: DestinyLoadoutComponent[] =
     raw && raw.length > 0
       ? raw
-      : (Array.from({ length: 10 }, () => ({})) as DestinyLoadoutComponent[]);
+      : (Array.from({ length: 10 }, () => ({})) as DestinyLoadoutComponent[])
 
   const populatedCount = loadouts.filter(
     (l) => l.nameHash || l.iconHash || l.colorHash
-  ).length;
+  ).length
 
   return (
     <div className="space-y-5">
-      <div className="flex items-end justify-between gap-4 flex-wrap">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h2 className="text-2xl font-extrabold">{t("loadouts.title")}</h2>
-          <p className="text-sm text-bungie-muted mt-0.5">
+          <p className="text-bungie-muted mt-0.5 text-sm">
             {t("loadouts.subtitle")}
           </p>
         </div>
-        <div className="flex items-center gap-2 px-3 h-9 rounded-full bg-bungie-accent/10 border border-bungie-accent/30 text-bungie-accent text-[11px] font-extrabold uppercase tracking-[0.2em]">
-          <span className="w-1.5 h-1.5 rounded-full bg-bungie-accent animate-pulse" />
+        <div className="bg-bungie-accent/10 border-bungie-accent/30 text-bungie-accent flex h-9 items-center gap-2 rounded-full border px-3 text-[11px] font-extrabold tracking-[0.2em] uppercase">
+          <span className="bg-bungie-accent h-1.5 w-1.5 animate-pulse rounded-full" />
           {populatedCount} / {loadouts.length} actifs
         </div>
       </div>
 
       {!raw && (
-        <p className="text-[11px] text-amber-300/90 -mt-2">
-          ⚠ Les loadouts n'ont pas encore été détectés côté API — tu peux
-          quand même créer un slot via « Enregistrer équipement actuel ».
+        <p className="-mt-2 text-[11px] text-amber-300/90">
+          ⚠ Les loadouts n'ont pas encore été détectés côté API — tu peux quand
+          même créer un slot via « Enregistrer équipement actuel ».
         </p>
       )}
 
@@ -1371,5 +1379,5 @@ export function Loadouts() {
         ))}
       </div>
     </div>
-  );
+  )
 }

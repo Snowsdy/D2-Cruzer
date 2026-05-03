@@ -16,10 +16,10 @@
  *   - `fmtNumber`      : thousands-grouped locale-aware number
  *   - `fmtPercent`     : 2-decimal percentage
  */
-import { SEC_PER_HOUR, SEC_PER_DAY, MS_PER_SECOND } from "../constants/time";
+import { SEC_PER_HOUR, SEC_PER_DAY, MS_PER_SECOND } from "../constants/time"
 
 function toSeconds(ms: number): number {
-  return Math.max(0, Math.floor(ms / MS_PER_SECOND));
+  return Math.max(0, Math.floor(ms / MS_PER_SECOND))
 }
 
 /**
@@ -27,13 +27,13 @@ function toSeconds(ms: number): number {
  * Used for weekly/daily reset timers, Xûr departure, checklist deadlines.
  */
 export function fmtCountdownDHM(target: Date, now: Date = new Date()): string {
-  const s = toSeconds(target.getTime() - now.getTime());
-  const d = Math.floor(s / SEC_PER_DAY);
-  const h = Math.floor((s % SEC_PER_DAY) / SEC_PER_HOUR);
-  const m = Math.floor((s % SEC_PER_HOUR) / 60);
-  if (d > 0) return `${d}j ${h}h ${m}m`;
-  if (h > 0) return `${h}h ${m}m`;
-  return `${m}m`;
+  const s = toSeconds(target.getTime() - now.getTime())
+  const d = Math.floor(s / SEC_PER_DAY)
+  const h = Math.floor((s % SEC_PER_DAY) / SEC_PER_HOUR)
+  const m = Math.floor((s % SEC_PER_HOUR) / 60)
+  if (d > 0) return `${d}j ${h}h ${m}m`
+  if (h > 0) return `${h}h ${m}m`
+  return `${m}m`
 }
 
 /**
@@ -41,13 +41,13 @@ export function fmtCountdownDHM(target: Date, now: Date = new Date()): string {
  * in vendor refresh cards where minute precision is noise.
  */
 export function fmtCountdownDH(target: Date, now: Date = new Date()): string {
-  const s = toSeconds(target.getTime() - now.getTime());
-  const d = Math.floor(s / SEC_PER_DAY);
-  const h = Math.floor((s % SEC_PER_DAY) / SEC_PER_HOUR);
-  const m = Math.floor((s % SEC_PER_HOUR) / 60);
-  if (d > 0) return `${d}j ${h}h`;
-  if (h > 0) return `${h}h ${m}m`;
-  return `${m}m`;
+  const s = toSeconds(target.getTime() - now.getTime())
+  const d = Math.floor(s / SEC_PER_DAY)
+  const h = Math.floor((s % SEC_PER_DAY) / SEC_PER_HOUR)
+  const m = Math.floor((s % SEC_PER_HOUR) / 60)
+  if (d > 0) return `${d}j ${h}h`
+  if (h > 0) return `${h}h ${m}m`
+  return `${m}m`
 }
 
 /**
@@ -55,13 +55,13 @@ export function fmtCountdownDH(target: Date, now: Date = new Date()): string {
  * activity durations (fastest raid, checkpoint times…).
  */
 export function fmtDurationHMS(ms: number): string {
-  if (!ms) return "—";
-  const s = toSeconds(ms);
-  const h = Math.floor(s / SEC_PER_HOUR);
-  const m = Math.floor((s % SEC_PER_HOUR) / 60);
-  const sec = s % 60;
-  if (h > 0) return `${h}h ${m}m`;
-  return `${m}m ${sec}s`;
+  if (!ms) return "—"
+  const s = toSeconds(ms)
+  const h = Math.floor(s / SEC_PER_HOUR)
+  const m = Math.floor((s % SEC_PER_HOUR) / 60)
+  const sec = s % 60
+  if (h > 0) return `${h}h ${m}m`
+  return `${m}m ${sec}s`
 }
 
 /**
@@ -69,24 +69,24 @@ export function fmtDurationHMS(ms: number): string {
  * playtime displays where the hours count is the headline number.
  */
 export function fmtHoursMinutes(seconds: number): string {
-  const total = Math.max(0, Math.floor(seconds));
-  const h = Math.floor(total / SEC_PER_HOUR);
-  const m = Math.floor((total % SEC_PER_HOUR) / 60);
-  return `${h.toLocaleString()}h ${m.toString().padStart(2, "0")}m`;
+  const total = Math.max(0, Math.floor(seconds))
+  const h = Math.floor(total / SEC_PER_HOUR)
+  const m = Math.floor((total % SEC_PER_HOUR) / 60)
+  return `${h.toLocaleString()}h ${m.toString().padStart(2, "0")}m`
 }
 
 /** Fractional days under 1 → hours. Used by the Playtime view. */
 export function fmtDays(seconds: number): string {
-  const d = seconds / SEC_PER_DAY;
-  return d >= 1 ? `${d.toFixed(1)} jours` : `${Math.round(d * 24)}h`;
+  const d = seconds / SEC_PER_DAY
+  return d >= 1 ? `${d.toFixed(1)} jours` : `${Math.round(d * 24)}h`
 }
 
 /** Thousands-grouped locale number, up to 2 decimals. */
 export function fmtNumber(n: number): string {
-  return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  return n.toLocaleString(undefined, { maximumFractionDigits: 2 })
 }
 
 /** Two-decimal percentage, e.g. `56.72%`. */
 export function fmtPercent(n: number): string {
-  return `${(n * 100).toFixed(2)}%`;
+  return `${(n * 100).toFixed(2)}%`
 }

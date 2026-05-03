@@ -13,22 +13,22 @@
  * the content is a curated highlight reel, not the full CHANGELOG.
  */
 
-import { useEffect, useState, type ReactNode } from "react";
-import { useTranslation } from "react-i18next";
+import { useEffect, useState, type ReactNode } from "react"
+import { useTranslation } from "react-i18next"
 
-declare const __APP_VERSION__: string;
+declare const __APP_VERSION__: string
 
-const STORAGE_KEY = "cruzer:lastSeenVersion";
+const STORAGE_KEY = "cruzer:lastSeenVersion"
 
 /**
  * Highlights for the currently-shipping version. Add a new entry when
  * bumping `package.json` and the modal re-fires for everyone.
  */
 interface Highlight {
-  emoji: string;
-  title: string;
-  body: string;
-  accent?: "accent" | "warm" | "emerald" | "sky" | "purple";
+  emoji: string
+  title: string
+  body: string
+  accent?: "accent" | "warm" | "emerald" | "sky" | "purple"
 }
 
 const RELEASES: Record<string, { headline: string; items: Highlight[] }> = {
@@ -49,7 +49,7 @@ const RELEASES: Record<string, { headline: string; items: Highlight[] }> = {
       },
       {
         emoji: "📊",
-        title: "\"Saison écoulée\" au lieu de \"Saison\"",
+        title: '"Saison écoulée" au lieu de "Saison"',
         body: "Le pourcentage du passage du temps dans la saison est désormais explicite.",
         accent: "sky",
       },
@@ -115,7 +115,7 @@ const RELEASES: Record<string, { headline: string; items: Highlight[] }> = {
       },
     ],
   },
-};
+}
 
 const ACCENT_TINTS: Record<NonNullable<Highlight["accent"]>, string> = {
   accent: "rgba(243,7,94,0.18)",
@@ -123,7 +123,7 @@ const ACCENT_TINTS: Record<NonNullable<Highlight["accent"]>, string> = {
   emerald: "rgba(52,211,153,0.15)",
   sky: "rgba(56,189,248,0.15)",
   purple: "rgba(168,85,247,0.18)",
-};
+}
 
 const ACCENT_BORDERS: Record<NonNullable<Highlight["accent"]>, string> = {
   accent: "rgba(243,7,94,0.40)",
@@ -131,57 +131,57 @@ const ACCENT_BORDERS: Record<NonNullable<Highlight["accent"]>, string> = {
   emerald: "rgba(52,211,153,0.40)",
   sky: "rgba(56,189,248,0.40)",
   purple: "rgba(168,85,247,0.40)",
-};
+}
 
 function isNewerVersion(a: string, b: string): boolean {
-  const pa = a.split(".").map((n) => Number(n) || 0);
-  const pb = b.split(".").map((n) => Number(n) || 0);
+  const pa = a.split(".").map((n) => Number(n) || 0)
+  const pb = b.split(".").map((n) => Number(n) || 0)
   for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-    const x = pa[i] ?? 0;
-    const y = pb[i] ?? 0;
-    if (x > y) return true;
-    if (x < y) return false;
+    const x = pa[i] ?? 0
+    const y = pb[i] ?? 0
+    if (x > y) return true
+    if (x < y) return false
   }
-  return false;
+  return false
 }
 
 export function WhatsNewModal() {
-  const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const { t } = useTranslation()
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     try {
-      const seen = localStorage.getItem(STORAGE_KEY);
-      const current = __APP_VERSION__;
-      const release = RELEASES[current];
+      const seen = localStorage.getItem(STORAGE_KEY)
+      const current = __APP_VERSION__
+      const release = RELEASES[current]
       // Only show when we have curated highlights for this version AND
       // the user has never seen them.
-      if (!release) return;
+      if (!release) return
       if (!seen || isNewerVersion(current, seen)) {
-        setOpen(true);
+        setOpen(true)
       }
     } catch {
       /* localStorage unavailable — silently skip */
     }
-  }, []);
+  }, [])
 
   const dismiss = () => {
     try {
-      localStorage.setItem(STORAGE_KEY, __APP_VERSION__);
+      localStorage.setItem(STORAGE_KEY, __APP_VERSION__)
     } catch {
       /* ignore */
     }
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
-  if (!open) return null;
-  const release = RELEASES[__APP_VERSION__];
-  if (!release) return null;
+  if (!open) return null
+  const release = RELEASES[__APP_VERSION__]
+  if (!release) return null
 
   return (
     <Backdrop onClose={dismiss}>
       <div
-        className="relative w-full max-w-160 max-h-[85vh] overflow-hidden rounded-2xl border animate-[dropdown-in_280ms_ease-out]"
+        className="relative max-h-[85vh] w-full max-w-160 animate-[dropdown-in_280ms_ease-out] overflow-hidden rounded-2xl border"
         style={{
           background:
             "linear-gradient(180deg, rgba(17,17,29,0.96), rgba(7,7,13,0.96))",
@@ -192,12 +192,12 @@ export function WhatsNewModal() {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Accent gradient top bar */}
-        <div className="h-0.5 bg-linear-to-r from-transparent via-bungie-accent to-transparent" />
+        <div className="via-bungie-accent h-0.5 bg-linear-to-r from-transparent to-transparent" />
 
         {/* Close */}
         <button
           onClick={dismiss}
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 border border-white/15 text-white/70 hover:text-white hover:border-white/40 transition-colors flex items-center justify-center"
+          className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-black/50 text-white/70 transition-colors hover:border-white/40 hover:text-white"
           aria-label={t("common.close", "Fermer")}
         >
           ✕
@@ -205,20 +205,20 @@ export function WhatsNewModal() {
 
         {/* Header */}
         <div className="px-7 pt-7 pb-5">
-          <div className="text-[10px] uppercase tracking-[0.3em] font-extrabold text-bungie-accent mb-1.5">
+          <div className="text-bungie-accent mb-1.5 text-[10px] font-extrabold tracking-[0.3em] uppercase">
             Cruzer Compagnon · v{__APP_VERSION__}
           </div>
-          <h2 className="text-[26px] font-extrabold tracking-tight leading-[1.15] text-white">
+          <h2 className="text-[26px] leading-[1.15] font-extrabold tracking-tight text-white">
             {t("whatsNew.title", "Quoi de neuf")}
           </h2>
-          <p className="text-sm text-bungie-muted mt-2">{release.headline}</p>
+          <p className="text-bungie-muted mt-2 text-sm">{release.headline}</p>
         </div>
 
         {/* Scrollable body */}
-        <div className="px-7 pb-4 overflow-auto max-h-[55vh] space-y-2.5">
+        <div className="max-h-[55vh] space-y-2.5 overflow-auto px-7 pb-4">
           {release.items.map((item, i) => {
-            const tint = ACCENT_TINTS[item.accent ?? "accent"];
-            const border = ACCENT_BORDERS[item.accent ?? "accent"];
+            const tint = ACCENT_TINTS[item.accent ?? "accent"]
+            const border = ACCENT_BORDERS[item.accent ?? "accent"]
             return (
               <div
                 key={i}
@@ -230,47 +230,47 @@ export function WhatsNewModal() {
                 }}
               >
                 <div
-                  className="w-10 h-10 shrink-0 rounded-lg flex items-center justify-center text-[18px]"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-[18px]"
                   style={{ background: tint, border: `1px solid ${border}` }}
                 >
                   {item.emoji}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-[13px] font-extrabold text-white leading-tight">
+                  <div className="text-[13px] leading-tight font-extrabold text-white">
                     {item.title}
                   </div>
-                  <p className="text-[12px] text-bungie-text/75 mt-1 leading-snug">
+                  <p className="text-bungie-text/75 mt-1 text-[12px] leading-snug">
                     {item.body}
                   </p>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
 
         {/* Footer */}
-        <div className="border-t border-bungie-border/40 px-7 py-4 flex items-center justify-between gap-3">
-          <span className="text-[10px] uppercase tracking-[0.22em] font-bold text-white/40">
+        <div className="border-bungie-border/40 flex items-center justify-between gap-3 border-t px-7 py-4">
+          <span className="text-[10px] font-bold tracking-[0.22em] text-white/40 uppercase">
             {t("whatsNew.footerHint", "Change-log complet dans CHANGELOG.md")}
           </span>
           <button
             onClick={dismiss}
-            className="h-9 px-5 rounded-md bg-bungie-accent hover:brightness-110 text-black font-extrabold text-[12px] uppercase tracking-wider transition-all"
+            className="bg-bungie-accent h-9 rounded-md px-5 text-[12px] font-extrabold tracking-wider text-black uppercase transition-all hover:brightness-110"
           >
             {t("whatsNew.dismiss", "C'est parti")}
           </button>
         </div>
       </div>
     </Backdrop>
-  );
+  )
 }
 
 function Backdrop({
   children,
   onClose,
 }: {
-  children: ReactNode;
-  onClose: () => void;
+  children: ReactNode
+  onClose: () => void
 }) {
   return (
     <div
@@ -280,5 +280,5 @@ function Backdrop({
     >
       {children}
     </div>
-  );
+  )
 }

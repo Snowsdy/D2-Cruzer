@@ -4,7 +4,7 @@
  * All use the Destiny tricorn silhouette with per-activity color accent.
  */
 
-type Props = { name: string; size?: number; className?: string };
+type Props = { name: string; size?: number; className?: string }
 
 const CREST_COLOR: Record<string, string> = {
   // Raids — tinted per expansion theme
@@ -27,13 +27,13 @@ const CREST_COLOR: Record<string, string> = {
   Prophecy: "#f1f5f9",
   "Ghosts of the Deep": "#0891b2",
   "Sundered Doctrine": "#a855f7",
-};
+}
 
 export function ActivityCrest({ name, size = 40, className = "" }: Props) {
-  const color = CREST_COLOR[name] ?? "#f3075e";
+  const color = CREST_COLOR[name] ?? "#f3075e"
   return (
     <div
-      className={`relative rounded-md flex items-center justify-center ${className}`}
+      className={`relative flex items-center justify-center rounded-md ${className}`}
       style={{
         width: size,
         height: size,
@@ -55,5 +55,5 @@ export function ActivityCrest({ name, size = 40, className = "" }: Props) {
         <ellipse cx="50" cy="28" rx="7" ry="24" transform="rotate(240 50 55)" />
       </svg>
     </div>
-  );
+  )
 }

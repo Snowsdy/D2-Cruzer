@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useSeason } from "../hooks/useSeason";
-import { SeasonModal } from "./season-modal";
+import { useState } from "react"
+import { useSeason } from "../hooks/useSeason"
+import { SeasonModal } from "./season-modal"
 
 /**
  * Compact header chip — matches the LivePlayersBadge pill style
@@ -8,15 +8,15 @@ import { SeasonModal } from "./season-modal";
  * indicators rather than a mix of shapes.
  */
 export function SeasonBadge() {
-  const season = useSeason();
-  const [open, setOpen] = useState(false);
+  const season = useSeason()
+  const [open, setOpen] = useState(false)
 
-  if (!season) return null;
+  if (!season) return null
 
   const xpPct = Math.min(
     100,
     season.xpNeeded > 0 ? (season.xpProgress / season.xpNeeded) * 100 : 0
-  );
+  )
 
   return (
     <>
@@ -25,17 +25,17 @@ export function SeasonBadge() {
         title={`${season.name} · Rang ${season.rank}${
           season.daysLeft != null ? ` · ${season.daysLeft}j restants` : ""
         }`}
-        className="flex items-center gap-1.5 h-7 px-2 rounded-full bg-bungie-panel/50 border border-bungie-accent/25 hover:border-bungie-accent/60 transition-colors shrink-0"
+        className="bg-bungie-panel/50 border-bungie-accent/25 hover:border-bungie-accent/60 flex h-7 shrink-0 items-center gap-1.5 rounded-full border px-2 transition-colors"
       >
-        <span className="text-[10.5px] font-bold uppercase tracking-wider text-bungie-accent tabular-nums leading-none">
+        <span className="text-bungie-accent text-[10.5px] leading-none font-bold tracking-wider uppercase tabular-nums">
           S{season.number}
         </span>
-        <span className="w-px h-3 bg-white/10" />
-        <span className="font-mono text-[11px] font-bold tabular-nums text-white leading-none">
+        <span className="h-3 w-px bg-white/10" />
+        <span className="font-mono text-[11px] leading-none font-bold text-white tabular-nums">
           {season.rank}
         </span>
         <span
-          className="relative h-[2.5px] w-7 rounded-full overflow-hidden"
+          className="relative h-[2.5px] w-7 overflow-hidden rounded-full"
           style={{ background: "rgba(0,0,0,0.55)" }}
         >
           <span
@@ -50,5 +50,5 @@ export function SeasonBadge() {
 
       {open && <SeasonModal season={season} onClose={() => setOpen(false)} />}
     </>
-  );
+  )
 }
