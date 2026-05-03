@@ -1,8 +1,8 @@
-import { bungieGet } from "./bungie";
+import { bungieGet } from "./bungie"
 import type {
   DestinyPublicMilestone,
   DestinyMilestoneDefinition,
-} from "bungie-api-ts/destiny2";
+} from "bungie-api-ts/destiny2"
 
 export async function getPublicMilestones(): Promise<
   Record<string, DestinyPublicMilestone>
@@ -10,7 +10,7 @@ export async function getPublicMilestones(): Promise<
   return bungieGet<Record<string, DestinyPublicMilestone>>(
     "/Destiny2/Milestones/",
     { auth: false }
-  );
+  )
 }
 
 export async function getMilestoneDef(
@@ -20,5 +20,5 @@ export async function getMilestoneDef(
   return bungieGet<DestinyMilestoneDefinition>(
     `/Destiny2/Manifest/DestinyMilestoneDefinition/${hash}/?lc=${encodeURIComponent(locale)}`,
     { auth: false }
-  );
+  )
 }

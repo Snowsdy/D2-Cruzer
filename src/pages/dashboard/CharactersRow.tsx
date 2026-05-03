@@ -8,56 +8,56 @@
  * Inventory for that Guardian.
  */
 
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { useProfile } from "@/hooks/useProfile";
-import { useCharacterStore } from "@/store/character";
-import { useManifestStore } from "@/store/manifest";
-import { getName } from "@/api/manifest";
+import { useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+import { useProfile } from "@/hooks/useProfile"
+import { useCharacterStore } from "@/store/character"
+import { useManifestStore } from "@/store/manifest"
+import { getName } from "@/api/manifest"
 
 function relativeDay(
   iso: string | undefined,
   t: (key: string, opts?: Record<string, unknown>) => string
 ): string {
-  if (!iso) return "—";
-  const ms = Date.now() - new Date(iso).getTime();
-  const days = Math.floor(ms / 86400000);
-  if (days <= 0) return t("dashboard.characters.today");
-  if (days === 1) return t("dashboard.characters.yesterday");
-  if (days < 30) return t("dashboard.characters.daysAgo", { n: days });
-  return t("dashboard.characters.monthsAgo", { n: Math.floor(days / 30) });
+  if (!iso) return "—"
+  const ms = Date.now() - new Date(iso).getTime()
+  const days = Math.floor(ms / 86400000)
+  if (days <= 0) return t("dashboard.characters.today")
+  if (days === 1) return t("dashboard.characters.yesterday")
+  if (days < 30) return t("dashboard.characters.daysAgo", { n: days })
+  return t("dashboard.characters.monthsAgo", { n: Math.floor(days / 30) })
 }
 
 export function CharactersRow() {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { profile } = useProfile();
-  const setActive = useCharacterStore((s) => s.setActiveCharacter);
-  const activeId = useCharacterStore((s) => s.activeCharacterId);
-  const manifest = useManifestStore((s) => s.manifest);
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { profile } = useProfile()
+  const setActive = useCharacterStore((s) => s.setActiveCharacter)
+  const activeId = useCharacterStore((s) => s.activeCharacterId)
+  const manifest = useManifestStore((s) => s.manifest)
 
-  const chars = profile.data?.characters?.data;
-  if (!chars) return null;
+  const chars = profile.data?.characters?.data
+  if (!chars) return null
   const list = Object.values(chars).sort(
     (a, b) =>
       new Date(b.dateLastPlayed).getTime() -
       new Date(a.dateLastPlayed).getTime()
-  );
+  )
 
-  if (list.length === 0) return null;
+  if (list.length === 0) return null
 
   const goToChar = (cid: string) => {
-    setActive(cid);
-    navigate("/inventory");
-  };
+    setActive(cid)
+    navigate("/inventory")
+  }
 
   return (
     <section>
-      <div className="flex items-baseline justify-between mb-3">
-        <h2 className="text-[11px] uppercase tracking-[0.28em] font-extrabold text-bungie-muted">
+      <div className="mb-3 flex items-baseline justify-between">
+        <h2 className="text-bungie-muted text-[11px] font-extrabold tracking-[0.28em] uppercase">
           {t("dashboard.characters.title", "Tes Gardiens")}
         </h2>
-        <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/30">
+        <span className="text-[10px] font-bold tracking-[0.2em] text-white/30 uppercase">
           {t("dashboard.characters.hint", "Clique pour ouvrir l'inventaire")}
         </span>
       </div>
@@ -66,19 +66,19 @@ export function CharactersRow() {
         {list.map((c) => {
           const className = manifest
             ? getName(manifest.DestinyClassDefinition, c.classHash)
-            : "…";
+            : "…"
           const classIcon =
             manifest?.DestinyClassDefinition?.[c.classHash]?.displayProperties
-              ?.icon;
-          const emblem = c.emblemBackgroundPath || c.emblemPath;
-          const hoursPlayed = Math.round(Number(c.minutesPlayedTotal ?? 0) / 60);
-          const isActive = c.characterId === activeId;
+              ?.icon
+          const emblem = c.emblemBackgroundPath || c.emblemPath
+          const hoursPlayed = Math.round(Number(c.minutesPlayedTotal ?? 0) / 60)
+          const isActive = c.characterId === activeId
 
           return (
             <button
               key={c.characterId}
               onClick={() => goToChar(c.characterId)}
-              className={`relative overflow-hidden rounded-xl text-left group h-24 transition-all hover:-translate-y-0.5 ${
+              className={`group relative h-24 overflow-hidden rounded-xl text-left transition-all hover:-translate-y-0.5 ${
                 isActive
                   ? "shadow-[0_0_0_1px_rgba(243,7,94,0.6),0_0_28px_rgba(243,7,94,0.25)]"
                   : "shadow-[0_0_0_1px_rgba(31,32,48,0.6)] hover:shadow-[0_0_0_1px_rgba(243,7,94,0.45)]"
@@ -93,49 +93,47 @@ export function CharactersRow() {
             >
               {/* Accent ribbon on active */}
               {isActive && (
-                <span className="absolute left-0 top-0 bottom-0 w-1 bg-linear-to-b from-bungie-accent to-bungie-accent/40" />
+                <span className="from-bungie-accent to-bungie-accent/40 absolute top-0 bottom-0 left-0 w-1 bg-linear-to-b" />
               )}
 
-              <div className="relative h-full flex items-center gap-3 p-3 pl-4">
+              <div className="relative flex h-full items-center gap-3 p-3 pl-4">
                 {classIcon && (
                   <div
-                    className={`w-12 h-12 shrink-0 rounded-lg flex items-center justify-center ${
+                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${
                       isActive ? "bg-bungie-accent/15" : "bg-black/50"
                     } border ${
-                      isActive
-                        ? "border-bungie-accent/60"
-                        : "border-white/10"
+                      isActive ? "border-bungie-accent/60" : "border-white/10"
                     }`}
                   >
                     <img
                       src={`https://www.bungie.net${classIcon}`}
                       alt=""
-                      className="w-8 h-8"
+                      className="h-8 w-8"
                     />
                   </div>
                 )}
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-sm font-extrabold tracking-tight text-white truncate">
+                    <span className="truncate text-sm font-extrabold tracking-tight text-white">
                       {className}
                     </span>
                     {isActive && (
-                      <span className="text-[8.5px] uppercase tracking-[0.2em] font-extrabold text-bungie-accent">
+                      <span className="text-bungie-accent text-[8.5px] font-extrabold tracking-[0.2em] uppercase">
                         Actif
                       </span>
                     )}
                   </div>
-                  <div className="flex items-baseline gap-3 mt-1">
-                    <span className="text-2xl font-extrabold text-[#f5a623] tabular-nums leading-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
+                  <div className="mt-1 flex items-baseline gap-3">
+                    <span className="text-2xl leading-none font-extrabold text-[#f5a623] tabular-nums drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
                       ◆ {c.light}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 mt-1.5 text-[10px] font-semibold text-white/60">
+                  <div className="mt-1.5 flex items-center gap-2 text-[10px] font-semibold text-white/60">
                     <span className="tabular-nums">
                       {hoursPlayed.toLocaleString()} h
                     </span>
-                    <span className="w-0.5 h-0.5 rounded-full bg-white/30" />
+                    <span className="h-0.5 w-0.5 rounded-full bg-white/30" />
                     <span>
                       {relativeDay(c.dateLastPlayed, (k, o) =>
                         String(t(k, o as never))
@@ -145,9 +143,9 @@ export function CharactersRow() {
                 </div>
               </div>
             </button>
-          );
+          )
         })}
       </div>
     </section>
-  );
+  )
 }

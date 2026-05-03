@@ -28,6 +28,6 @@ export const VendorHashes = {
   Eververse: 3361454721,
   /** Master Rahool — Cryptarch, Tour. */
   Rahool: 2255782930,
-} as const;
+} as const
 
-export type VendorKey = keyof typeof VendorHashes;
+export type VendorKey = keyof typeof VendorHashes

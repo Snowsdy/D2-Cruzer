@@ -1,11 +1,11 @@
 // Minimal SVG flags — Windows doesn't render 🇫🇷 style emoji flags natively,
 // so we draw them ourselves at small sizes. Aspect ratio 4:3, simple shapes.
 
-type Props = { code: string; size?: number; className?: string };
+type Props = { code: string; size?: number; className?: string }
 
 export function Flag({ code, size = 18, className = "" }: Props) {
-  const w = Math.round(size * 1.45);
-  const h = size;
+  const w = Math.round(size * 1.45)
+  const h = size
   const common = {
     width: w,
     height: h,
@@ -18,7 +18,7 @@ export function Flag({ code, size = 18, className = "" }: Props) {
       boxShadow: "0 0 0 1px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.4)",
       flexShrink: 0,
     } as React.CSSProperties,
-  };
+  }
 
   switch (code.toLowerCase()) {
     case "fr":
@@ -28,7 +28,7 @@ export function Flag({ code, size = 18, className = "" }: Props) {
           <rect x="8" width="8" height="16" fill="#fff" />
           <rect x="16" width="8" height="16" fill="#EF4135" />
         </svg>
-      );
+      )
     case "en":
     case "us":
       return (
@@ -48,14 +48,14 @@ export function Flag({ code, size = 18, className = "" }: Props) {
             />
           ))}
         </svg>
-      );
+      )
     case "es":
       return (
         <svg {...common}>
           <rect width="24" height="16" fill="#AA151B" />
           <rect y="4" width="24" height="8" fill="#F1BF00" />
         </svg>
-      );
+      )
     case "de":
       return (
         <svg {...common}>
@@ -63,7 +63,7 @@ export function Flag({ code, size = 18, className = "" }: Props) {
           <rect y="5.33" width="24" height="5.34" fill="#DD0000" />
           <rect y="10.67" width="24" height="5.33" fill="#FFCE00" />
         </svg>
-      );
+      )
     case "it":
       return (
         <svg {...common}>
@@ -71,7 +71,7 @@ export function Flag({ code, size = 18, className = "" }: Props) {
           <rect x="8" width="8" height="16" fill="#fff" />
           <rect x="16" width="8" height="16" fill="#CE2B37" />
         </svg>
-      );
+      )
     case "pt-br":
     case "pt":
     case "br":
@@ -87,7 +87,7 @@ export function Flag({ code, size = 18, className = "" }: Props) {
             fill="none"
           />
         </svg>
-      );
+      )
     case "ja":
     case "jp":
       return (
@@ -95,7 +95,7 @@ export function Flag({ code, size = 18, className = "" }: Props) {
           <rect width="24" height="16" fill="#fff" />
           <circle cx="12" cy="8" r="4.8" fill="#BC002D" />
         </svg>
-      );
+      )
     case "ko":
     case "kr":
       return (
@@ -125,7 +125,7 @@ export function Flag({ code, size = 18, className = "" }: Props) {
             <line x1="18.5" y1="13" x2="20.5" y2="13" />
           </g>
         </svg>
-      );
+      )
     case "ru":
       return (
         <svg {...common}>
@@ -133,7 +133,7 @@ export function Flag({ code, size = 18, className = "" }: Props) {
           <rect y="5.33" width="24" height="5.34" fill="#0039A6" />
           <rect y="10.67" width="24" height="5.33" fill="#D52B1E" />
         </svg>
-      );
+      )
     case "zh-chs":
     case "zh":
     case "cn":
@@ -146,7 +146,7 @@ export function Flag({ code, size = 18, className = "" }: Props) {
           <Star x={9.5} y={6} r={0.5} />
           <Star x={8} y={7.5} r={0.5} />
         </svg>
-      );
+      )
     default:
       return (
         <svg {...common}>
@@ -162,16 +162,16 @@ export function Flag({ code, size = 18, className = "" }: Props) {
             {code.slice(0, 2).toUpperCase()}
           </text>
         </svg>
-      );
+      )
   }
 }
 
 function Star({ x, y, r }: { x: number; y: number; r: number }) {
-  const pts: string[] = [];
+  const pts: string[] = []
   for (let i = 0; i < 10; i++) {
-    const angle = (Math.PI / 5) * i - Math.PI / 2;
-    const radius = i % 2 === 0 ? r : r * 0.45;
-    pts.push(`${x + Math.cos(angle) * radius},${y + Math.sin(angle) * radius}`);
+    const angle = (Math.PI / 5) * i - Math.PI / 2
+    const radius = i % 2 === 0 ? r : r * 0.45
+    pts.push(`${x + Math.cos(angle) * radius},${y + Math.sin(angle) * radius}`)
   }
-  return <polygon points={pts.join(" ")} fill="#FFDE00" />;
+  return <polygon points={pts.join(" ")} fill="#FFDE00" />
 }

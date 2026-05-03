@@ -34,6 +34,6 @@ export const BRAND = Object.freeze({
   colorWarn: 0xfbbf24,
   colorError: 0xef4444,
   colorMuted: 0x8b8fa1,
-});
+})
 
-export type BrandColor = keyof typeof BRAND;
+export type BrandColor = keyof typeof BRAND

@@ -15,9 +15,9 @@
 
 export interface AccentPair {
   /** Tailwind `text-*` class for primary labels/numbers. */
-  text: string;
+  text: string
   /** Tailwind `border-xxx-500/40` class for card outlines. */
-  border: string;
+  border: string
 }
 
 export const ACCENTS = {
@@ -28,6 +28,6 @@ export const ACCENTS = {
   ironBanner: { text: "text-red-300", border: "border-red-500/40" },
   nightfall: { text: "text-orange-300", border: "border-orange-500/40" },
   playtime: { text: "text-emerald-300", border: "border-emerald-500/40" },
-} as const satisfies Record<string, AccentPair>;
+} as const satisfies Record<string, AccentPair>
 
-export type AccentKey = keyof typeof ACCENTS;
+export type AccentKey = keyof typeof ACCENTS

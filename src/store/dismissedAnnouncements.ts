@@ -6,14 +6,14 @@
  * even after the app restarts. Persisted so a shell reload doesn't undo
  * the user's choice.
  */
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { create } from "zustand"
+import { persist, createJSONStorage } from "zustand/middleware"
 
 interface DismissedState {
-  ids: string[];
-  dismiss: (id: string) => void;
-  reset: () => void;
-  isDismissed: (id: string) => boolean;
+  ids: string[]
+  dismiss: (id: string) => void
+  reset: () => void
+  isDismissed: (id: string) => boolean
 }
 
 export const useDismissedAnnouncements = create<DismissedState>()(
@@ -30,4 +30,4 @@ export const useDismissedAnnouncements = create<DismissedState>()(
       storage: createJSONStorage(() => localStorage),
     }
   )
-);
+)

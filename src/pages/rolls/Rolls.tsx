@@ -1,28 +1,28 @@
-import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useItemDef } from "@/hooks/useItemDef";
+import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { useItemDef } from "@/hooks/useItemDef"
 import {
   GOD_ROLLS,
   ELEMENT_COLORS,
   type GodRoll,
   type PerkRef,
   type RollRow,
-} from "@/constants/godRolls";
+} from "@/constants/godRolls"
 
-type Tab = "all" | "pve" | "pvp";
+type Tab = "all" | "pve" | "pvp"
 
 // ---------------------------------------------------------------------------
 // Card
 // ---------------------------------------------------------------------------
 
 function PerkChip({ perk, color }: { perk: PerkRef; color: string }) {
-  const def = useItemDef(perk.hash);
-  const icon = def.data?.displayProperties?.icon;
-  const resolvedName = def.data?.displayProperties?.name;
-  const displayName = resolvedName ?? perk.name;
+  const def = useItemDef(perk.hash)
+  const icon = def.data?.displayProperties?.icon
+  const resolvedName = def.data?.displayProperties?.name
+  const displayName = resolvedName ?? perk.name
   return (
     <span
-      className="inline-flex items-center gap-1 pl-0.5 pr-1.5 h-6 rounded-sm text-[10.5px] font-bold text-white"
+      className="inline-flex h-6 items-center gap-1 rounded-sm pr-1.5 pl-0.5 text-[10.5px] font-bold text-white"
       style={{
         background: `${color}1f`,
         border: `1px solid ${color}55`,
@@ -32,7 +32,7 @@ function PerkChip({ perk, color }: { perk: PerkRef; color: string }) {
         <img
           src={`https://www.bungie.net${icon}`}
           alt=""
-          className="w-5 h-5"
+          className="h-5 w-5"
           style={{
             background: "rgba(0,0,0,0.6)",
             border: `1px solid ${color}80`,
@@ -40,7 +40,7 @@ function PerkChip({ perk, color }: { perk: PerkRef; color: string }) {
         />
       ) : (
         <span
-          className="w-5 h-5 flex items-center justify-center text-[10px] text-white/40"
+          className="flex h-5 w-5 items-center justify-center text-[10px] text-white/40"
           style={{
             background: "rgba(0,0,0,0.4)",
             border: `1px solid ${color}35`,
@@ -49,9 +49,9 @@ function PerkChip({ perk, color }: { perk: PerkRef; color: string }) {
           ◇
         </span>
       )}
-      <span className="truncate max-w-40">{displayName}</span>
+      <span className="max-w-40 truncate">{displayName}</span>
     </span>
-  );
+  )
 }
 
 function RollColumn({ row, color }: { row: RollRow; color: string }) {
@@ -63,7 +63,7 @@ function RollColumn({ row, color }: { row: RollRow; color: string }) {
         border: `1px solid ${color}22`,
       }}
     >
-      <div className="text-[9px] uppercase tracking-[0.22em] text-white/40 font-extrabold font-mono mb-1.5">
+      <div className="mb-1.5 font-mono text-[9px] font-extrabold tracking-[0.22em] text-white/40 uppercase">
         {row.column}
       </div>
       <div className="flex flex-wrap gap-1">
@@ -72,26 +72,26 @@ function RollColumn({ row, color }: { row: RollRow; color: string }) {
         ))}
       </div>
     </div>
-  );
+  )
 }
 
 function RollCard({ roll, filter }: { roll: GodRoll; filter: Tab }) {
-  const def = useItemDef(roll.hash);
-  const d = def.data;
-  const icon = d?.displayProperties?.icon;
-  const watermark = d?.iconWatermark;
-  const name = d?.displayProperties?.name ?? roll.nameHint;
-  const typeName = d?.itemTypeDisplayName ?? roll.type;
-  const elementColor = ELEMENT_COLORS[roll.element] ?? "#f3075e";
-  const tier = d?.inventory?.tierType ?? 5;
-  const isExotic = tier === 6;
+  const def = useItemDef(roll.hash)
+  const d = def.data
+  const icon = d?.displayProperties?.icon
+  const watermark = d?.iconWatermark
+  const name = d?.displayProperties?.name ?? roll.nameHint
+  const typeName = d?.itemTypeDisplayName ?? roll.type
+  const elementColor = ELEMENT_COLORS[roll.element] ?? "#f3075e"
+  const tier = d?.inventory?.tierType ?? 5
+  const isExotic = tier === 6
 
-  const showPve = filter !== "pvp" && roll.pve && roll.pve.length > 0;
-  const showPvp = filter !== "pve" && roll.pvp && roll.pvp.length > 0;
+  const showPve = filter !== "pvp" && roll.pve && roll.pve.length > 0
+  const showPvp = filter !== "pve" && roll.pvp && roll.pvp.length > 0
 
   return (
     <div
-      className="group relative rounded-xl overflow-hidden flex flex-col transition-all hover:-translate-y-0.5"
+      className="group relative flex flex-col overflow-hidden rounded-xl transition-all hover:-translate-y-0.5"
       style={{
         background:
           "linear-gradient(180deg, rgba(14,10,22,0.95), rgba(7,7,13,0.98))",
@@ -101,7 +101,7 @@ function RollCard({ roll, filter }: { roll: GodRoll; filter: Tab }) {
     >
       {/* Element accent stripe */}
       <div
-        className="absolute left-0 top-0 bottom-0 w-0.5"
+        className="absolute top-0 bottom-0 left-0 w-0.5"
         style={{
           background: `linear-gradient(180deg, ${elementColor}, transparent)`,
           boxShadow: `0 0 10px ${elementColor}`,
@@ -111,7 +111,7 @@ function RollCard({ roll, filter }: { roll: GodRoll; filter: Tab }) {
       {/* Header */}
       <div className="flex items-center gap-3 p-4">
         <div
-          className="relative w-14 h-14 shrink-0 overflow-hidden"
+          className="relative h-14 w-14 shrink-0 overflow-hidden"
           style={{
             border: `1px solid ${isExotic ? "rgba(206,165,46,0.7)" : "rgba(255,255,255,0.14)"}`,
           }}
@@ -120,26 +120,26 @@ function RollCard({ roll, filter }: { roll: GodRoll; filter: Tab }) {
             <img
               src={`https://www.bungie.net${icon}`}
               alt=""
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
             />
           )}
           {watermark && (
             <img
               src={`https://www.bungie.net${watermark}`}
               alt=""
-              className="absolute inset-0 w-full h-full pointer-events-none"
+              className="pointer-events-none absolute inset-0 h-full w-full"
             />
           )}
         </div>
         <div className="min-w-0 flex-1">
           <div
-            className={`text-[16px] font-extrabold truncate ${
+            className={`truncate text-[16px] font-extrabold ${
               isExotic ? "text-amber-300" : "text-white"
             }`}
           >
             {name}
           </div>
-          <div className="text-[10px] uppercase tracking-[0.16em] font-bold mt-1 flex items-center gap-1.5">
+          <div className="mt-1 flex items-center gap-1.5 text-[10px] font-bold tracking-[0.16em] uppercase">
             <span style={{ color: elementColor }}>{roll.element}</span>
             <span className="text-white/25">·</span>
             <span className="text-white/55">{typeName}</span>
@@ -148,17 +148,17 @@ function RollCard({ roll, filter }: { roll: GodRoll; filter: Tab }) {
       </div>
 
       {roll.notes && (
-        <div className="mx-4 mb-3 text-[11px] italic text-amber-200/75 px-2 py-1.5 rounded-md bg-amber-400/5 border border-amber-400/20">
+        <div className="mx-4 mb-3 rounded-md border border-amber-400/20 bg-amber-400/5 px-2 py-1.5 text-[11px] text-amber-200/75 italic">
           {roll.notes}
         </div>
       )}
 
-      <div className="px-4 pb-4 space-y-3">
+      <div className="space-y-3 px-4 pb-4">
         {showPve && roll.pve && (
           <div>
-            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] font-extrabold font-mono text-emerald-300/85 mb-1.5">
+            <div className="mb-1.5 flex items-center gap-2 font-mono text-[10px] font-extrabold tracking-[0.25em] text-emerald-300/85 uppercase">
               <span>PvE</span>
-              <div className="flex-1 h-px bg-emerald-300/15" />
+              <div className="h-px flex-1 bg-emerald-300/15" />
             </div>
             <div className="space-y-1.5">
               {roll.pve.map((r, i) => (
@@ -169,9 +169,9 @@ function RollCard({ roll, filter }: { roll: GodRoll; filter: Tab }) {
         )}
         {showPvp && roll.pvp && (
           <div>
-            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] font-extrabold font-mono text-red-300/85 mb-1.5">
+            <div className="mb-1.5 flex items-center gap-2 font-mono text-[10px] font-extrabold tracking-[0.25em] text-red-300/85 uppercase">
               <span>PvP</span>
-              <div className="flex-1 h-px bg-red-300/15" />
+              <div className="h-px flex-1 bg-red-300/15" />
             </div>
             <div className="space-y-1.5">
               {roll.pvp.map((r, i) => (
@@ -182,7 +182,7 @@ function RollCard({ roll, filter }: { roll: GodRoll; filter: Tab }) {
         )}
       </div>
     </div>
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -190,39 +190,39 @@ function RollCard({ roll, filter }: { roll: GodRoll; filter: Tab }) {
 // ---------------------------------------------------------------------------
 
 export function Rolls() {
-  const { t } = useTranslation();
-  const [filter, setFilter] = useState<Tab>("all");
-  const [query, setQuery] = useState("");
+  const { t } = useTranslation()
+  const [filter, setFilter] = useState<Tab>("all")
+  const [query, setQuery] = useState("")
 
   const filtered = useMemo(() => {
-    let list = GOD_ROLLS;
-    if (filter === "pve") list = list.filter((r) => r.pve && r.pve.length);
-    if (filter === "pvp") list = list.filter((r) => r.pvp && r.pvp.length);
+    let list = GOD_ROLLS
+    if (filter === "pve") list = list.filter((r) => r.pve && r.pve.length)
+    if (filter === "pvp") list = list.filter((r) => r.pvp && r.pvp.length)
     if (query.trim()) {
-      const q = query.toLowerCase();
+      const q = query.toLowerCase()
       list = list.filter(
         (r) =>
           r.nameHint.toLowerCase().includes(q) ||
           r.type.toLowerCase().includes(q) ||
           r.element.toLowerCase().includes(q)
-      );
+      )
     }
-    return list;
-  }, [filter, query]);
+    return list
+  }, [filter, query])
 
   return (
     <div className="space-y-5">
       <div>
         <h2 className="text-2xl font-extrabold">{t("nav.rolls")}</h2>
-        <p className="text-sm text-bungie-muted mt-1">
+        <p className="text-bungie-muted mt-1 text-sm">
           God rolls communautaires — références pour reconnaître un drop digne
           du coffre.
         </p>
       </div>
 
       {/* Controls */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <div className="flex gap-1 p-1 bg-black/30 border border-bungie-border rounded-full">
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="border-bungie-border flex gap-1 rounded-full border bg-black/30 p-1">
           {[
             { key: "all", label: `Tout (${GOD_ROLLS.length})` },
             { key: "pve", label: "PvE" },
@@ -231,9 +231,9 @@ export function Rolls() {
             <button
               key={it.key}
               onClick={() => setFilter(it.key as Tab)}
-              className={`px-4 h-8 rounded-full text-xs font-bold transition-all ${
+              className={`h-8 rounded-full px-4 text-xs font-bold transition-all ${
                 filter === it.key
-                  ? "bg-bungie-accent text-black shadow-glow"
+                  ? "bg-bungie-accent shadow-glow text-black"
                   : "text-bungie-text/70 hover:text-white"
               }`}
             >
@@ -245,15 +245,15 @@ export function Rolls() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Rechercher une arme, un type, un élément…"
-          className="h-8 px-3 rounded-full bg-black/30 border border-bungie-border text-white text-sm focus:outline-none focus:border-bungie-accent flex-1 min-w-60"
+          className="border-bungie-border focus:border-bungie-accent h-8 min-w-60 flex-1 rounded-full border bg-black/30 px-3 text-sm text-white focus:outline-none"
         />
-        <div className="text-[11px] text-bungie-muted">
+        <div className="text-bungie-muted text-[11px]">
           {filtered.length} arme{filtered.length > 1 ? "s" : ""}
         </div>
       </div>
 
       {filtered.length === 0 ? (
-        <div className="panel p-8 text-center text-bungie-muted">
+        <div className="panel text-bungie-muted p-8 text-center">
           Aucun résultat pour « {query} ».
         </div>
       ) : (
@@ -264,10 +264,10 @@ export function Rolls() {
         </div>
       )}
 
-      <p className="text-[10px] text-bungie-muted/70 italic">
+      <p className="text-bungie-muted/70 text-[10px] italic">
         Données curatées depuis la méta communautaire (Light.gg / D2Gunsmith).
         Les noms de perks sont indicatifs — ton drop peut varier.
       </p>
     </div>
-  );
+  )
 }

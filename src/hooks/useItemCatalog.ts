@@ -13,57 +13,56 @@
  * the load in the background right after login, making /database instant.
  */
 
-import { useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useTranslation } from "react-i18next";
-import { invoke } from "@tauri-apps/api/core";
-import { bungieGet } from "@/api/bungie";
+import { useEffect } from "react"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useTranslation } from "react-i18next"
+import { invoke } from "@tauri-apps/api/core"
+import { bungieGet } from "@/api/bungie"
 import {
   readCachedCatalog,
   writeCachedCatalog,
   type ItemTable,
-} from "@/lib/catalogCache";
+} from "@/lib/catalogCache"
 
 interface ManifestInfo {
-  version: string;
-  jsonWorldComponentContentPaths: Record<string, Record<string, string>>;
+  version: string
+  jsonWorldComponentContentPaths: Record<string, Record<string, string>>
 }
 
 async function fetchItemTable(locale: string): Promise<ItemTable> {
   const info = await bungieGet<ManifestInfo>("/Destiny2/Manifest/", {
     auth: false,
-  });
+  })
 
   // Fast path: hit IndexedDB first.
-  const cached = await readCachedCatalog(info.version, locale);
-  if (cached) return cached;
+  const cached = await readCachedCatalog(info.version, locale)
+  if (cached) return cached
 
   const path =
     info.jsonWorldComponentContentPaths[locale]
       ?.DestinyInventoryItemDefinition ??
-    info.jsonWorldComponentContentPaths["en"]
-      ?.DestinyInventoryItemDefinition;
-  if (!path) throw new Error("Manifest path introuvable");
+    info.jsonWorldComponentContentPaths["en"]?.DestinyInventoryItemDefinition
+  if (!path) throw new Error("Manifest path introuvable")
 
-  const data = await invoke<ItemTable>("bungie_fetch_raw", { path });
+  const data = await invoke<ItemTable>("bungie_fetch_raw", { path })
   // Fire-and-forget — caching is an optimization.
-  void writeCachedCatalog(info.version, locale, data);
-  return data;
+  void writeCachedCatalog(info.version, locale, data)
+  return data
 }
 
 function catalogQueryKey(locale: string) {
-  return ["itemCatalog", locale] as const;
+  return ["itemCatalog", locale] as const
 }
 
 export function useItemCatalog() {
-  const { i18n } = useTranslation();
-  const locale = i18n.resolvedLanguage ?? "en";
+  const { i18n } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? "en"
   return useQuery({
     queryKey: catalogQueryKey(locale),
     queryFn: () => fetchItemTable(locale),
     staleTime: Infinity,
     gcTime: Infinity,
-  });
+  })
 }
 
 /**
@@ -71,14 +70,14 @@ export function useItemCatalog() {
  * shows results instantly. Safe to call multiple times — TanStack dedupes.
  */
 export function usePrefetchItemCatalog() {
-  const qc = useQueryClient();
-  const { i18n } = useTranslation();
-  const locale = i18n.resolvedLanguage ?? "en";
+  const qc = useQueryClient()
+  const { i18n } = useTranslation()
+  const locale = i18n.resolvedLanguage ?? "en"
   useEffect(() => {
     qc.prefetchQuery({
       queryKey: catalogQueryKey(locale),
       queryFn: () => fetchItemTable(locale),
       staleTime: Infinity,
-    });
-  }, [qc, locale]);
+    })
+  }, [qc, locale])
 }

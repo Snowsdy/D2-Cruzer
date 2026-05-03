@@ -29,15 +29,15 @@ export const Buckets = {
   GeneralVault: 138197802,
   // Postmaster (lost items)
   LostItems: 215593132,
-} as const;
+} as const
 
-export type BucketHash = (typeof Buckets)[keyof typeof Buckets];
+export type BucketHash = (typeof Buckets)[keyof typeof Buckets]
 
 export const WEAPON_BUCKETS: BucketHash[] = [
   Buckets.Kinetic,
   Buckets.Energy,
   Buckets.Power,
-];
+]
 
 export const ARMOR_BUCKETS: BucketHash[] = [
   Buckets.Helmet,
@@ -45,7 +45,7 @@ export const ARMOR_BUCKETS: BucketHash[] = [
   Buckets.Chest,
   Buckets.Legs,
   Buckets.ClassItem,
-];
+]
 
 // Equippable general slots (used in character equipment views — DimGrid, CharacterTab).
 export const GENERAL_BUCKETS: BucketHash[] = [
@@ -53,7 +53,7 @@ export const GENERAL_BUCKETS: BucketHash[] = [
   Buckets.Ghost,
   Buckets.Sparrow,
   Buckets.Ship,
-];
+]
 
 // Extended list used only in the Vault view — adds non-equippable stash buckets
 // like consumables and materials so they appear under the "Général" filter.
@@ -61,10 +61,10 @@ export const VAULT_GENERAL_BUCKETS: BucketHash[] = [
   ...GENERAL_BUCKETS,
   Buckets.Consumables,
   Buckets.Materials,
-];
+]
 
 export const EQUIPPED_BUCKETS: BucketHash[] = [
   ...WEAPON_BUCKETS,
   ...ARMOR_BUCKETS,
   ...GENERAL_BUCKETS,
-];
+]

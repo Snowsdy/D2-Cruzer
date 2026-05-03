@@ -2,11 +2,11 @@ import path from "path"
 import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
-import { readFileSync } from "node:fs";
+import { readFileSync } from "node:fs"
 
 const pkg = JSON.parse(
   readFileSync(path.resolve(__dirname, "package.json"), "utf8")
-);
+)
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -33,7 +33,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id: string) => {
-          if (!id.includes("node_modules")) return undefined;
+          if (!id.includes("node_modules")) return undefined
           // Match on path segments with trailing slash so e.g. `react-dom`
           // doesn't spuriously match the `react-i18next` lookup below.
           if (
@@ -43,22 +43,22 @@ export default defineConfig({
             id.includes("/node_modules/react-router/") ||
             id.includes("/node_modules/scheduler/")
           ) {
-            return "react-vendor";
+            return "react-vendor"
           }
           if (id.includes("/node_modules/@tanstack/react-query")) {
-            return "query-vendor";
+            return "query-vendor"
           }
           if (
             id.includes("/node_modules/i18next/") ||
             id.includes("/node_modules/i18next-browser-languagedetector/") ||
             id.includes("/node_modules/react-i18next/")
           ) {
-            return "i18n-vendor";
+            return "i18n-vendor"
           }
           if (id.includes("/node_modules/@tauri-apps/")) {
-            return "tauri-vendor";
+            return "tauri-vendor"
           }
-          return undefined;
+          return undefined
         },
       },
     },

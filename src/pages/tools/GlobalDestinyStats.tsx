@@ -9,11 +9,11 @@
  *    (monthly-ish) so we bump them when the site shows drift.
  */
 
-import { useQuery } from "@tanstack/react-query";
-import { trackedInvoke } from "@/lib/tauri";
+import { useQuery } from "@tanstack/react-query"
+import { trackedInvoke } from "@/lib/tauri"
 
 interface SteamPlayerCount {
-  player_count: number;
+  player_count: number
 }
 
 function useSteamPlayerCount() {
@@ -23,21 +23,21 @@ function useSteamPlayerCount() {
       try {
         return await trackedInvoke<SteamPlayerCount | null>(
           "steam_destiny2_player_count"
-        );
+        )
       } catch {
-        return null;
+        return null
       }
     },
     staleTime: 60_000,
     refetchInterval: 2 * 60_000,
-  });
+  })
 }
 
 interface Stat {
-  label: string;
-  value: string;
-  hint?: string;
-  color: string;
+  label: string
+  value: string
+  hint?: string
+  color: string
 }
 
 // popularity.report snapshot — refresh manually when the site drifts.
@@ -72,16 +72,16 @@ const GLOBAL_STATS: Stat[] = [
     hint: "Gardiens tombés",
     color: "#9ca3af",
   },
-];
+]
 
 // Steam is ~35 % of the active Destiny 2 player base (community estimate).
 // Multiply by 1/0.35 ≈ 2.857 to extrapolate cross-platform.
-const STEAM_SHARE = 0.35;
+const STEAM_SHARE = 0.35
 
 export function GlobalDestinyStats() {
-  const q = useSteamPlayerCount();
-  const live = q.data?.player_count ?? null;
-  const total = live != null ? Math.round(live / STEAM_SHARE) : null;
+  const q = useSteamPlayerCount()
+  const live = q.data?.player_count ?? null
+  const total = live != null ? Math.round(live / STEAM_SHARE) : null
 
   return (
     <div
@@ -93,40 +93,40 @@ export function GlobalDestinyStats() {
       }}
     >
       <div
-        className="absolute -top-16 -left-16 w-60 h-60 rounded-full pointer-events-none"
+        className="pointer-events-none absolute -top-16 -left-16 h-60 w-60 rounded-full"
         style={{
           background:
             "radial-gradient(circle, rgba(243,7,94,0.18), transparent 70%)",
         }}
       />
 
-      <div className="relative flex items-center gap-4 px-5 py-4 flex-wrap">
+      <div className="relative flex flex-wrap items-center gap-4 px-5 py-4">
         {/* Live players — emerald pulse, cross-platform estimate */}
-        <div className="flex items-center gap-3 shrink-0 pr-4 border-r border-white/10">
-          <div className="relative w-2.5 h-2.5 shrink-0">
+        <div className="flex shrink-0 items-center gap-3 border-r border-white/10 pr-4">
+          <div className="relative h-2.5 w-2.5 shrink-0">
             <span
-              className={`block w-2.5 h-2.5 rounded-full ${
+              className={`block h-2.5 w-2.5 rounded-full ${
                 total != null
                   ? "bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]"
                   : "bg-white/20"
               }`}
             />
             {total != null && (
-              <span className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping opacity-50" />
+              <span className="absolute inset-0 h-2.5 w-2.5 animate-ping rounded-full bg-emerald-400 opacity-50" />
             )}
           </div>
           <div>
-            <div className="text-[9px] uppercase tracking-[0.28em] font-extrabold text-emerald-300 font-mono">
+            <div className="font-mono text-[9px] font-extrabold tracking-[0.28em] text-emerald-300 uppercase">
               Joueurs en ligne · Toutes plateformes
             </div>
-            <div className="text-2xl font-extrabold tabular-nums leading-none text-white mt-0.5">
+            <div className="mt-0.5 text-2xl leading-none font-extrabold text-white tabular-nums">
               {total != null
                 ? total.toLocaleString("fr-FR")
                 : q.isLoading
                   ? "…"
                   : "—"}
             </div>
-            <div className="text-[9.5px] text-white/45 mt-1">
+            <div className="mt-1 text-[9.5px] text-white/45">
               {total != null
                 ? `Steam ${live?.toLocaleString("fr-FR")} · estimation × 2.85 cross-plateforme`
                 : "API Steam indisponible"}
@@ -135,28 +135,28 @@ export function GlobalDestinyStats() {
         </div>
 
         {/* popularity.report totals */}
-        <div className="flex items-stretch gap-2 flex-wrap flex-1 justify-end">
+        <div className="flex flex-1 flex-wrap items-stretch justify-end gap-2">
           {GLOBAL_STATS.map((s) => (
             <div
               key={s.label}
-              className="px-3 py-2 rounded-md min-w-30"
+              className="min-w-30 rounded-md px-3 py-2"
               style={{
                 background: "rgba(0,0,0,0.5)",
                 border: `1px solid ${s.color}30`,
                 backdropFilter: "blur(6px)",
               }}
             >
-              <div className="text-[8.5px] uppercase tracking-[0.22em] text-white/45 font-extrabold font-mono leading-none">
+              <div className="font-mono text-[8.5px] leading-none font-extrabold tracking-[0.22em] text-white/45 uppercase">
                 {s.label}
               </div>
               <div
-                className="text-lg font-extrabold tabular-nums leading-none mt-1"
+                className="mt-1 text-lg leading-none font-extrabold tabular-nums"
                 style={{ color: s.color }}
               >
                 {s.value}
               </div>
               {s.hint && (
-                <div className="text-[9px] text-white/35 mt-1 leading-tight">
+                <div className="mt-1 text-[9px] leading-tight text-white/35">
                   {s.hint}
                 </div>
               )}
@@ -173,5 +173,5 @@ export function GlobalDestinyStats() {
         </p>
       </div>
     </div>
-  );
+  )
 }

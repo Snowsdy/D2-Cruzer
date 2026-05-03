@@ -1,22 +1,22 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import { SK_PLATFORM, SK_AUTH_CHARACTER } from "../constants/storageKeys";
+import { create } from "zustand"
+import { persist, createJSONStorage } from "zustand/middleware"
+import { SK_PLATFORM, SK_AUTH_CHARACTER } from "../constants/storageKeys"
 
 export interface AuthState {
-  accessToken: string | null;
-  refreshToken: string | null;
-  expiresAt: number | null;
-  membershipId: string | null;
-  rememberMe: boolean;
+  accessToken: string | null
+  refreshToken: string | null
+  expiresAt: number | null
+  membershipId: string | null
+  rememberMe: boolean
   setTokens: (t: {
-    accessToken: string;
-    refreshToken: string | null;
-    expiresIn: number;
-    membershipId: string;
-  }) => void;
-  setRememberMe: (v: boolean) => void;
-  clear: () => void;
-  isExpired: () => boolean;
+    accessToken: string
+    refreshToken: string | null
+    expiresIn: number
+    membershipId: string
+  }) => void
+  setRememberMe: (v: boolean) => void
+  clear: () => void
+  isExpired: () => boolean
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -42,22 +42,22 @@ export const useAuthStore = create<AuthState>()(
           refreshToken: null,
           expiresAt: null,
           membershipId: null,
-        });
+        })
         // Wipe platform + character selection so the next login re-detects
         // from scratch (no leftover state from the previous user).
         try {
-          localStorage.removeItem(SK_PLATFORM);
-          localStorage.removeItem(SK_AUTH_CHARACTER);
+          localStorage.removeItem(SK_PLATFORM)
+          localStorage.removeItem(SK_AUTH_CHARACTER)
         } catch {
           // ignore
         }
       },
       isExpired: () => {
-        const exp = get().expiresAt;
+        const exp = get().expiresAt
         // Consider the token "expired" 5 minutes before Bungie actually
         // invalidates it — gives us plenty of runway to refresh in the
         // background before any API call hits a 401/99.
-        return !exp || Date.now() >= exp - 5 * 60_000;
+        return !exp || Date.now() >= exp - 5 * 60_000
       },
     }),
     {
@@ -69,7 +69,7 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) =>
         state.rememberMe
           ? state
-          : { rememberMe: state.rememberMe } as AuthState,
+          : ({ rememberMe: state.rememberMe } as AuthState),
     }
   )
-);
+)

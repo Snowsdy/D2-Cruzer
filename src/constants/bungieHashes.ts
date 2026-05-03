@@ -11,7 +11,7 @@
  * here so consumers don't each define their own local mini-enum.
  */
 
-import type { VendorKey } from "@/api/vendors";
+import type { VendorKey } from "@/api/vendors"
 
 // ---------------------------------------------------------------------------
 // Item types  (DestinyInventoryItemDefinition.itemType)
@@ -30,7 +30,7 @@ export const ITEM_TYPE = {
   Package: 25,
   Bounty: 26,
   Finisher: 29,
-} as const;
+} as const
 
 // ---------------------------------------------------------------------------
 // Class types  (DestinyInventoryItemDefinition.classType)
@@ -40,7 +40,7 @@ export const CLASS_TYPE = {
   Hunter: 1,
   Warlock: 2,
   Any: 3,
-} as const;
+} as const
 
 // ---------------------------------------------------------------------------
 // Rarity / tier  (inventory.tierType) — 2..6 scale, 6 = Exotic
@@ -51,7 +51,7 @@ export const TIER = {
   Rare: 4,
   Legendary: 5,
   Exotic: 6,
-} as const;
+} as const
 
 // ---------------------------------------------------------------------------
 // Damage types  (DestinyInventoryItemDefinition.defaultDamageType)
@@ -63,7 +63,7 @@ export const DAMAGE_TYPE = {
   Void: 4,
   Stasis: 6,
   Strand: 7,
-} as const;
+} as const
 
 // ---------------------------------------------------------------------------
 // Ammo types  (equippingBlock.ammoType) — weapon slot
@@ -72,7 +72,7 @@ export const AMMO_TYPE = {
   Kinetic: 1,
   Energy: 2,
   Power: 3,
-} as const;
+} as const
 
 // ---------------------------------------------------------------------------
 // Well-known DestinyItemCategoryDefinition hashes
@@ -80,7 +80,7 @@ export const AMMO_TYPE = {
 export const ITEM_CATEGORY_HASH = {
   Shader: 41757123,
   Finisher: 3683254069,
-} as const;
+} as const
 
 // ---------------------------------------------------------------------------
 // Activity mode hashes  (DestinyActivityDefinition.directActivityModeType,
@@ -99,7 +99,7 @@ export const ACTIVITY_MODE = {
   Gambit: 63,
   Dungeon: 82,
   LostSector: 87,
-} as const;
+} as const
 
 /**
  * Inventory bucket hashes — Bungie exposes slot-level crest icons for these
@@ -123,7 +123,7 @@ export const BucketHashes = {
   Consumables: 1469714392,
   Modifications: 3313201758,
   Shaders: 2973005342,
-} as const;
+} as const
 
 /** Damage type hashes — guaranteed present in manifest with colored icons. */
 export const DamageTypes = {
@@ -133,7 +133,7 @@ export const DamageTypes = {
   Void: 3454344768,
   Stasis: 151347233,
   Strand: 3949783978,
-} as const;
+} as const
 
 /** Stat hashes — guaranteed present. */
 export const Stats = {
@@ -143,14 +143,14 @@ export const Stats = {
   Discipline: 1735777505,
   Intellect: 144602215,
   Strength: 4244567218,
-} as const;
+} as const
 
 /** Class hashes. */
 export const Classes = {
   Titan: 3655393761,
   Hunter: 671679327,
   Warlock: 2271682572,
-} as const;
+} as const
 
 export const VENDOR_COLOR: Record<VendorKey, string> = {
   Zavala: "#38bdf8",
@@ -164,5 +164,5 @@ export const VENDOR_COLOR: Record<VendorKey, string> = {
   Eververse: "#38bdf8",
   Xur: "#facc15",
   LordSaladin: "",
-  Rahool: ""
-};
+  Rahool: "",
+}

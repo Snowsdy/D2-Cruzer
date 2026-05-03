@@ -8,24 +8,24 @@
 
 export interface PerkRef {
   /** DestinyInventoryItemDefinition hash — used to pull the real perk icon. */
-  hash?: number;
+  hash?: number
   /** Fallback display name (shown if the manifest can't resolve the hash). */
-  name: string;
+  name: string
 }
 
 export interface RollRow {
-  column: string; // "Canon", "Chargeur", "Perk 1", "Perk 2", "Masterwork"
-  perks: PerkRef[];
+  column: string // "Canon", "Chargeur", "Perk 1", "Perk 2", "Masterwork"
+  perks: PerkRef[]
 }
 
 export interface GodRoll {
-  hash: number; // DestinyInventoryItemDefinition hash (weapon itself)
-  nameHint: string;
-  type: string;
-  element: string;
-  pve?: RollRow[];
-  pvp?: RollRow[];
-  notes?: string;
+  hash: number // DestinyInventoryItemDefinition hash (weapon itself)
+  nameHint: string
+  type: string
+  element: string
+  pve?: RollRow[]
+  pvp?: RollRow[]
+  notes?: string
 }
 
 // ---------------------------------------------------------------------------
@@ -110,14 +110,14 @@ const P = {
   MW_Reload: 1119087317,
   MW_Stability: 2452480335,
   MW_ImpactInducer: 3751912585,
-};
+}
 
 // ---------------------------------------------------------------------------
 // FR-display → hash shortcut so the roll rows stay terse.
 // Any name not listed here renders as plain text (safe fallback).
 // ---------------------------------------------------------------------------
 
-const byName = (name: string, hash?: number): PerkRef => ({ name, hash });
+const byName = (name: string, hash?: number): PerkRef => ({ name, hash })
 
 // ---------------------------------------------------------------------------
 // Curated god rolls (current meta snapshot)
@@ -430,10 +430,7 @@ export const GOD_ROLLS: GodRoll[] = [
       },
       {
         column: "Perk 2",
-        perks: [
-          byName("Kill Clip", P.KillClip),
-          byName("Frénésie", P.Frenzy),
-        ],
+        perks: [byName("Kill Clip", P.KillClip), byName("Frénésie", P.Frenzy)],
       },
     ],
   },
@@ -478,7 +475,7 @@ export const GOD_ROLLS: GodRoll[] = [
       },
     ],
   },
-];
+]
 
 export const ELEMENT_COLORS: Record<string, string> = {
   Kinétique: "#cccccc",
@@ -488,4 +485,4 @@ export const ELEMENT_COLORS: Record<string, string> = {
   Stasis: "#4d88ff",
   Toile: "#35c19f",
   Prismatique: "#f0e668",
-};
+}

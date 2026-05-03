@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/preserve-manual-memoization */
-import { useEffect, useMemo, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-import { useTranslation } from "react-i18next";
-import { useItemCatalog } from "@/hooks/useItemCatalog";
+import { useEffect, useMemo, useRef, useState } from "react"
+import { createPortal } from "react-dom"
+import { useTranslation } from "react-i18next"
+import { useItemCatalog } from "@/hooks/useItemCatalog"
 import {
   ITEM_TYPE as IT,
   CLASS_TYPE as CLS,
   AMMO_TYPE as AMMO,
   ITEM_CATEGORY_HASH,
-} from "@/constants/bungieHashes";
-import { isShader } from "@/utils/itemClassify";
-import type { DestinyInventoryItemDefinition } from "bungie-api-ts/destiny2";
+} from "@/constants/bungieHashes"
+import { isShader } from "@/utils/itemClassify"
+import type { DestinyInventoryItemDefinition } from "bungie-api-ts/destiny2"
 
 // ---------------------------------------------------------------------------
 // Bungie item classification — using itemType + itemSubType + classType.
@@ -26,33 +26,33 @@ import type { DestinyInventoryItemDefinition } from "bungie-api-ts/destiny2";
  *   - empty or "[Deprecated]" display names
  */
 function isDisplayable(d: DestinyInventoryItemDefinition): boolean {
-  if (d.redacted) return false;
-  if ((d as unknown as { blacklisted?: boolean }).blacklisted) return false;
-  const name = d.displayProperties?.name ?? "";
-  if (!name) return false;
-  if (/\[deprecated\]|\[unused\]|^classified$/i.test(name)) return false;
-  if (!d.displayProperties?.hasIcon) return false;
-  return true;
+  if (d.redacted) return false
+  if ((d as unknown as { blacklisted?: boolean }).blacklisted) return false
+  const name = d.displayProperties?.name ?? ""
+  if (!name) return false
+  if (/\[deprecated\]|\[unused\]|^classified$/i.test(name)) return false
+  if (!d.displayProperties?.hasIcon) return false
+  return true
 }
 
 interface Facet {
-  key: string;
-  labelKey: string;
-  match: (d: DestinyInventoryItemDefinition) => boolean;
+  key: string
+  labelKey: string
+  match: (d: DestinyInventoryItemDefinition) => boolean
 }
 
 interface TabDef {
-  key: string;
-  labelKey: string;
-  match: (d: DestinyInventoryItemDefinition) => boolean;
-  facets?: Facet[];
+  key: string
+  labelKey: string
+  match: (d: DestinyInventoryItemDefinition) => boolean
+  facets?: Facet[]
 }
 
 const ALL_FACET: Facet = {
   key: "all",
   labelKey: "database.facet.all",
   match: () => true,
-};
+}
 
 const TABS: TabDef[] = [
   {
@@ -90,7 +90,11 @@ const TABS: TabDef[] = [
     match: (d) => d.itemType === IT.Armor,
     facets: [
       ALL_FACET,
-      { key: "titan", labelKey: "database.facet.titan", match: (d) => d.classType === CLS.Titan },
+      {
+        key: "titan",
+        labelKey: "database.facet.titan",
+        match: (d) => d.classType === CLS.Titan,
+      },
       {
         key: "hunter",
         labelKey: "database.facet.hunter",
@@ -114,7 +118,11 @@ const TABS: TabDef[] = [
     match: (d) => d.itemType === IT.Subclass,
     facets: [
       ALL_FACET,
-      { key: "titan", labelKey: "database.facet.titan", match: (d) => d.classType === CLS.Titan },
+      {
+        key: "titan",
+        labelKey: "database.facet.titan",
+        match: (d) => d.classType === CLS.Titan,
+      },
       {
         key: "hunter",
         labelKey: "database.facet.hunter",
@@ -156,9 +164,9 @@ const TABS: TabDef[] = [
     key: "emotes",
     labelKey: "database.tab.emotes",
     match: (d) => {
-      if (d.itemType === IT.Emote) return true;
-      const t = (d.itemTypeDisplayName ?? "").toLowerCase();
-      return /emote|gestuelle/.test(t);
+      if (d.itemType === IT.Emote) return true
+      const t = (d.itemTypeDisplayName ?? "").toLowerCase()
+      return /emote|gestuelle/.test(t)
     },
   },
   {
@@ -167,14 +175,14 @@ const TABS: TabDef[] = [
     // Finisher detection — itemType 29, known Finisher category hash, or
     // the French/English type label.
     match: (d) => {
-      if (d.itemType === IT.Finisher) return true;
-      const cats = d.itemCategoryHashes ?? [];
-      if (cats.includes(ITEM_CATEGORY_HASH.Finisher)) return true;
-      const t = (d.itemTypeDisplayName ?? "").toLowerCase();
-      return /ach[èe]vement|finisher/.test(t);
+      if (d.itemType === IT.Finisher) return true
+      const cats = d.itemCategoryHashes ?? []
+      if (cats.includes(ITEM_CATEGORY_HASH.Finisher)) return true
+      const t = (d.itemTypeDisplayName ?? "").toLowerCase()
+      return /ach[èe]vement|finisher/.test(t)
     },
   },
-];
+]
 
 const TIER_COLORS: Record<number, string> = {
   6: "rgba(206,165,46,0.7)", // Exotic
@@ -182,7 +190,7 @@ const TIER_COLORS: Record<number, string> = {
   4: "rgba(81,108,186,0.6)", // Rare
   3: "rgba(60,145,66,0.55)", // Uncommon
   2: "rgba(195,188,180,0.35)", // Common
-};
+}
 
 const TIER_NAME_KEY: Record<number, string> = {
   6: "database.tier.exotic",
@@ -190,7 +198,7 @@ const TIER_NAME_KEY: Record<number, string> = {
   4: "database.tier.rare",
   3: "database.tier.uncommon",
   2: "database.tier.common",
-};
+}
 
 const TAB_ACCENT: Record<string, string> = {
   weapons: "#f87171",
@@ -205,7 +213,7 @@ const TAB_ACCENT: Record<string, string> = {
   emotes: "#fde047",
   finishers: "#fca5a5",
   subclass: "#d946ef",
-};
+}
 
 // ---------------------------------------------------------------------------
 // Tile
@@ -215,27 +223,27 @@ function ItemTile({
   def,
   onClick,
 }: {
-  def: DestinyInventoryItemDefinition;
-  onClick: () => void;
+  def: DestinyInventoryItemDefinition
+  onClick: () => void
 }) {
-  const icon = def.displayProperties?.icon;
-  const watermark = def.iconWatermark;
-  const tier = def.inventory?.tierType ?? 5;
-  const name = def.displayProperties?.name ?? "";
-  const typeName = def.itemTypeDisplayName;
-  const isExotic = tier === 6;
+  const icon = def.displayProperties?.icon
+  const watermark = def.iconWatermark
+  const tier = def.inventory?.tierType ?? 5
+  const name = def.displayProperties?.name ?? ""
+  const typeName = def.itemTypeDisplayName
+  const isExotic = tier === 6
 
   return (
     <button
       onClick={onClick}
-      className="cv-auto-tile text-left p-2 rounded-md flex items-center gap-2 hover:-translate-y-0.5 transition-all"
+      className="cv-auto-tile flex items-center gap-2 rounded-md p-2 text-left transition-all hover:-translate-y-0.5"
       style={{
         background: "rgba(12,8,20,0.8)",
         border: `1px solid ${TIER_COLORS[tier] ?? "rgba(255,255,255,0.06)"}`,
       }}
     >
       <div
-        className="relative w-11 h-11 shrink-0 overflow-hidden"
+        className="relative h-11 w-11 shrink-0 overflow-hidden"
         style={{
           border: `1px solid ${TIER_COLORS[tier] ?? "rgba(255,255,255,0.14)"}`,
         }}
@@ -246,7 +254,7 @@ function ItemTile({
             alt=""
             loading="lazy"
             decoding="async"
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
         )}
         {watermark && (
@@ -255,24 +263,24 @@ function ItemTile({
             alt=""
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 w-full h-full pointer-events-none"
+            className="pointer-events-none absolute inset-0 h-full w-full"
           />
         )}
       </div>
       <div className="min-w-0 flex-1">
         <div
-          className={`text-[12px] font-bold truncate ${
+          className={`truncate text-[12px] font-bold ${
             isExotic ? "text-amber-300" : "text-white"
           }`}
         >
           {name || "…"}
         </div>
         {typeName && (
-          <div className="text-[10px] text-white/45 truncate">{typeName}</div>
+          <div className="truncate text-[10px] text-white/45">{typeName}</div>
         )}
       </div>
     </button>
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -283,44 +291,44 @@ function DetailModal({
   def,
   onClose,
 }: {
-  def: DestinyInventoryItemDefinition;
-  onClose: () => void;
+  def: DestinyInventoryItemDefinition
+  onClose: () => void
 }) {
-  const { t } = useTranslation();
-  const icon = def.displayProperties?.icon;
-  const screenshot = def.screenshot;
-  const name = def.displayProperties?.name;
-  const description = def.displayProperties?.description;
-  const flavor = def.flavorText;
-  const type = def.itemTypeDisplayName;
-  const tier = def.inventory?.tierType ?? 5;
-  const tierName = def.inventory?.tierTypeName ?? t(TIER_NAME_KEY[tier]);
-  const isExotic = tier === 6;
-  const borderColor = TIER_COLORS[tier];
+  const { t } = useTranslation()
+  const icon = def.displayProperties?.icon
+  const screenshot = def.screenshot
+  const name = def.displayProperties?.name
+  const description = def.displayProperties?.description
+  const flavor = def.flavorText
+  const type = def.itemTypeDisplayName
+  const tier = def.inventory?.tierType ?? 5
+  const tierName = def.inventory?.tierTypeName ?? t(TIER_NAME_KEY[tier])
+  const isExotic = tier === 6
+  const borderColor = TIER_COLORS[tier]
 
   // Esc closes
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose()
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [onClose])
 
-  if (typeof document === "undefined") return null;
+  if (typeof document === "undefined") return null
 
   return createPortal(
     <div
-      className="fixed inset-0 z-9998 flex items-center justify-center p-6 fade-in-fast"
+      className="fade-in-fast fixed inset-0 z-9998 flex items-center justify-center p-6"
       style={{ background: "rgba(0,0,0,0.78)", backdropFilter: "blur(6px)" }}
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl max-h-[84vh] flex flex-col panel overflow-hidden"
+        className="panel flex max-h-[84vh] w-full max-w-2xl flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
         style={{ border: `1px solid ${borderColor}` }}
       >
         {screenshot && (
           <div
-            className="h-44 relative shrink-0"
+            className="relative h-44 shrink-0"
             style={{
               backgroundImage: `linear-gradient(180deg, rgba(7,7,13,0.3), rgba(7,7,13,0.95)), url(https://www.bungie.net${screenshot})`,
               backgroundSize: "cover",
@@ -328,18 +336,18 @@ function DetailModal({
             }}
           />
         )}
-        <div className="p-5 flex flex-col gap-4 overflow-y-auto min-h-0 flex-1">
+        <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-5">
           <div className="flex items-start gap-4">
             {icon && (
               <img
                 src={`https://www.bungie.net${icon}`}
                 alt=""
-                className="w-16 h-16 shrink-0"
+                className="h-16 w-16 shrink-0"
                 style={{ border: `1px solid ${borderColor}` }}
               />
             )}
             <div className="min-w-0 flex-1">
-              <div className="text-[10px] uppercase tracking-[0.25em] text-white/45 font-extrabold">
+              <div className="text-[10px] font-extrabold tracking-[0.25em] text-white/45 uppercase">
                 {tierName}
               </div>
               <h2
@@ -350,187 +358,191 @@ function DetailModal({
                 {name}
               </h2>
               {type && (
-                <div className="text-[11px] text-white/55 font-semibold mt-0.5">
+                <div className="mt-0.5 text-[11px] font-semibold text-white/55">
                   {type}
                 </div>
               )}
             </div>
             <button
               onClick={onClose}
-              className="h-9 w-9 flex items-center justify-center rounded-md hover:bg-white/5 text-white/70 hover:text-white"
+              className="flex h-9 w-9 items-center justify-center rounded-md text-white/70 hover:bg-white/5 hover:text-white"
             >
               ✕
             </button>
           </div>
           {flavor && (
-            <div className="italic text-[12px] text-white/70 leading-snug border-l-2 pl-3 border-amber-400/40">
+            <div className="border-l-2 border-amber-400/40 pl-3 text-[12px] leading-snug text-white/70 italic">
               {flavor}
             </div>
           )}
           {description && (
-            <div className="text-[13px] text-white/85 leading-relaxed whitespace-pre-line">
+            <div className="text-[13px] leading-relaxed whitespace-pre-line text-white/85">
               {description}
             </div>
           )}
-          <div className="pt-3 border-t border-white/5 text-[10px] uppercase tracking-[0.2em] text-white/35 font-mono font-bold">
+          <div className="border-t border-white/5 pt-3 font-mono text-[10px] font-bold tracking-[0.2em] text-white/35 uppercase">
             {t("database.hash")} {def.hash}
           </div>
         </div>
       </div>
     </div>,
     document.body
-  );
+  )
 }
 
 // ---------------------------------------------------------------------------
 // Page
 // ---------------------------------------------------------------------------
 
-type SortMode = "tier" | "name" | "type";
+type SortMode = "tier" | "name" | "type"
 
 export function Database() {
-  const { t } = useTranslation();
-  const catalog = useItemCatalog();
-  const [tab, setTab] = useState<string>("weapons");
-  const [facet, setFacet] = useState<string>("all");
-  const [query, setQuery] = useState("");
-  const [tierFilter, setTierFilter] = useState<number | null>(null);
-  const [sortMode, setSortMode] = useState<SortMode>("tier");
+  const { t } = useTranslation()
+  const catalog = useItemCatalog()
+  const [tab, setTab] = useState<string>("weapons")
+  const [facet, setFacet] = useState<string>("all")
+  const [query, setQuery] = useState("")
+  const [tierFilter, setTierFilter] = useState<number | null>(null)
+  const [sortMode, setSortMode] = useState<SortMode>("tier")
   const [selected, setSelected] =
-    useState<DestinyInventoryItemDefinition | null>(null);
-    const facetRef = useRef("all")
-    const visibleCountRef = useRef(120)
+    useState<DestinyInventoryItemDefinition | null>(null)
+  const facetRef = useRef("all")
+  const visibleCountRef = useRef(120)
 
-  const tabDef = TABS.find((ti) => ti.key === tab)!;
+  const tabDef = TABS.find((ti) => ti.key === tab)!
   const activeFacet: Facet =
-    tabDef.facets?.find((f) => f.key === facet) ?? ALL_FACET;
+    tabDef.facets?.find((f) => f.key === facet) ?? ALL_FACET
 
   // Reset facet when switching tabs (a weapon facet makes no sense on armor)
   useEffect(() => {
-    setFacet(facetRef.current);
-  }, [tab]);
+    setFacet(facetRef.current)
+  }, [tab])
 
   const items = useMemo(() => {
-    if (!catalog.data) return [] as DestinyInventoryItemDefinition[];
-    const q = query.trim().toLowerCase();
-    const out: DestinyInventoryItemDefinition[] = [];
+    if (!catalog.data) return [] as DestinyInventoryItemDefinition[]
+    const q = query.trim().toLowerCase()
+    const out: DestinyInventoryItemDefinition[] = []
     // Classify each item into the FIRST matching tab so categories stay
     // mutually exclusive (e.g. an item can't show up in both "Emotes" and
     // "Achèvements" just because its predicates happen to overlap).
     const classifyTab = (d: DestinyInventoryItemDefinition): string | null => {
-      for (const ti of TABS) if (ti.match(d)) return ti.key;
-      return null;
-    };
+      for (const ti of TABS) if (ti.match(d)) return ti.key
+      return null
+    }
     for (const hash in catalog.data) {
-      const d = catalog.data[hash as unknown as number];
-      if (!d) continue;
-      if (!isDisplayable(d)) continue;
-      if (classifyTab(d) !== tab) continue;
-      if (!activeFacet.match(d)) continue;
-      if (tierFilter != null && d.inventory?.tierType !== tierFilter) continue;
+      const d = catalog.data[hash as unknown as number]
+      if (!d) continue
+      if (!isDisplayable(d)) continue
+      if (classifyTab(d) !== tab) continue
+      if (!activeFacet.match(d)) continue
+      if (tierFilter != null && d.inventory?.tierType !== tierFilter) continue
       if (q) {
-        const name = d.displayProperties.name.toLowerCase();
-        const type = (d.itemTypeDisplayName ?? "").toLowerCase();
-        if (!name.includes(q) && !type.includes(q)) continue;
+        const name = d.displayProperties.name.toLowerCase()
+        const type = (d.itemTypeDisplayName ?? "").toLowerCase()
+        if (!name.includes(q) && !type.includes(q)) continue
       }
-      out.push(d);
+      out.push(d)
     }
 
-    const byName = (a: DestinyInventoryItemDefinition, b: DestinyInventoryItemDefinition) =>
+    const byName = (
+      a: DestinyInventoryItemDefinition,
+      b: DestinyInventoryItemDefinition
+    ) =>
       (a.displayProperties?.name ?? "").localeCompare(
         b.displayProperties?.name ?? "",
         "fr",
         { sensitivity: "base" }
-      );
+      )
 
     switch (sortMode) {
       case "name":
-        out.sort(byName);
-        break;
+        out.sort(byName)
+        break
       case "type":
         out.sort((a, b) => {
-          const tA = a.itemTypeDisplayName ?? "";
-          const tB = b.itemTypeDisplayName ?? "";
-          const cmp = tA.localeCompare(tB, "fr", { sensitivity: "base" });
-          if (cmp !== 0) return cmp;
-          return byName(a, b);
-        });
-        break;
+          const tA = a.itemTypeDisplayName ?? ""
+          const tB = b.itemTypeDisplayName ?? ""
+          const cmp = tA.localeCompare(tB, "fr", { sensitivity: "base" })
+          if (cmp !== 0) return cmp
+          return byName(a, b)
+        })
+        break
       case "tier":
       default:
         // Tier desc (exotic → common), then by type name, then alpha.
         out.sort((a, b) => {
-          const tA = a.inventory?.tierType ?? 0;
-          const tB = b.inventory?.tierType ?? 0;
-          if (tA !== tB) return tB - tA;
+          const tA = a.inventory?.tierType ?? 0
+          const tB = b.inventory?.tierType ?? 0
+          if (tA !== tB) return tB - tA
           const typeCmp = (a.itemTypeDisplayName ?? "").localeCompare(
             b.itemTypeDisplayName ?? "",
             "fr",
             { sensitivity: "base" }
-          );
-          if (typeCmp !== 0) return typeCmp;
-          return byName(a, b);
-        });
+          )
+          if (typeCmp !== 0) return typeCmp
+          return byName(a, b)
+        })
     }
-    return out;
-  }, [catalog.data, query, sortMode, tab, activeFacet, tierFilter]);
+    return out
+  }, [catalog.data, query, sortMode, tab, activeFacet, tierFilter])
 
-  const [visibleCount, setVisibleCount] = useState(120);
+  const [visibleCount, setVisibleCount] = useState(120)
   // Reset pagination when filters change
   useEffect(() => {
-    setVisibleCount(visibleCountRef.current);
-  }, [tab, facet, query, tierFilter, sortMode]);
+    setVisibleCount(visibleCountRef.current)
+  }, [tab, facet, query, tierFilter, sortMode])
 
   // Per-tab count across the catalog — data-driven so the numbers match
   // what the user actually sees when clicking a tab. MUST be declared
   // before any early return to keep hook order stable across loading →
   // loaded transitions (Rules of Hooks).
   const totalPerTab = useMemo(() => {
-    const count: Record<string, number> = {};
-    for (const ti of TABS) count[ti.key] = 0;
-    if (!catalog.data) return count;
+    const count: Record<string, number> = {}
+    for (const ti of TABS) count[ti.key] = 0
+    if (!catalog.data) return count
     for (const hash in catalog.data) {
-      const d = catalog.data[hash as unknown as number];
-      if (!d || !isDisplayable(d)) continue;
+      const d = catalog.data[hash as unknown as number]
+      if (!d || !isDisplayable(d)) continue
       for (const ti of TABS) {
         if (ti.match(d)) {
-          count[ti.key] = (count[ti.key] ?? 0) + 1;
-          break;
+          count[ti.key] = (count[ti.key] ?? 0) + 1
+          break
         }
       }
     }
-    return count;
-  }, [catalog.data]);
+    return count
+  }, [catalog.data])
 
   if (catalog.isLoading) {
     return (
       <div className="space-y-5">
         <div>
           <h2 className="text-2xl font-extrabold">{t("database.title")}</h2>
-          <p className="text-sm text-bungie-muted mt-1">
+          <p className="text-bungie-muted mt-1 text-sm">
             {t("database.subtitle")}
           </p>
         </div>
         <div
-          className="rounded-xl overflow-hidden relative"
+          className="relative overflow-hidden rounded-xl"
           style={{
-            background: "linear-gradient(180deg, rgba(14,10,22,0.95), rgba(7,7,13,0.98))",
+            background:
+              "linear-gradient(180deg, rgba(14,10,22,0.95), rgba(7,7,13,0.98))",
             border: "1px solid rgba(255,255,255,0.06)",
           }}
         >
           <div className="absolute inset-x-0 top-0 h-0.5 overflow-hidden">
             <div
-              className="h-full w-1/3 bg-bungie-accent"
+              className="bg-bungie-accent h-full w-1/3"
               style={{
                 animation: "indeterminateBar 1.4s ease-in-out infinite",
               }}
             />
           </div>
           <div className="p-10 text-center">
-            <div className="text-white/85 font-semibold">
+            <div className="font-semibold text-white/85">
               {t("database.loading")}
             </div>
-            <div className="text-[11px] mt-2 text-white/45">
+            <div className="mt-2 text-[11px] text-white/45">
               {t("database.loadingHint")}
             </div>
           </div>
@@ -542,7 +554,7 @@ export function Database() {
           }
         `}</style>
       </div>
-    );
+    )
   }
 
   if (catalog.isError) {
@@ -550,38 +562,40 @@ export function Database() {
       <div className="space-y-5">
         <h2 className="text-2xl font-extrabold">{t("database.title")}</h2>
         <div className="panel p-6 text-red-300">
-          {t("database.loadingError", { error: (catalog.error as Error).message })}
+          {t("database.loadingError", {
+            error: (catalog.error as Error).message,
+          })}
         </div>
       </div>
-    );
+    )
   }
 
-  const tabAccent = TAB_ACCENT[tab] ?? "#f3075e";
+  const tabAccent = TAB_ACCENT[tab] ?? "#f3075e"
 
   return (
     <div className="space-y-5">
       <div>
         <h2 className="text-2xl font-extrabold">{t("database.title")}</h2>
-        <p className="text-sm text-bungie-muted mt-1">
+        <p className="text-bungie-muted mt-1 text-sm">
           {t("database.subtitle")}
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-[240px_1fr] gap-4">
+      <div className="grid gap-4 lg:grid-cols-[240px_1fr]">
         {/* ================= SIDEBAR ================= */}
         <aside className="space-y-1.5">
-          <div className="text-[9px] uppercase tracking-[0.3em] text-white/35 font-extrabold font-mono px-2 pb-1">
+          <div className="px-2 pb-1 font-mono text-[9px] font-extrabold tracking-[0.3em] text-white/35 uppercase">
             {t("database.categories")}
           </div>
           {TABS.map((tabItem) => {
-            const active = tab === tabItem.key;
-            const color = TAB_ACCENT[tabItem.key] ?? "#ffffff";
-            const count = totalPerTab[tabItem.key] ?? 0;
+            const active = tab === tabItem.key
+            const color = TAB_ACCENT[tabItem.key] ?? "#ffffff"
+            const count = totalPerTab[tabItem.key] ?? 0
             return (
               <button
                 key={tabItem.key}
                 onClick={() => setTab(tabItem.key)}
-                className="w-full text-left rounded-lg px-3 py-2 flex items-center gap-3 transition-all relative overflow-hidden group"
+                className="group relative flex w-full items-center gap-3 overflow-hidden rounded-lg px-3 py-2 text-left transition-all"
                 style={{
                   background: active
                     ? `linear-gradient(90deg, ${color}22, ${color}06 55%, transparent)`
@@ -591,7 +605,7 @@ export function Database() {
               >
                 {active && (
                   <div
-                    className="absolute left-0 top-2 bottom-2 w-0.5"
+                    className="absolute top-2 bottom-2 left-0 w-0.5"
                     style={{
                       background: `linear-gradient(180deg, ${color}, transparent)`,
                       boxShadow: `0 0 8px ${color}`,
@@ -608,13 +622,13 @@ export function Database() {
                   {t(tabItem.labelKey)}
                 </div>
                 <div
-                  className="text-[10.5px] font-mono tabular-nums font-extrabold"
+                  className="font-mono text-[10.5px] font-extrabold tabular-nums"
                   style={{ color: active ? color : "rgba(255,255,255,0.4)" }}
                 >
                   {count.toLocaleString("fr-FR")}
                 </div>
               </button>
-            );
+            )
           })}
         </aside>
 
@@ -622,12 +636,12 @@ export function Database() {
         <div className="min-w-0 space-y-4">
           {/* Sub-facets (only when the active tab defines them) */}
           {tabDef.facets && tabDef.facets.length > 1 && (
-            <div className="flex gap-1 flex-wrap">
+            <div className="flex flex-wrap gap-1">
               {tabDef.facets.map((f) => (
                 <button
                   key={f.key}
                   onClick={() => setFacet(f.key)}
-                  className="h-7 px-3 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors"
+                  className="h-7 rounded-md px-3 text-[11px] font-bold tracking-wider uppercase transition-colors"
                   style={{
                     background:
                       facet === f.key
@@ -636,7 +650,8 @@ export function Database() {
                     border: `1px solid ${
                       facet === f.key ? tabAccent : "rgba(255,255,255,0.08)"
                     }`,
-                    color: facet === f.key ? tabAccent : "rgba(255,255,255,0.65)",
+                    color:
+                      facet === f.key ? tabAccent : "rgba(255,255,255,0.65)",
                   }}
                 >
                   {t(f.labelKey)}
@@ -646,17 +661,17 @@ export function Database() {
           )}
 
           {/* Controls row — search + tier + sort */}
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex flex-wrap items-center gap-3">
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t("database.search")}
-              className="h-9 px-3 rounded-md bg-black/30 border border-bungie-border text-white text-sm focus:outline-none focus:border-bungie-accent min-w-60 flex-1"
+              className="border-bungie-border focus:border-bungie-accent h-9 min-w-60 flex-1 rounded-md border bg-black/30 px-3 text-sm text-white focus:outline-none"
             />
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setTierFilter(null)}
-                className={`h-8 px-3 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors ${
+                className={`h-8 rounded-md px-3 text-[11px] font-bold tracking-wider uppercase transition-colors ${
                   tierFilter === null
                     ? "bg-bungie-accent text-black"
                     : "bg-white/5 text-white/70 hover:bg-white/10"
@@ -668,7 +683,7 @@ export function Database() {
                 <button
                   key={tr}
                   onClick={() => setTierFilter(tr)}
-                  className={`h-8 px-3 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors ${
+                  className={`h-8 rounded-md px-3 text-[11px] font-bold tracking-wider uppercase transition-colors ${
                     tierFilter === tr
                       ? "text-black"
                       : "text-white/70 hover:text-white"
@@ -695,8 +710,8 @@ export function Database() {
                 </button>
               ))}
             </div>
-            <div className="flex items-center gap-1 h-8 px-1 rounded-md bg-white/3 border border-white/8">
-              <span className="text-[9px] uppercase tracking-[0.2em] text-white/40 font-extrabold px-2">
+            <div className="flex h-8 items-center gap-1 rounded-md border border-white/8 bg-white/3 px-1">
+              <span className="px-2 text-[9px] font-extrabold tracking-[0.2em] text-white/40 uppercase">
                 {t("database.sort")}
               </span>
               {(
@@ -709,7 +724,7 @@ export function Database() {
                 <button
                   key={so.key}
                   onClick={() => setSortMode(so.key)}
-                  className={`h-6 px-2 rounded text-[10.5px] font-bold uppercase tracking-wider transition-colors ${
+                  className={`h-6 rounded px-2 text-[10.5px] font-bold tracking-wider uppercase transition-colors ${
                     sortMode === so.key
                       ? "bg-bungie-accent text-black"
                       : "text-white/60 hover:text-white"
@@ -719,14 +734,15 @@ export function Database() {
                 </button>
               ))}
             </div>
-            <div className="text-[11px] text-bungie-muted ml-auto">
-              {items.length.toLocaleString("fr-FR")} / {(totalPerTab[tab] ?? 0).toLocaleString("fr-FR")}
+            <div className="text-bungie-muted ml-auto text-[11px]">
+              {items.length.toLocaleString("fr-FR")} /{" "}
+              {(totalPerTab[tab] ?? 0).toLocaleString("fr-FR")}
             </div>
           </div>
 
           {/* Grid */}
           {items.length === 0 ? (
-            <div className="panel p-8 text-center text-bungie-muted">
+            <div className="panel text-bungie-muted p-8 text-center">
               {t("database.noResults")}
             </div>
           ) : (
@@ -744,9 +760,11 @@ export function Database() {
                 <div className="flex justify-center pt-2">
                   <button
                     onClick={() => setVisibleCount((v) => v + 120)}
-                    className="h-9 px-5 rounded-full bg-bungie-accent/15 hover:bg-bungie-accent/25 border border-bungie-accent/40 text-bungie-accent text-xs font-extrabold uppercase tracking-wider"
+                    className="bg-bungie-accent/15 hover:bg-bungie-accent/25 border-bungie-accent/40 text-bungie-accent h-9 rounded-full border px-5 text-xs font-extrabold tracking-wider uppercase"
                   >
-                    {t("database.loadMore", { n: Math.min(120, items.length - visibleCount) })}
+                    {t("database.loadMore", {
+                      n: Math.min(120, items.length - visibleCount),
+                    })}
                   </button>
                 </div>
               )}
@@ -759,5 +777,5 @@ export function Database() {
         <DetailModal def={selected} onClose={() => setSelected(null)} />
       )}
     </div>
-  );
+  )
 }

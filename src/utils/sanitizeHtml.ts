@@ -8,21 +8,22 @@
 // NOT a full parser. Trades perfect fidelity for simplicity. If we ever need
 // rich sanitization, swap this for DOMPurify.
 
-const SCRIPT_RE = /<script\b[^>]*>[\s\S]*?<\/script\s*>/gi;
-const STYLE_RE = /<style\b[^>]*>[\s\S]*?<\/style\s*>/gi;
+const SCRIPT_RE = /<script\b[^>]*>[\s\S]*?<\/script\s*>/gi
+const STYLE_RE = /<style\b[^>]*>[\s\S]*?<\/style\s*>/gi
 // Block-level dangerous containers that can load foreign content / JS.
 const DANGEROUS_TAGS_RE =
-  /<\/?(?:iframe|object|embed|frame|frameset|base|meta|link)\b[^>]*>/gi;
+  /<\/?(?:iframe|object|embed|frame|frameset|base|meta|link)\b[^>]*>/gi
 // on... event attribute handlers. Uses `[\s/]+` instead of `\s+` so we also
 // catch `<svg/onload=…>` — a common XSS trick where the parser treats the
 // slash as attribute separator. Matches `onfoo=value`, `onfoo="v"`, `onfoo='v'`.
-const EVENT_ATTR_RE = /[\s/]+on[a-z][a-z0-9_-]*\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi;
+const EVENT_ATTR_RE =
+  /[\s/]+on[a-z][a-z0-9_-]*\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi
 // javascript: + vbscript: URIs on any navigation-bearing attribute. Also
 // strips `data:` URIs with a *text* MIME (data:text/html etc — the real
 // XSS vector) but leaves image-typed data URIs alone so Bungie's lazy-load
 // placeholders don't erase the whole `src` attribute.
 const BAD_URI_RE =
-  /\b(?:href|src|xlink:href|action|formaction|srcdoc|poster)\s*=\s*(?:"\s*(?:javascript:|vbscript:|data:(?!image\/))[^"]*"|'\s*(?:javascript:|vbscript:|data:(?!image\/))[^']*')/gi;
+  /\b(?:href|src|xlink:href|action|formaction|srcdoc|poster)\s*=\s*(?:"\s*(?:javascript:|vbscript:|data:(?!image\/))[^"]*"|'\s*(?:javascript:|vbscript:|data:(?!image\/))[^']*')/gi
 
 /**
  * Strips scripts, style blocks, embed-like tags, event handlers, and
@@ -37,11 +38,11 @@ const BAD_URI_RE =
  * for DOMPurify.
  */
 export function sanitizeHtml(input: string | undefined | null): string {
-  if (!input) return "";
+  if (!input) return ""
   return input
     .replace(SCRIPT_RE, "")
     .replace(STYLE_RE, "")
     .replace(DANGEROUS_TAGS_RE, "")
     .replace(EVENT_ATTR_RE, "")
-    .replace(BAD_URI_RE, "");
+    .replace(BAD_URI_RE, "")
 }

@@ -1,12 +1,12 @@
-import { bungieGet } from "./bungie";
+import { bungieGet } from "./bungie"
 
 export interface AggregateActivity {
-  activityHash: number;
-  values: Record<string, { basic: { value: number; displayValue: string } }>;
+  activityHash: number
+  values: Record<string, { basic: { value: number; displayValue: string } }>
 }
 
 export interface AggregateActivityResponse {
-  activities: AggregateActivity[];
+  activities: AggregateActivity[]
 }
 
 export async function getAggregateActivityStats(
@@ -16,22 +16,22 @@ export async function getAggregateActivityStats(
 ): Promise<AggregateActivityResponse> {
   return bungieGet<AggregateActivityResponse>(
     `/Destiny2/${membershipType}/Account/${membershipId}/Character/${characterId}/Stats/AggregateActivityStats/`
-  );
+  )
 }
 
 export interface ActivityHistoryEntry {
-  period: string;
+  period: string
   activityDetails: {
-    referenceId: number;
-    instanceId: string;
-    mode: number;
-    modes: number[];
-  };
-  values: Record<string, { basic: { value: number; displayValue: string } }>;
+    referenceId: number
+    instanceId: string
+    mode: number
+    modes: number[]
+  }
+  values: Record<string, { basic: { value: number; displayValue: string } }>
 }
 
 export interface ActivityHistoryResponse {
-  activities?: ActivityHistoryEntry[];
+  activities?: ActivityHistoryEntry[]
 }
 
 export async function getActivityHistory(
@@ -43,35 +43,35 @@ export async function getActivityHistory(
 ): Promise<ActivityHistoryResponse> {
   return bungieGet<ActivityHistoryResponse>(
     `/Destiny2/${membershipType}/Account/${membershipId}/Character/${characterId}/Stats/Activities/?mode=${mode}&count=${count}&page=0`
-  );
+  )
 }
 
 export interface PgcrEntry {
   player: {
     destinyUserInfo: {
-      membershipId: string;
-      displayName: string;
-    };
-  };
-  characterId: string;
-  values: Record<string, { basic: { value: number; displayValue: string } }>;
+      membershipId: string
+      displayName: string
+    }
+  }
+  characterId: string
+  values: Record<string, { basic: { value: number; displayValue: string } }>
 }
 
 export interface PgcrResponse {
-  period: string;
+  period: string
   activityDetails: {
-    referenceId: number;
-    instanceId: string;
-    mode: number;
-  };
-  entries: PgcrEntry[];
+    referenceId: number
+    instanceId: string
+    mode: number
+  }
+  entries: PgcrEntry[]
 }
 
 export async function getPgcr(instanceId: string): Promise<PgcrResponse> {
   return bungieGet<PgcrResponse>(
     `/Destiny2/Stats/PostGameCarnageReport/${instanceId}/`,
     { auth: false }
-  );
+  )
 }
 
 // Bungie activity mode codes — https://bungie-net.github.io/multi/schema_Destiny-HistoricalStats-Definitions-DestinyActivityModeType.html
@@ -148,4 +148,4 @@ export const ActivityModes = {
   ZoneControl: 89,
   IronBannerRift: 90,
   IronBannerZoneControl: 91,
-} as const;
+} as const

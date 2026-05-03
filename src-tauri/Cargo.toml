@@ -1,6 +1,6 @@
 [package]
 name = "cruzer-compagnon"
-version = "0.0.1"
+version = "0.0.2"
 description = "All-in-one Destiny 2 companion"
 authors = ["Snowsdy"]
 edition = "2021"

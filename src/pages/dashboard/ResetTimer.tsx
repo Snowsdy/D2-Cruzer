@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import type { ReactNode } from "react";
-import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react"
+import type { ReactNode } from "react"
+import { useTranslation } from "react-i18next"
 
 // Returns the next occurrence of the given UTC day-of-week (0-6) at hour:minute UTC
 function nextUtcDate(dayOfWeek: number, hour: number, minute = 0): Date {
-  const now = new Date();
+  const now = new Date()
   const target = new Date(
     Date.UTC(
       now.getUTCFullYear(),
@@ -15,24 +15,24 @@ function nextUtcDate(dayOfWeek: number, hour: number, minute = 0): Date {
       0,
       0
     )
-  );
-  let delta = (dayOfWeek - now.getUTCDay() + 7) % 7;
-  if (delta === 0 && target.getTime() <= now.getTime()) delta = 7;
-  target.setUTCDate(target.getUTCDate() + delta);
-  return target;
+  )
+  let delta = (dayOfWeek - now.getUTCDay() + 7) % 7
+  if (delta === 0 && target.getTime() <= now.getTime()) delta = 7
+  target.setUTCDate(target.getUTCDate() + delta)
+  return target
 }
 
 function fmtCountdown(d: Date): { str: string; totalSec: number } {
-  const ms = d.getTime() - Date.now();
-  const total = Math.max(0, Math.floor(ms / 1000));
-  const days = Math.floor(total / 86400);
-  const hours = Math.floor((total % 86400) / 3600);
-  const minutes = Math.floor((total % 3600) / 60);
-  const parts: string[] = [];
-  if (days > 0) parts.push(`${days}j`);
-  parts.push(`${String(hours).padStart(2, "0")}h`);
-  parts.push(`${String(minutes).padStart(2, "0")}m`);
-  return { str: parts.join(" "), totalSec: total };
+  const ms = d.getTime() - Date.now()
+  const total = Math.max(0, Math.floor(ms / 1000))
+  const days = Math.floor(total / 86400)
+  const hours = Math.floor((total % 86400) / 3600)
+  const minutes = Math.floor((total % 3600) / 60)
+  const parts: string[] = []
+  if (days > 0) parts.push(`${days}j`)
+  parts.push(`${String(hours).padStart(2, "0")}h`)
+  parts.push(`${String(minutes).padStart(2, "0")}m`)
+  return { str: parts.join(" "), totalSec: total }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -40,13 +40,13 @@ function fmtCountdown(d: Date): { str: string; totalSec: number } {
 /* -------------------------------------------------------------------------- */
 
 interface TimerProps {
-  icon: ReactNode;
-  label: string;
-  target: Date;
-  cycleSeconds: number;
-  accent?: "accent" | "warm" | "sky" | "emerald";
-  hint?: string;
-  highlight?: boolean;
+  icon: ReactNode
+  label: string
+  target: Date
+  cycleSeconds: number
+  accent?: "accent" | "warm" | "sky" | "emerald"
+  hint?: string
+  highlight?: boolean
 }
 
 function Timer({
@@ -58,25 +58,41 @@ function Timer({
   hint,
   highlight = false,
 }: TimerProps) {
-  const [, setTick] = useState(0);
+  const [, setTick] = useState(0)
   useEffect(() => {
-    const id = setInterval(() => setTick((t) => t + 1), 30_000);
-    return () => clearInterval(id);
-  }, []);
+    const id = setInterval(() => setTick((t) => t + 1), 30_000)
+    return () => clearInterval(id)
+  }, [])
 
-  const { str: countdown, totalSec } = fmtCountdown(target);
+  const { str: countdown, totalSec } = fmtCountdown(target)
   // "Elapsed %" — how far we are through the current cycle.
   const elapsed = Math.min(
     100,
     Math.max(0, ((cycleSeconds - totalSec) / cycleSeconds) * 100)
-  );
+  )
 
   const accentMap = {
-    accent: { text: "#f3075e", soft: "rgba(243,7,94,0.15)", border: "rgba(243,7,94,0.28)" },
-    warm: { text: "#f5a623", soft: "rgba(245,166,35,0.15)", border: "rgba(245,166,35,0.3)" },
-    sky: { text: "#38bdf8", soft: "rgba(56,189,248,0.13)", border: "rgba(56,189,248,0.28)" },
-    emerald: { text: "#34d399", soft: "rgba(52,211,153,0.13)", border: "rgba(52,211,153,0.28)" },
-  }[accent];
+    accent: {
+      text: "#f3075e",
+      soft: "rgba(243,7,94,0.15)",
+      border: "rgba(243,7,94,0.28)",
+    },
+    warm: {
+      text: "#f5a623",
+      soft: "rgba(245,166,35,0.15)",
+      border: "rgba(245,166,35,0.3)",
+    },
+    sky: {
+      text: "#38bdf8",
+      soft: "rgba(56,189,248,0.13)",
+      border: "rgba(56,189,248,0.28)",
+    },
+    emerald: {
+      text: "#34d399",
+      soft: "rgba(52,211,153,0.13)",
+      border: "rgba(52,211,153,0.28)",
+    },
+  }[accent]
 
   return (
     <div
@@ -90,13 +106,13 @@ function Timer({
     >
       {highlight && (
         <div
-          className="absolute -top-8 -right-8 w-24 h-24 rounded-full blur-2xl"
+          className="absolute -top-8 -right-8 h-24 w-24 rounded-full blur-2xl"
           style={{ background: accentMap.soft }}
         />
       )}
       <div className="relative flex items-center gap-2.5">
         <div
-          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
           style={{
             background: accentMap.soft,
             color: accentMap.text,
@@ -107,25 +123,25 @@ function Timer({
         </div>
         <div className="min-w-0 flex-1">
           <div
-            className="text-[10px] uppercase tracking-[0.22em] font-extrabold"
+            className="text-[10px] font-extrabold tracking-[0.22em] uppercase"
             style={{ color: accentMap.text }}
           >
             {label}
           </div>
           {hint && (
-            <div className="text-[10px] text-bungie-muted leading-tight truncate">
+            <div className="text-bungie-muted truncate text-[10px] leading-tight">
               {hint}
             </div>
           )}
         </div>
       </div>
 
-      <div className="text-[26px] font-extrabold tabular-nums leading-none mt-3 text-white">
+      <div className="mt-3 text-[26px] leading-none font-extrabold text-white tabular-nums">
         {countdown}
       </div>
 
       {/* Progress bar — shows how much of the cycle has elapsed. */}
-      <div className="mt-3 h-1 rounded-full overflow-hidden bg-black/40">
+      <div className="mt-3 h-1 overflow-hidden rounded-full bg-black/40">
         <div
           className="h-full rounded-full transition-[width] duration-700 ease-out"
           style={{
@@ -136,7 +152,7 @@ function Timer({
         />
       </div>
     </div>
-  );
+  )
 }
 
 /* -------------------------------------------------------------------------- */
@@ -146,35 +162,59 @@ function Timer({
 const IcDaily = (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
     <circle cx="12" cy="12" r="5" />
-    <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
+    <path
+      d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      fill="none"
+    />
   </svg>
-);
+)
 const IcWeekly = (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <rect x="3" y="5" width="18" height="16" rx="2" />
     <path d="M3 10h18M8 3v4M16 3v4" />
   </svg>
-);
+)
 const IcXur = (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M3 11c3-5 15-5 18 0-3 5-15 5-18 0z" />
     <circle cx="12" cy="11" r="3" fill="currentColor" />
   </svg>
-);
+)
 
 /* -------------------------------------------------------------------------- */
 /* Reset timers row                                                           */
 /* -------------------------------------------------------------------------- */
 
-const DAY = 24 * 3600;
-const WEEK = 7 * DAY;
+const DAY = 24 * 3600
+const WEEK = 7 * DAY
 
 export function ResetTimers() {
-  const { t } = useTranslation();
-  const weeklyReset = nextUtcDate(2, 17); // Tuesday 17:00 UTC
+  const { t } = useTranslation()
+  const weeklyReset = nextUtcDate(2, 17) // Tuesday 17:00 UTC
 
   const dailyReset = (() => {
-    const now = new Date();
+    const now = new Date()
     const target = new Date(
       Date.UTC(
         now.getUTCFullYear(),
@@ -185,20 +225,20 @@ export function ResetTimers() {
         0,
         0
       )
-    );
+    )
     if (target.getTime() <= now.getTime()) {
-      target.setUTCDate(target.getUTCDate() + 1);
+      target.setUTCDate(target.getUTCDate() + 1)
     }
-    return target;
-  })();
+    return target
+  })()
 
   // Xûr: arrives Friday 17:00 UTC → departs Tuesday 17:00 UTC
-  const xurArrives = nextUtcDate(5, 17);
-  const xurDeparts = nextUtcDate(2, 17);
-  const xurHere = xurArrives.getTime() > xurDeparts.getTime();
+  const xurArrives = nextUtcDate(5, 17)
+  const xurDeparts = nextUtcDate(2, 17)
+  const xurHere = xurArrives.getTime() > xurDeparts.getTime()
 
   // Xûr's "here" cycle is 4 days (Fri→Tue), "away" cycle is 3 days (Tue→Fri).
-  const xurCycleSec = xurHere ? 4 * DAY : 3 * DAY;
+  const xurCycleSec = xurHere ? 4 * DAY : 3 * DAY
 
   return (
     <div className="stagger grid gap-3 md:grid-cols-3">
@@ -228,5 +268,5 @@ export function ResetTimers() {
         highlight={xurHere}
       />
     </div>
-  );
+  )
 }

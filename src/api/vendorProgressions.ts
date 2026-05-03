@@ -12,7 +12,7 @@
  * Bungie change (new progression hash) is a one-file edit.
  */
 
-import type { VendorKey } from "./vendors";
+import type { VendorKey } from "./vendors"
 
 export const VENDOR_PROGRESSION: Record<VendorKey, readonly number[]> = {
   Zavala: [
@@ -55,5 +55,5 @@ export const VENDOR_PROGRESSION: Record<VendorKey, readonly number[]> = {
   // Xûr has no persistent rank progression — always fall back to the SVG crest.
   Xur: [],
   LordSaladin: [],
-  Rahool: []
-};
+  Rahool: [],
+}

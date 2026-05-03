@@ -1,5 +1,5 @@
-import { useGameStatus } from "@/hooks/useGameStatus";
-import { sanitizeHtml } from "@/utils/sanitizeHtml";
+import { useGameStatus } from "@/hooks/useGameStatus"
+import { sanitizeHtml } from "@/utils/sanitizeHtml"
 
 const STYLE = {
   info: {
@@ -20,26 +20,26 @@ const STYLE = {
     text: "text-red-100",
     icon: "text-red-300",
   },
-} as const;
+} as const
 
 const openLink = async (url: string) => {
   try {
-    const { open } = await import("@tauri-apps/plugin-shell");
-    await open(url);
+    const { open } = await import("@tauri-apps/plugin-shell")
+    await open(url)
   } catch {
-    window.open(url, "_blank");
+    window.open(url, "_blank")
   }
-};
+}
 
 export function MaintenanceBanner() {
-  const { status } = useGameStatus();
-  if (!status.message) return null;
+  const { status } = useGameStatus()
+  if (!status.message) return null
 
-  const s = STYLE[status.severity];
+  const s = STYLE[status.severity]
 
   return (
     <div
-      className={`border-b ${s.border} ${s.bg} ${s.text} px-4 py-2 text-sm flex items-center gap-3`}
+      className={`border-b ${s.border} ${s.bg} ${s.text} flex items-center gap-3 px-4 py-2 text-sm`}
     >
       <span className={`text-lg ${s.icon} shrink-0`}>
         {status.severity === "critical"
@@ -49,17 +49,17 @@ export function MaintenanceBanner() {
             : "ℹ"}
       </span>
       <span
-        className="flex-1 min-w-0"
+        className="min-w-0 flex-1"
         dangerouslySetInnerHTML={{ __html: sanitizeHtml(status.message) }}
       />
       {status.link && (
         <button
           onClick={() => openLink(status.link!)}
-          className="text-xs uppercase tracking-widest font-bold px-2 py-1 rounded border border-current/40 hover:bg-white/5 transition-colors shrink-0"
+          className="shrink-0 rounded border border-current/40 px-2 py-1 text-xs font-bold tracking-widest uppercase transition-colors hover:bg-white/5"
         >
           Détails ↗
         </button>
       )}
     </div>
-  );
+  )
 }

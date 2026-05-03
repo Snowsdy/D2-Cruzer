@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { useAuthStore } from "@/store/auth";
-import { refreshAccessToken } from "@/api/oauth";
+import { useEffect } from "react"
+import { useAuthStore } from "@/store/auth"
+import { refreshAccessToken } from "@/api/oauth"
 
 /**
  * Runs a background timer that proactively refreshes the Bungie access token
@@ -16,43 +16,42 @@ import { refreshAccessToken } from "@/api/oauth";
  */
 export function useTokenKeepAlive() {
   useEffect(() => {
-    let stopped = false;
-    let refreshing = false;
+    let stopped = false
+    let refreshing = false
 
     const tick = async () => {
-      if (stopped || refreshing) return;
-      const { accessToken, refreshToken, expiresAt } =
-        useAuthStore.getState();
-      if (!accessToken || !refreshToken || !expiresAt) return;
-      const msLeft = expiresAt - Date.now();
+      if (stopped || refreshing) return
+      const { accessToken, refreshToken, expiresAt } = useAuthStore.getState()
+      if (!accessToken || !refreshToken || !expiresAt) return
+      const msLeft = expiresAt - Date.now()
       // Refresh window: 6 min before expiry. With a 60s tick this catches the
       // token between t-6min and t-5min, well before any request gets 401.
-      if (msLeft > 6 * 60_000) return;
+      if (msLeft > 6 * 60_000) return
 
-      refreshing = true;
+      refreshing = true
       try {
-        const t = await refreshAccessToken(refreshToken);
+        const t = await refreshAccessToken(refreshToken)
         useAuthStore.getState().setTokens({
           accessToken: t.access_token,
           refreshToken: t.refresh_token,
           expiresIn: t.expires_in,
           membershipId: t.membership_id,
-        });
+        })
       } catch (e) {
         // Stay on the page — the user isn't forced out. The next API call
         // will handle the hard failure case.
-        console.warn("[auth] background keep-alive refresh failed:", e);
+        console.warn("[auth] background keep-alive refresh failed:", e)
       } finally {
-        refreshing = false;
+        refreshing = false
       }
-    };
+    }
 
     // Kick once on mount so a stale session gets a fresh token immediately.
-    tick();
-    const id = window.setInterval(tick, 60_000);
+    tick()
+    const id = window.setInterval(tick, 60_000)
     return () => {
-      stopped = true;
-      window.clearInterval(id);
-    };
-  }, []);
+      stopped = true
+      window.clearInterval(id)
+    }
+  }, [])
 }

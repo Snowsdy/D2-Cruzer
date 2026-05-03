@@ -602,8 +602,6 @@ struct NitterImage {
 #[derive(Debug, Deserialize, Default)]
 struct NitterItem {
     #[serde(default)]
-    title: String,
-    #[serde(default)]
     description: String,
     #[serde(default)]
     link: String,

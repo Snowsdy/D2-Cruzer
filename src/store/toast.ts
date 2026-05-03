@@ -1,47 +1,54 @@
-import { create } from "zustand";
+import { create } from "zustand"
 
-export type ToastKind = "success" | "error" | "info" | "route";
+export type ToastKind = "success" | "error" | "info" | "route"
 
 export interface Toast {
-  id: string;
-  kind: ToastKind;
-  message: string;
-  createdAt: number;
-  duration: number;
+  id: string
+  kind: ToastKind
+  message: string
+  createdAt: number
+  duration: number
   meta?: {
-    section?: string;
-    name?: string;
-  };
+    section?: string
+    name?: string
+  }
 }
 
 interface ToastState {
-  toasts: Toast[];
+  toasts: Toast[]
   push: (
     kind: ToastKind,
     message: string,
     opts?: { duration?: number; meta?: Toast["meta"] }
-  ) => void;
-  dismiss: (id: string) => void;
+  ) => void
+  dismiss: (id: string) => void
 }
 
 export const useToastStore = create<ToastState>((set) => ({
   toasts: [],
   push: (kind, message, opts) => {
-    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    const duration = opts?.duration ?? 4500;
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    const duration = opts?.duration ?? 4500
     set((s) => ({
       toasts: [
         ...s.toasts,
-        { id, kind, message, createdAt: Date.now(), duration, meta: opts?.meta },
+        {
+          id,
+          kind,
+          message,
+          createdAt: Date.now(),
+          duration,
+          meta: opts?.meta,
+        },
       ],
-    }));
+    }))
     setTimeout(() => {
-      set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) }));
-    }, duration);
+      set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) }))
+    }, duration)
   },
   dismiss: (id) =>
     set((s) => ({ toasts: s.toasts.filter((x) => x.id !== id) })),
-}));
+}))
 
 export const toast = {
   success: (msg: string, duration?: number) =>
@@ -55,4 +62,4 @@ export const toast = {
       duration,
       meta: { section, name },
     }),
-};
+}

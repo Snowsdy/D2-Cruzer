@@ -1,21 +1,21 @@
-import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { useSelectedMembership } from "@/hooks/useProfile";
-import { getAccountStats, readStat } from "@/api/stats";
-import { ACTIVITY_MODE } from "@/constants/bungieHashes";
-import { ACCENTS } from "@/constants/uiAccents";
+import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
+import { useQuery } from "@tanstack/react-query"
+import { Link } from "react-router-dom"
+import { useSelectedMembership } from "@/hooks/useProfile"
+import { getAccountStats, readStat } from "@/api/stats"
+import { ACTIVITY_MODE } from "@/constants/bungieHashes"
+import { ACCENTS } from "@/constants/uiAccents"
 
-const { text: ACCENT, border: ACCENT_BORDER } = ACCENTS.trials;
-const TRIALS_MODE = ACTIVITY_MODE.TrialsOfOsiris;
+const { text: ACCENT, border: ACCENT_BORDER } = ACCENTS.trials
+const TRIALS_MODE = ACTIVITY_MODE.TrialsOfOsiris
 
 function fmtNum(n: number): string {
-  return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  return n.toLocaleString(undefined, { maximumFractionDigits: 2 })
 }
 
 function fmtPct(n: number): string {
-  return `${(n * 100).toFixed(1)}%`;
+  return `${(n * 100).toFixed(1)}%`
 }
 
 function Stat({
@@ -24,33 +24,33 @@ function Stat({
   accent,
   hint,
 }: {
-  label: string;
-  value: string;
-  accent?: string;
-  hint?: string;
+  label: string
+  value: string
+  accent?: string
+  hint?: string
 }) {
   return (
     <div className="panel p-4">
-      <div className="text-[9px] uppercase tracking-widest text-bungie-muted">
+      <div className="text-bungie-muted text-[9px] tracking-widest uppercase">
         {label}
       </div>
       <div
-        className={`text-2xl font-bold tabular-nums mt-1 ${accent ?? "text-white"}`}
+        className={`mt-1 text-2xl font-bold tabular-nums ${accent ?? "text-white"}`}
       >
         {value}
       </div>
       {hint && (
-        <div className="text-[10px] text-bungie-muted mt-0.5 tabular-nums">
+        <div className="text-bungie-muted mt-0.5 text-[10px] tabular-nums">
           {hint}
         </div>
       )}
     </div>
-  );
+  )
 }
 
 export function TrialsView() {
-  const { t } = useTranslation();
-  const membership = useSelectedMembership();
+  const { t } = useTranslation()
+  const membership = useSelectedMembership()
 
   const stats = useQuery({
     queryKey: [
@@ -65,33 +65,33 @@ export function TrialsView() {
     enabled: !!membership,
     staleTime: 15_000,
     refetchInterval: 45_000,
-  });
+  })
 
   const row = useMemo(() => {
-    const r = stats.data?.mergedAllCharacters?.results;
+    const r = stats.data?.mergedAllCharacters?.results
     // Bungie keys historical stats response by mode — trials shows up as
     // "trialsOfOsiris" or "trialsOfTheNine" depending on era.
     const bucket =
-      r?.trialsOfOsiris?.allTime ?? r?.trialsOfTheNine?.allTime ?? null;
-    if (!bucket) return null;
+      r?.trialsOfOsiris?.allTime ?? r?.trialsOfTheNine?.allTime ?? null
+    if (!bucket) return null
 
-    const kills = readStat(bucket, "kills");
-    const deaths = readStat(bucket, "deaths");
-    const assists = readStat(bucket, "assists");
-    const matches = readStat(bucket, "activitiesEntered");
-    const wins = readStat(bucket, "activitiesWon");
-    const losses = Math.max(0, matches - wins);
-    const kdRatio = deaths > 0 ? kills / deaths : kills;
-    const kdaRatio = deaths > 0 ? (kills + assists) / deaths : kills + assists;
-    const winRate = matches > 0 ? wins / matches : 0;
-    const bestKills = readStat(bucket, "bestSingleGameKills");
-    const avgKills = readStat(bucket, "averageKillDistance");
-    const longestKill = readStat(bucket, "longestKillDistance");
-    const precision = readStat(bucket, "precisionKills");
-    const secondsPlayed = readStat(bucket, "secondsPlayed");
-    const opponentsDefeated = readStat(bucket, "opponentsDefeated");
-    const longestSpree = readStat(bucket, "longestKillSpree");
-    const lifespan = readStat(bucket, "averageLifespan");
+    const kills = readStat(bucket, "kills")
+    const deaths = readStat(bucket, "deaths")
+    const assists = readStat(bucket, "assists")
+    const matches = readStat(bucket, "activitiesEntered")
+    const wins = readStat(bucket, "activitiesWon")
+    const losses = Math.max(0, matches - wins)
+    const kdRatio = deaths > 0 ? kills / deaths : kills
+    const kdaRatio = deaths > 0 ? (kills + assists) / deaths : kills + assists
+    const winRate = matches > 0 ? wins / matches : 0
+    const bestKills = readStat(bucket, "bestSingleGameKills")
+    const avgKills = readStat(bucket, "averageKillDistance")
+    const longestKill = readStat(bucket, "longestKillDistance")
+    const precision = readStat(bucket, "precisionKills")
+    const secondsPlayed = readStat(bucket, "secondsPlayed")
+    const opponentsDefeated = readStat(bucket, "opponentsDefeated")
+    const longestSpree = readStat(bucket, "longestKillSpree")
+    const lifespan = readStat(bucket, "averageLifespan")
 
     return {
       kills,
@@ -112,8 +112,8 @@ export function TrialsView() {
       opponentsDefeated,
       longestSpree,
       lifespan,
-    };
-  }, [stats.data]);
+    }
+  }, [stats.data])
 
   return (
     <div className="space-y-4">
@@ -124,25 +124,25 @@ export function TrialsView() {
       </div>
 
       {/* Header */}
-      <div className={`panel p-5 border ${ACCENT_BORDER}`}>
-        <div className="flex items-end justify-between gap-4 flex-wrap">
+      <div className={`panel border p-5 ${ACCENT_BORDER}`}>
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <div className={`text-[10px] uppercase tracking-widest ${ACCENT}`}>
+            <div className={`text-[10px] tracking-widest uppercase ${ACCENT}`}>
               {t("trials.title")}
             </div>
             <div className="text-3xl font-bold">
               {row ? fmtNum(row.matches) : "—"}{" "}
-              <span className="text-base text-bungie-muted font-normal">
+              <span className="text-bungie-muted text-base font-normal">
                 {t("trials.matches")}
               </span>
             </div>
-            <div className="text-sm text-bungie-muted mt-1">
+            <div className="text-bungie-muted mt-1 text-sm">
               {row
                 ? `${fmtNum(row.wins)} ${t("trials.wins")} · ${fmtNum(row.losses)} ${t("trials.losses")}`
                 : t("common.loading")}
             </div>
           </div>
-          <div className={`text-5xl ${ACCENT} drop-shadow opacity-80`}>⚔</div>
+          <div className={`text-5xl ${ACCENT} opacity-80 drop-shadow`}>⚔</div>
         </div>
       </div>
 
@@ -151,16 +151,14 @@ export function TrialsView() {
       )}
 
       {stats.isError && (
-        <div className="panel p-4 border border-red-500/40">
-          <p className="text-red-400 font-semibold mb-1">
-            {t("common.error")}
-          </p>
-          <p className="text-sm text-bungie-muted">{String(stats.error)}</p>
+        <div className="panel border border-red-500/40 p-4">
+          <p className="mb-1 font-semibold text-red-400">{t("common.error")}</p>
+          <p className="text-bungie-muted text-sm">{String(stats.error)}</p>
         </div>
       )}
 
       {!stats.isLoading && row && row.matches === 0 && (
-        <div className="panel p-6 text-center text-bungie-muted text-sm">
+        <div className="panel text-bungie-muted p-6 text-center text-sm">
           {t("trials.noMatches")}
         </div>
       )}
@@ -168,7 +166,7 @@ export function TrialsView() {
       {row && row.matches > 0 && (
         <>
           {/* Primary KPIs */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
             <Stat
               label={t("trials.kd")}
               value={fmtNum(row.kdRatio)}
@@ -194,20 +192,20 @@ export function TrialsView() {
 
           {/* Win/Loss bar */}
           <div className="panel p-5">
-            <div className="flex items-center justify-between text-xs mb-2">
+            <div className="mb-2 flex items-center justify-between text-xs">
               <span className="font-semibold">{t("trials.record")}</span>
               <span className="text-bungie-muted tabular-nums">
                 {fmtNum(row.wins)} W · {fmtNum(row.losses)} L
               </span>
             </div>
-            <div className="h-3 bg-black/40 border border-white/5 rounded-full overflow-hidden flex">
+            <div className="flex h-3 overflow-hidden rounded-full border border-white/5 bg-black/40">
               <div
-                className="bg-emerald-400/70 h-full"
+                className="h-full bg-emerald-400/70"
                 style={{ width: `${row.winRate * 100}%` }}
                 title={`${fmtNum(row.wins)} ${t("trials.wins")}`}
               />
               <div
-                className="bg-red-400/70 h-full"
+                className="h-full bg-red-400/70"
                 style={{ width: `${(1 - row.winRate) * 100}%` }}
                 title={`${fmtNum(row.losses)} ${t("trials.losses")}`}
               />
@@ -215,11 +213,8 @@ export function TrialsView() {
           </div>
 
           {/* Secondary stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <Stat
-              label={t("trials.bestKills")}
-              value={fmtNum(row.bestKills)}
-            />
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            <Stat label={t("trials.bestKills")} value={fmtNum(row.bestKills)} />
             <Stat
               label={t("trials.longestKill")}
               value={`${fmtNum(row.longestKill)}m`}
@@ -246,5 +241,5 @@ export function TrialsView() {
         </>
       )}
     </div>
-  );
+  )
 }

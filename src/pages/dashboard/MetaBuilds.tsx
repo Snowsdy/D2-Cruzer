@@ -1,29 +1,29 @@
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useItemDef } from "@/hooks/useItemDef";
-import { useExoticForClass } from "@/hooks/useExoticForClass";
-import { BungieIcon } from "@/components/bungie-icon";
-import { ClassGlyph } from "./ClassGlyph";
-import { DamageTypes } from "@/constants/bungieHashes";
+import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { useItemDef } from "@/hooks/useItemDef"
+import { useExoticForClass } from "@/hooks/useExoticForClass"
+import { BungieIcon } from "@/components/bungie-icon"
+import { ClassGlyph } from "./ClassGlyph"
+import { DamageTypes } from "@/constants/bungieHashes"
 
-type ClassName = "Warlock" | "Hunter" | "Titan";
-type Element = "arc" | "solar" | "void" | "stasis" | "strand" | "prismatic";
+type ClassName = "Warlock" | "Hunter" | "Titan"
+type Element = "arc" | "solar" | "void" | "stasis" | "strand" | "prismatic"
 
 interface Build {
-  id: string;
-  title: string;
-  class: ClassName;
-  subclass: string;
-  element: Element;
-  tier: "S" | "A" | "B";
-  tags: string[];
-  exoticHash: number;
-  playstyle: string;
-  aspects: string[];
-  fragments: string[];
-  weapons: string[];
-  mobalyticsUrl: string;
-  author?: string;
+  id: string
+  title: string
+  class: ClassName
+  subclass: string
+  element: Element
+  tier: "S" | "A" | "B"
+  tags: string[]
+  exoticHash: number
+  playstyle: string
+  aspects: string[]
+  fragments: string[]
+  weapons: string[]
+  mobalyticsUrl: string
+  author?: string
 }
 
 // Mobalytics has no public API — manually curated current builds with direct links.
@@ -42,9 +42,14 @@ const BUILDS: Build[] = [
     playstyle:
       "Build Void Hunter avec invisibilité + Volatile Rounds pour DPS soutenu et survie en endgame Renegades.",
     aspects: ["Stylish Executioner", "Vanishing Step"],
-    fragments: ["Echo of Persistence", "Echo of Obscurity", "Echo of Domineering"],
+    fragments: [
+      "Echo of Persistence",
+      "Echo of Obscurity",
+      "Echo of Domineering",
+    ],
     weapons: ["Graviton Lance", "Le Monarque", "Retrofit Escapade"],
-    mobalyticsUrl: "https://mobalytics.gg/destiny-2/builds/hunter/void/llamad2-void-hunter-dps",
+    mobalyticsUrl:
+      "https://mobalytics.gg/destiny-2/builds/hunter/void/llamad2-void-hunter-dps",
   },
   {
     id: "titan-prismatic-smg",
@@ -61,7 +66,8 @@ const BUILDS: Build[] = [
     aspects: ["Consecration", "Knockout"],
     fragments: ["Facet of Courage", "Facet of Purpose", "Facet of Grace"],
     weapons: ["The Call", "SMG Légendaire au choix", "Edge of Action"],
-    mobalyticsUrl: "https://mobalytics.gg/destiny-2/builds/titan/prismatic/llama-smg-x-peacekeeper",
+    mobalyticsUrl:
+      "https://mobalytics.gg/destiny-2/builds/titan/prismatic/llama-smg-x-peacekeeper",
   },
   {
     id: "hunter-strand-revolutionary",
@@ -76,7 +82,11 @@ const BUILDS: Build[] = [
     playstyle:
       "Strand Hunter avec Threaded Specter + Cyrtarachne pour Woven Mail constant. Boucle de damage et survie.",
     aspects: ["Threaded Specter", "Ensnaring Slam"],
-    fragments: ["Thread of Warding", "Thread of Generation", "Thread of Continuity"],
+    fragments: [
+      "Thread of Warding",
+      "Thread of Generation",
+      "Thread of Continuity",
+    ],
     weapons: ["Final Warning", "Wicked Implement", "Ex Diris"],
     mobalyticsUrl:
       "https://mobalytics.gg/destiny-2/builds/hunter/strand/llama-revolutionary-strand-hunter",
@@ -96,7 +106,8 @@ const BUILDS: Build[] = [
     aspects: ["Sol Invictus", "Roaring Flames"],
     fragments: ["Ember of Torches", "Ember of Empyrean", "Ember of Char"],
     weapons: ["Still Hunt", "Izanagi's Burden", "The Lament"],
-    mobalyticsUrl: "https://mobalytics.gg/destiny-2/builds/titan/solar/llama-greatest-solar-titan",
+    mobalyticsUrl:
+      "https://mobalytics.gg/destiny-2/builds/titan/solar/llama-greatest-solar-titan",
   },
   {
     id: "warlock-prismatic-winter",
@@ -113,7 +124,8 @@ const BUILDS: Build[] = [
     aspects: ["Bleak Watcher", "Hellion"],
     fragments: ["Facet of Balance", "Facet of Purpose", "Facet of Protection"],
     weapons: ["Graviton Lance", "Wicked Implement", "Divinity"],
-    mobalyticsUrl: "https://mobalytics.gg/destiny-2/builds/warlock/prismatic/rest-winter-surge",
+    mobalyticsUrl:
+      "https://mobalytics.gg/destiny-2/builds/warlock/prismatic/rest-winter-surge",
   },
   {
     id: "warlock-stasis-bleak",
@@ -131,7 +143,7 @@ const BUILDS: Build[] = [
     weapons: ["Verglas Curve", "Anarchy", "Whisper of the Worm"],
     mobalyticsUrl: "https://mobalytics.gg/destiny-2/builds/warlock/stasis",
   },
-];
+]
 
 const ELEMENT_GRADIENT: Record<Element, string> = {
   arc: "from-pink-500 via-pink-400 to-blue-600",
@@ -140,13 +152,13 @@ const ELEMENT_GRADIENT: Record<Element, string> = {
   stasis: "from-pink-400 via-blue-300 to-indigo-500",
   strand: "from-emerald-500 via-green-400 to-teal-600",
   prismatic: "from-pink-500 via-fuchsia-400 via-amber-400 to-emerald-500",
-};
+}
 
 const TIER_COLOR: Record<Build["tier"], string> = {
   S: "text-yellow-300 border-yellow-400 bg-yellow-400/20",
   A: "text-purple-300 border-purple-400 bg-purple-400/15",
   B: "text-blue-300 border-blue-400 bg-blue-400/15",
-};
+}
 
 const DAMAGE_BY_ELEMENT: Record<Element, number | null> = {
   arc: DamageTypes.Arc,
@@ -155,49 +167,49 @@ const DAMAGE_BY_ELEMENT: Record<Element, number | null> = {
   stasis: DamageTypes.Stasis,
   strand: DamageTypes.Strand,
   prismatic: null, // no single damage — use multi-color gradient
-};
+}
 
 function BuildThumb({
   hash,
   className,
   element,
 }: {
-  hash: number;
-  className: ClassName;
-  element: Element;
+  hash: number
+  className: ClassName
+  element: Element
 }) {
-  const hardDef = useItemDef(hash);
+  const hardDef = useItemDef(hash)
   // Fallback: use an exotic the user actually owns for this class
-  const userExotic = useExoticForClass(className);
+  const userExotic = useExoticForClass(className)
 
-  const def = hardDef.data ?? userExotic.def;
-  const icon = def?.displayProperties?.icon;
-  const watermark = def?.iconWatermark;
+  const def = hardDef.data ?? userExotic.def
+  const icon = def?.displayProperties?.icon
+  const watermark = def?.iconWatermark
 
   if (icon) {
     return (
-      <div className="relative w-16 h-16 shrink-0">
+      <div className="relative h-16 w-16 shrink-0">
         <img
           src={`https://www.bungie.net${icon}`}
           alt=""
-          className="w-full h-full rounded border-2 border-yellow-400/70 shadow-[0_0_16px_rgba(250,204,21,0.35)]"
+          className="h-full w-full rounded border-2 border-yellow-400/70 shadow-[0_0_16px_rgba(250,204,21,0.35)]"
         />
         {watermark && (
           <img
             src={`https://www.bungie.net${watermark}`}
             alt=""
-            className="absolute inset-0 w-full h-full pointer-events-none"
+            className="pointer-events-none absolute inset-0 h-full w-full"
           />
         )}
       </div>
-    );
+    )
   }
 
-  const damageHash = DAMAGE_BY_ELEMENT[element];
+  const damageHash = DAMAGE_BY_ELEMENT[element]
 
   return (
     <div
-      className={`relative w-16 h-16 shrink-0 rounded border-2 border-yellow-400/70 flex items-center justify-center overflow-hidden bg-linear-to-br ${ELEMENT_GRADIENT[element]} shadow-[0_0_16px_rgba(250,204,21,0.35)]`}
+      className={`relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded border-2 border-yellow-400/70 bg-linear-to-br ${ELEMENT_GRADIENT[element]} shadow-[0_0_16px_rgba(250,204,21,0.35)]`}
     >
       <div className="absolute inset-0 bg-black/50" />
       <div className="relative text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
@@ -209,49 +221,55 @@ function BuildThumb({
         </div>
       )}
     </div>
-  );
+  )
 }
 
 function BuildCard({ build, onOpen }: { build: Build; onOpen: () => void }) {
   return (
     <button
       onClick={onOpen}
-      className="relative rounded-xl overflow-hidden panel text-left hover:-translate-y-0.5 transition-all group"
+      className="panel group relative overflow-hidden rounded-xl text-left transition-all hover:-translate-y-0.5"
     >
       {/* Gradient backdrop */}
       <div
-        className={`absolute inset-0 bg-linear-to-br ${ELEMENT_GRADIENT[build.element]} opacity-30 group-hover:opacity-40 transition-opacity`}
+        className={`absolute inset-0 bg-linear-to-br ${ELEMENT_GRADIENT[build.element]} opacity-30 transition-opacity group-hover:opacity-40`}
       />
       {/* Giant class glyph decoration */}
-      <div className="absolute -right-6 -bottom-10 text-white/15 pointer-events-none group-hover:text-white/25 transition-colors">
+      <div className="pointer-events-none absolute -right-6 -bottom-10 text-white/15 transition-colors group-hover:text-white/25">
         <ClassGlyph className={build.class} size={180} />
       </div>
       <div className="absolute inset-0 bg-linear-to-tr from-black/85 via-black/30 to-transparent" />
 
-      <div className="relative p-4 min-h-37.5 flex flex-col justify-between">
+      <div className="relative flex min-h-37.5 flex-col justify-between p-4">
         <div className="flex items-start justify-between gap-3">
           <div
-            className={`text-xs font-bold px-2 py-0.5 rounded-full border ${TIER_COLOR[build.tier]}`}
+            className={`rounded-full border px-2 py-0.5 text-xs font-bold ${TIER_COLOR[build.tier]}`}
           >
             {build.tier}-TIER
           </div>
-          <div className="text-[10px] uppercase tracking-widest text-white/60">
+          <div className="text-[10px] tracking-widest text-white/60 uppercase">
             {build.class}
           </div>
         </div>
 
-        <div className="flex items-end gap-3 mt-3">
-          <BuildThumb hash={build.exoticHash} className={build.class} element={build.element} />
-          <div className="flex-1 min-w-0">
-            <div className="font-bold text-white leading-tight">{build.title}</div>
-            <div className="text-[11px] uppercase tracking-widest text-bungie-accent mt-1">
+        <div className="mt-3 flex items-end gap-3">
+          <BuildThumb
+            hash={build.exoticHash}
+            className={build.class}
+            element={build.element}
+          />
+          <div className="min-w-0 flex-1">
+            <div className="leading-tight font-bold text-white">
+              {build.title}
+            </div>
+            <div className="text-bungie-accent mt-1 text-[11px] tracking-widest uppercase">
               {build.subclass}
             </div>
             <div className="mt-2 flex flex-wrap gap-1">
               {build.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-[10px] px-2 py-0.5 rounded-full bg-black/50 text-white/80"
+                  className="rounded-full bg-black/50 px-2 py-0.5 text-[10px] text-white/80"
                 >
                   {tag}
                 </span>
@@ -261,26 +279,26 @@ function BuildCard({ build, onOpen }: { build: Build; onOpen: () => void }) {
         </div>
       </div>
     </button>
-  );
+  )
 }
 
 function BuildModal({ build, onClose }: { build: Build; onClose: () => void }) {
-  const def = useItemDef(build.exoticHash);
-  const screenshot = def.data?.screenshot;
+  const def = useItemDef(build.exoticHash)
+  const screenshot = def.data?.screenshot
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose()
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [onClose])
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="relative rounded-xl overflow-hidden panel max-w-3xl w-full max-h-[85vh] overflow-y-auto"
+        className="panel relative max-h-[85vh] w-full max-w-3xl overflow-hidden overflow-y-auto rounded-xl"
         onClick={(e) => e.stopPropagation()}
         style={{
           backgroundImage: screenshot
@@ -291,23 +309,23 @@ function BuildModal({ build, onClose }: { build: Build; onClose: () => void }) {
         }}
       >
         <div
-          className={`absolute inset-0 bg-linear-to-br ${ELEMENT_GRADIENT[build.element]} opacity-20 pointer-events-none`}
+          className={`absolute inset-0 bg-linear-to-br ${ELEMENT_GRADIENT[build.element]} pointer-events-none opacity-20`}
         />
-        <div className="absolute -right-20 -bottom-20 text-white/10 pointer-events-none">
+        <div className="pointer-events-none absolute -right-20 -bottom-20 text-white/10">
           <ClassGlyph className={build.class} size={400} />
         </div>
 
-        <div className="relative p-6 space-y-5">
+        <div className="relative space-y-5 p-6">
           {/* Header */}
           <div className="flex items-start justify-between gap-4">
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-2">
+            <div className="min-w-0 flex-1">
+              <div className="mb-2 flex items-center gap-2">
                 <span
-                  className={`text-xs font-bold px-2 py-0.5 rounded-full border ${TIER_COLOR[build.tier]}`}
+                  className={`rounded-full border px-2 py-0.5 text-xs font-bold ${TIER_COLOR[build.tier]}`}
                 >
                   {build.tier}-TIER
                 </span>
-                <span className="text-[10px] uppercase tracking-widest text-white/60">
+                <span className="text-[10px] tracking-widest text-white/60 uppercase">
                   {build.class} · {build.subclass}
                 </span>
               </div>
@@ -318,7 +336,7 @@ function BuildModal({ build, onClose }: { build: Build; onClose: () => void }) {
                 {build.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-[10px] px-2 py-0.5 rounded-full bg-black/50 text-white/80"
+                    className="rounded-full bg-black/50 px-2 py-0.5 text-[10px] text-white/80"
                   >
                     {tag}
                   </span>
@@ -327,17 +345,21 @@ function BuildModal({ build, onClose }: { build: Build; onClose: () => void }) {
             </div>
             <button
               onClick={onClose}
-              className="text-white/60 hover:text-white text-xl leading-none px-2"
+              className="px-2 text-xl leading-none text-white/60 hover:text-white"
             >
               ✕
             </button>
           </div>
 
           {/* Exotic */}
-          <div className="flex items-center gap-4 panel p-3 bg-black/40">
-            <BuildThumb hash={build.exoticHash} className={build.class} element={build.element} />
+          <div className="panel flex items-center gap-4 bg-black/40 p-3">
+            <BuildThumb
+              hash={build.exoticHash}
+              className={build.class}
+              element={build.element}
+            />
             <div className="min-w-0">
-              <div className="text-[10px] uppercase tracking-widest text-yellow-300/80">
+              <div className="text-[10px] tracking-widest text-yellow-300/80 uppercase">
                 Exotique clé
               </div>
               <div className="font-bold text-yellow-300">
@@ -353,25 +375,25 @@ function BuildModal({ build, onClose }: { build: Build; onClose: () => void }) {
 
           {/* Playstyle */}
           <div>
-            <div className="text-[10px] uppercase tracking-widest text-bungie-accent mb-2">
+            <div className="text-bungie-accent mb-2 text-[10px] tracking-widest uppercase">
               Gameplay
             </div>
-            <p className="text-sm text-white/85 leading-relaxed">
+            <p className="text-sm leading-relaxed text-white/85">
               {build.playstyle}
             </p>
           </div>
 
           {/* Aspects / Fragments */}
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <div className="text-[10px] uppercase tracking-widest text-bungie-accent mb-2">
+              <div className="text-bungie-accent mb-2 text-[10px] tracking-widest uppercase">
                 Aspects
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {build.aspects.map((a) => (
                   <span
                     key={a}
-                    className="text-xs px-2.5 py-1 rounded bg-black/40 border border-bungie-border text-white/85"
+                    className="border-bungie-border rounded border bg-black/40 px-2.5 py-1 text-xs text-white/85"
                   >
                     {a}
                   </span>
@@ -379,14 +401,14 @@ function BuildModal({ build, onClose }: { build: Build; onClose: () => void }) {
               </div>
             </div>
             <div>
-              <div className="text-[10px] uppercase tracking-widest text-bungie-accent mb-2">
+              <div className="text-bungie-accent mb-2 text-[10px] tracking-widest uppercase">
                 Fragments
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {build.fragments.map((f) => (
                   <span
                     key={f}
-                    className="text-xs px-2.5 py-1 rounded bg-black/40 border border-bungie-border text-white/85"
+                    className="border-bungie-border rounded border bg-black/40 px-2.5 py-1 text-xs text-white/85"
                   >
                     {f}
                   </span>
@@ -397,14 +419,14 @@ function BuildModal({ build, onClose }: { build: Build; onClose: () => void }) {
 
           {/* Weapons */}
           <div>
-            <div className="text-[10px] uppercase tracking-widest text-bungie-accent mb-2">
+            <div className="text-bungie-accent mb-2 text-[10px] tracking-widest uppercase">
               Armes recommandées
             </div>
             <div className="flex flex-wrap gap-1.5">
               {build.weapons.map((w) => (
                 <span
                   key={w}
-                  className="text-xs px-2.5 py-1 rounded bg-bungie-accent/15 border border-bungie-accent/40 text-bungie-accent"
+                  className="bg-bungie-accent/15 border-bungie-accent/40 text-bungie-accent rounded border px-2.5 py-1 text-xs"
                 >
                   {w}
                 </span>
@@ -413,22 +435,23 @@ function BuildModal({ build, onClose }: { build: Build; onClose: () => void }) {
           </div>
 
           {/* Author + Mobalytics link */}
-          <div className="pt-3 border-t border-bungie-border flex items-center justify-between gap-3 flex-wrap">
+          <div className="border-bungie-border flex flex-wrap items-center justify-between gap-3 border-t pt-3">
             {build.author && (
-              <div className="text-[10px] uppercase tracking-widest text-bungie-muted">
-                Source : <span className="text-white/80">{build.author}</span> · Mobalytics
+              <div className="text-bungie-muted text-[10px] tracking-widest uppercase">
+                Source : <span className="text-white/80">{build.author}</span> ·
+                Mobalytics
               </div>
             )}
             <button
               onClick={async () => {
                 try {
-                  const { open } = await import("@tauri-apps/plugin-shell");
-                  await open(build.mobalyticsUrl);
+                  const { open } = await import("@tauri-apps/plugin-shell")
+                  await open(build.mobalyticsUrl)
                 } catch {
-                  window.open(build.mobalyticsUrl, "_blank");
+                  window.open(build.mobalyticsUrl, "_blank")
                 }
               }}
-              className="btn-primary text-xs px-4 py-1.5"
+              className="btn-primary px-4 py-1.5 text-xs"
             >
               Voir le build complet sur Mobalytics →
             </button>
@@ -436,18 +459,18 @@ function BuildModal({ build, onClose }: { build: Build; onClose: () => void }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export function MetaBuilds() {
-  const { t } = useTranslation();
-  const [selected, setSelected] = useState<Build | null>(null);
+  const { t } = useTranslation()
+  const [selected, setSelected] = useState<Build | null>(null)
 
   return (
     <section>
-      <div className="flex items-baseline justify-between mb-3">
+      <div className="mb-3 flex items-baseline justify-between">
         <h3 className="section-title">{t("dashboard.metaBuilds")}</h3>
-        <span className="text-[10px] uppercase tracking-widest text-bungie-muted">
+        <span className="text-bungie-muted text-[10px] tracking-widest uppercase">
           {t("dashboard.metaBuildsHint")}
         </span>
       </div>
@@ -457,7 +480,9 @@ export function MetaBuilds() {
         ))}
       </div>
 
-      {selected && <BuildModal build={selected} onClose={() => setSelected(null)} />}
+      {selected && (
+        <BuildModal build={selected} onClose={() => setSelected(null)} />
+      )}
     </section>
-  );
+  )
 }

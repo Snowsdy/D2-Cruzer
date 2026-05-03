@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useItemDef } from "@/hooks/useItemDef";
-import { useManifestStore } from "@/store/manifest";
-import { PerksDisplay } from "./perk-display";
+import { useEffect } from "react"
+import { useTranslation } from "react-i18next"
+import { useItemDef } from "@/hooks/useItemDef"
+import { useManifestStore } from "@/store/manifest"
+import { PerksDisplay } from "./perk-display"
 
 const TIER_TEXT: Record<number, string> = {
   2: "text-zinc-300",
@@ -10,50 +10,50 @@ const TIER_TEXT: Record<number, string> = {
   4: "text-blue-400",
   5: "text-purple-400",
   6: "text-yellow-300",
-};
+}
 
 interface Props {
-  itemHash: number;
-  onClose: () => void;
+  itemHash: number
+  onClose: () => void
 }
 
 export function ItemPreviewModal({ itemHash, onClose }: Props) {
-  const { t, i18n } = useTranslation();
-  const { data: def } = useItemDef(itemHash);
+  const { t, i18n } = useTranslation()
+  const { data: def } = useItemDef(itemHash)
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose()
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [onClose])
 
   if (!def) {
     return (
       <Backdrop onClose={onClose}>
-        <div className="panel p-8 max-w-md">
+        <div className="panel max-w-md p-8">
           <p className="text-bungie-muted">{t("common.loading")}</p>
         </div>
       </Backdrop>
-    );
+    )
   }
 
-  const tier = def.inventory?.tierType ?? 0;
-  const tierColor = TIER_TEXT[tier] ?? "text-white";
+  const tier = def.inventory?.tierType ?? 0
+  const tierColor = TIER_TEXT[tier] ?? "text-white"
   const screenshot = def.screenshot
     ? `https://www.bungie.net${def.screenshot}`
-    : null;
-  const icon = def.displayProperties?.icon;
-  const watermark = def.iconWatermark;
-  const name = def.displayProperties?.name ?? `Item ${itemHash}`;
-  const typeName = def.itemTypeDisplayName ?? "";
-  const description = def.displayProperties?.description ?? "";
-  const flavor = def.flavorText ?? "";
-  const tierName = def.inventory?.tierTypeName ?? "";
+    : null
+  const icon = def.displayProperties?.icon
+  const watermark = def.iconWatermark
+  const name = def.displayProperties?.name ?? `Item ${itemHash}`
+  const typeName = def.itemTypeDisplayName ?? ""
+  const description = def.displayProperties?.description ?? ""
+  const flavor = def.flavorText ?? ""
+  const tierName = def.inventory?.tierTypeName ?? ""
 
   return (
     <Backdrop onClose={onClose}>
       <div
-        className="relative rounded-2xl overflow-hidden border border-bungie-accent/40 max-w-2xl w-full shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] bg-bungie-panel"
+        className="border-bungie-accent/40 bg-bungie-panel relative w-full max-w-2xl overflow-hidden rounded-2xl border shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)]"
         style={
           screenshot
             ? {
@@ -68,24 +68,24 @@ export function ItemPreviewModal({ itemHash, onClose }: Props) {
       >
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 border border-white/20 hover:border-white/40 flex items-center justify-center text-white/80 hover:text-white text-sm"
+          className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-black/60 text-sm text-white/80 hover:border-white/40 hover:text-white"
         >
           ✕
         </button>
 
-        <div className="p-6 flex gap-4 items-start">
+        <div className="flex items-start gap-4 p-6">
           {icon && (
             <div className="relative shrink-0">
               <img
                 src={`https://www.bungie.net${icon}`}
                 alt=""
-                className="w-20 h-20 rounded-lg border border-white/25 bg-black/50"
+                className="h-20 w-20 rounded-lg border border-white/25 bg-black/50"
               />
               {watermark && (
                 <img
                   src={`https://www.bungie.net${watermark}`}
                   alt=""
-                  className="absolute inset-0 w-20 h-20 pointer-events-none"
+                  className="pointer-events-none absolute inset-0 h-20 w-20"
                 />
               )}
             </div>
@@ -94,18 +94,18 @@ export function ItemPreviewModal({ itemHash, onClose }: Props) {
             <h2 className={`text-2xl font-bold drop-shadow ${tierColor}`}>
               {name}
             </h2>
-            <div className="text-xs text-white/70 uppercase tracking-widest mt-1 flex flex-wrap items-center gap-2">
+            <div className="mt-1 flex flex-wrap items-center gap-2 text-xs tracking-widest text-white/70 uppercase">
               {typeName && <span>{typeName}</span>}
               {typeName && tierName && <span className="opacity-30">·</span>}
               {tierName && <span className="opacity-70">{tierName}</span>}
             </div>
             {description && (
-              <p className="text-sm text-white/85 mt-3 leading-relaxed">
+              <p className="mt-3 text-sm leading-relaxed text-white/85">
                 {description}
               </p>
             )}
             {flavor && (
-              <p className="text-xs italic text-white/55 mt-3 leading-relaxed border-l-2 border-white/20 pl-3">
+              <p className="mt-3 border-l-2 border-white/20 pl-3 text-xs leading-relaxed text-white/55 italic">
                 {flavor}
               </p>
             )}
@@ -115,7 +115,7 @@ export function ItemPreviewModal({ itemHash, onClose }: Props) {
         {/* Weapon / armor stats */}
         {def.stats?.stats && Object.keys(def.stats.stats).length > 0 && (
           <div className="px-6 pb-4">
-            <div className="text-[10px] uppercase tracking-widest text-bungie-muted mb-2">
+            <div className="text-bungie-muted mb-2 text-[10px] tracking-widest uppercase">
               {t("itemPreview.stats")}
             </div>
             <div className="space-y-1">
@@ -146,60 +146,60 @@ export function ItemPreviewModal({ itemHash, onClose }: Props) {
         </div>
 
         {/* Meta row */}
-        <div className="px-6 pb-4 flex items-center justify-start text-[10px] text-white/40">
+        <div className="flex items-center justify-start px-6 pb-4 text-[10px] text-white/40">
           <span className="font-mono">#{itemHash}</span>
         </div>
       </div>
     </Backdrop>
-  );
+  )
 }
 
 function StatLine({ statHash, value }: { statHash: number; value: number }) {
-  const manifest = useManifestStore((s) => s.manifest);
-  const statDef = manifest?.DestinyStatDefinition?.[statHash];
-  const name = statDef?.displayProperties?.name ?? `#${statHash}`;
-  const icon = statDef?.displayProperties?.icon;
-  const max = 100;
-  const pct = Math.min(100, (value / max) * 100);
+  const manifest = useManifestStore((s) => s.manifest)
+  const statDef = manifest?.DestinyStatDefinition?.[statHash]
+  const name = statDef?.displayProperties?.name ?? `#${statHash}`
+  const icon = statDef?.displayProperties?.icon
+  const max = 100
+  const pct = Math.min(100, (value / max) * 100)
   return (
     <div className="flex items-center gap-2 text-xs">
       {icon && (
         <img
           src={`https://www.bungie.net${icon}`}
           alt=""
-          className="w-4 h-4 shrink-0"
+          className="h-4 w-4 shrink-0"
         />
       )}
-      <span className="text-white/80 w-28 truncate">{name}</span>
-      <div className="flex-1 h-1.5 bg-black/50 rounded-full overflow-hidden">
+      <span className="w-28 truncate text-white/80">{name}</span>
+      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-black/50">
         <div
-          className="h-full bg-bungie-accent/70"
+          className="bg-bungie-accent/70 h-full"
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="tabular-nums text-white/90 w-8 text-right">{value}</span>
+      <span className="w-8 text-right text-white/90 tabular-nums">{value}</span>
     </div>
-  );
+  )
 }
 
 function Backdrop({
   children,
   onClose,
 }: {
-  children: React.ReactNode;
-  onClose: () => void;
+  children: React.ReactNode
+  onClose: () => void
 }) {
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/55 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
+      className="animate-fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-md"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="max-h-full overflow-auto fade-in-scale"
+        className="fade-in-scale max-h-full overflow-auto"
       >
         {children}
       </div>
     </div>
-  );
+  )
 }

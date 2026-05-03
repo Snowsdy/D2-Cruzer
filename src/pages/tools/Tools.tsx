@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import type { ReactElement } from "react";
+import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
+import type { ReactElement } from "react"
 import {
   IconInventory,
   IconScope,
@@ -14,21 +14,21 @@ import {
   IconNewspaper,
   IconUser,
   IconList,
-} from "@/components/icon";
+} from "@/components/icon"
 
 interface Tool {
-  name: string;
-  description: string;
-  to: string;
-  accent: string;
-  icon: ReactElement;
-  subtitle?: string;
+  name: string
+  description: string
+  to: string
+  accent: string
+  icon: ReactElement
+  subtitle?: string
 }
 
 interface Category {
-  id: string;
-  icon: ReactElement;
-  tools: Tool[];
+  id: string
+  icon: ReactElement
+  tools: Tool[]
 }
 
 const CATEGORIES: Category[] = [
@@ -160,7 +160,7 @@ const CATEGORIES: Category[] = [
       },
     ],
   },
-];
+]
 
 const ACCENT_CLASSES: Record<
   string,
@@ -196,40 +196,40 @@ const ACCENT_CLASSES: Record<
     shadow: "hover:shadow-[0_0_24px_rgba(251,146,60,0.25)]",
     glow: "bg-orange-400/10",
   },
-};
+}
 
 function ToolCard({ tool, t }: { tool: Tool; t: (key: string) => string }) {
-  const cls = ACCENT_CLASSES[tool.accent] ?? ACCENT_CLASSES.cyan;
+  const cls = ACCENT_CLASSES[tool.accent] ?? ACCENT_CLASSES.cyan
   return (
     <Link
       to={tool.to}
-      className={`group relative overflow-hidden rounded-xl p-4 bg-bungie-panel/80 border-2 transition-all hover:-translate-y-0.5 ${cls.border} ${cls.shadow}`}
+      className={`group bg-bungie-panel/80 relative overflow-hidden rounded-xl border-2 p-4 transition-all hover:-translate-y-0.5 ${cls.border} ${cls.shadow}`}
     >
       <div
-        className={`absolute top-0 right-0 w-20 h-20 ${cls.glow} rounded-full blur-2xl`}
+        className={`absolute top-0 right-0 h-20 w-20 ${cls.glow} rounded-full blur-2xl`}
       />
-      <div className="relative flex flex-col h-full">
+      <div className="relative flex h-full flex-col">
         <div className="flex items-start justify-between gap-2">
           <div
-            className={`w-12 h-12 rounded-lg border-2 ${cls.border.split(" ")[0]} bg-black/70 flex items-center justify-center ${cls.text}`}
+            className={`h-12 w-12 rounded-lg border-2 ${cls.border.split(" ")[0]} flex items-center justify-center bg-black/70 ${cls.text}`}
           >
             {tool.icon}
           </div>
-          <span className="text-[9px] uppercase tracking-widest font-bold px-1.5 py-0.5 rounded bg-bungie-accent/20 text-bungie-accent border border-bungie-accent/40">
+          <span className="bg-bungie-accent/20 text-bungie-accent border-bungie-accent/40 rounded border px-1.5 py-0.5 text-[9px] font-bold tracking-widest uppercase">
             {t("tools.badgeNative")}
           </span>
         </div>
-        <div className="mt-2 font-bold text-white leading-tight">
+        <div className="mt-2 leading-tight font-bold text-white">
           {tool.name}
         </div>
         {tool.subtitle && (
           <div
-            className={`text-[10px] uppercase tracking-widest mt-0.5 ${cls.text}/80`}
+            className={`mt-0.5 text-[10px] tracking-widest uppercase ${cls.text}/80`}
           >
             {tool.subtitle}
           </div>
         )}
-        <div className="text-xs text-bungie-muted mt-2 line-clamp-2 flex-1">
+        <div className="text-bungie-muted mt-2 line-clamp-2 flex-1 text-xs">
           {tool.description}
         </div>
         <div className={`text-[10px] ${cls.text} mt-3 font-semibold`}>
@@ -237,15 +237,15 @@ function ToolCard({ tool, t }: { tool: Tool; t: (key: string) => string }) {
         </div>
       </div>
     </Link>
-  );
+  )
 }
 
 export function Tools() {
-  const { t } = useTranslation();
-  const [filter, setFilter] = useState("");
+  const { t } = useTranslation()
+  const [filter, setFilter] = useState("")
 
   const filtered = useMemo(() => {
-    const q = filter.trim().toLowerCase();
+    const q = filter.trim().toLowerCase()
     return CATEGORIES.map((cat) => ({
       ...cat,
       tools: cat.tools.filter(
@@ -255,45 +255,47 @@ export function Tools() {
           tool.description.toLowerCase().includes(q) ||
           (tool.subtitle?.toLowerCase().includes(q) ?? false)
       ),
-    })).filter((c) => c.tools.length > 0);
-  }, [filter]);
+    })).filter((c) => c.tools.length > 0)
+  }, [filter])
 
-  const totalCount = CATEGORIES.reduce((acc, c) => acc + c.tools.length, 0);
+  const totalCount = CATEGORIES.reduce((acc, c) => acc + c.tools.length, 0)
 
   return (
-    <div className="space-y-6 max-w-6xl">
-      <div className="flex items-baseline justify-between gap-4 flex-wrap">
+    <div className="max-w-6xl space-y-6">
+      <div className="flex flex-wrap items-baseline justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">{t("nav.tools")}</h1>
-          <p className="text-sm text-bungie-muted mt-1">{t("tools.subtitle")}</p>
+          <p className="text-bungie-muted mt-1 text-sm">
+            {t("tools.subtitle")}
+          </p>
         </div>
         <input
           type="search"
           placeholder={t("tools.search")}
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="bg-bungie-panel/60 border border-bungie-border rounded-full px-4 py-2 text-sm w-64 focus:outline-none focus:border-bungie-accent/60"
+          className="bg-bungie-panel/60 border-bungie-border focus:border-bungie-accent/60 w-64 rounded-full border px-4 py-2 text-sm focus:outline-none"
         />
       </div>
 
-      <section className="relative rounded-2xl p-6 border-2 border-bungie-accent/50 bg-linear-to-br from-bungie-accent/10 via-pink-500/5 to-transparent shadow-[0_0_40px_rgba(245,166,35,0.08)]">
-        <div className="absolute -top-3 left-6 bg-bungie-bg px-3 py-1 rounded-full border border-bungie-accent/60">
-          <span className="text-[10px] uppercase tracking-widest font-bold text-bungie-accent">
+      <section className="border-bungie-accent/50 from-bungie-accent/10 relative rounded-2xl border-2 bg-linear-to-br via-pink-500/5 to-transparent p-6 shadow-[0_0_40px_rgba(245,166,35,0.08)]">
+        <div className="bg-bungie-bg border-bungie-accent/60 absolute -top-3 left-6 rounded-full border px-3 py-1">
+          <span className="text-bungie-accent text-[10px] font-bold tracking-widest uppercase">
             ★ {t("tools.nativeBadge")}
           </span>
         </div>
 
-        <div className="flex items-baseline justify-between gap-3 flex-wrap mb-5 pt-1">
+        <div className="mb-5 flex flex-wrap items-baseline justify-between gap-3 pt-1">
           <div>
-            <h2 className="text-2xl font-bold flex items-center gap-2">
+            <h2 className="flex items-center gap-2 text-2xl font-bold">
               <span className="text-bungie-accent">✦</span>
               <span>{t("tools.native")}</span>
             </h2>
-            <p className="text-xs text-bungie-muted mt-1">
+            <p className="text-bungie-muted mt-1 text-xs">
               {t("tools.nativeHint")}
             </p>
           </div>
-          <span className="px-2 py-1 rounded-full bg-bungie-accent/15 border border-bungie-accent/40 text-bungie-accent text-xs font-semibold">
+          <span className="bg-bungie-accent/15 border-bungie-accent/40 text-bungie-accent rounded-full border px-2 py-1 text-xs font-semibold">
             {totalCount} {t("tools.nativeShort")}
           </span>
         </div>
@@ -301,10 +303,10 @@ export function Tools() {
         <div className="space-y-6">
           {filtered.map((cat) => (
             <section key={cat.id}>
-              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold">
                 <span className="text-bungie-accent/90">{cat.icon}</span>
                 <span>{t(`tools.category.${cat.id}`)}</span>
-                <span className="text-xs text-bungie-muted">
+                <span className="text-bungie-muted text-xs">
                   ({cat.tools.length})
                 </span>
               </h3>
@@ -318,5 +320,5 @@ export function Tools() {
         </div>
       </section>
     </div>
-  );
+  )
 }

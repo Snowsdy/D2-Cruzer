@@ -14,20 +14,20 @@
  */
 
 // --- OAuth (transient, cleared on redirect-back) -----------------------------
-export const SK_OAUTH_STATE = "cruzer:oauth_state";
-export const SK_PKCE_VERIFIER = "cruzer:pkce_verifier";
+export const SK_OAUTH_STATE = "cruzer:oauth_state"
+export const SK_PKCE_VERIFIER = "cruzer:pkce_verifier"
 
 // --- Boot / first-launch gate -----------------------------------------------
-export const SK_BOOTED = "cruzer:booted";
+export const SK_BOOTED = "cruzer:booted"
 
 // --- Zustand-persist stores -------------------------------------------------
-export const SK_SETTINGS = "cruzer:settings";
-export const SK_CHARACTER = "cruzer:character";
-export const SK_TAGS = "cruzer:tags";
+export const SK_SETTINGS = "cruzer:settings"
+export const SK_CHARACTER = "cruzer:character"
+export const SK_TAGS = "cruzer:tags"
 // Legacy flat keys — kept with the dot form so existing user data survives.
-export const SK_PLATFORM = "cruzer.platform";
-export const SK_AUTH_CHARACTER = "cruzer.character";
-export const SK_BUILDS = "cruzer.builds";
+export const SK_PLATFORM = "cruzer.platform"
+export const SK_AUTH_CHARACTER = "cruzer.character"
+export const SK_BUILDS = "cruzer.builds"
 
 // --- Manifest cache (carries version suffix) --------------------------------
-export const SK_MANIFEST_LIGHT = "cruzer:manifest_light_v6";
+export const SK_MANIFEST_LIGHT = "cruzer:manifest_light_v6"

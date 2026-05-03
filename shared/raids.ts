@@ -12,15 +12,15 @@
 
 export interface RaidMeta {
   /** Short slug used in URLs + keys. */
-  key: string;
+  key: string
   /** Display name (EN; localised via manifest when possible). */
-  name: string;
-  destination: string;
+  name: string
+  destination: string
   /** Encounter list in order. */
-  encounters: string[];
+  encounters: string[]
   /** Hash for the aggregate completion record
    *  (`DestinyRecordDefinition`). */
-  completionRecordHash?: number;
+  completionRecordHash?: number
 }
 
 export const RAIDS: RaidMeta[] = [
@@ -92,7 +92,7 @@ export const RAIDS: RaidMeta[] = [
     encounters: ["Substratum", "Herald", "Verity", "Witness"],
     completionRecordHash: 4196566271,
   },
-];
+]
 
 /** Bungie's DestinyActivityType hash for Raid activities. */
-export const RAID_ACTIVITY_TYPE_HASH = 2043403989;
+export const RAID_ACTIVITY_TYPE_HASH = 2043403989
