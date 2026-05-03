@@ -1,0 +1,765 @@
+{
+  "app": {
+    "name": "Cruzer Compagnon",
+    "tagline": "Der All-in-One-Begleiter für Destiny 2"
+  },
+  "auth": {
+    "login": "Mit Bungie.net anmelden",
+    "logout": "Abmelden",
+    "welcome": "Willkommen, Hüter",
+    "connecting": "Anmeldung läuft…",
+    "error": "Authentifizierung fehlgeschlagen",
+    "rememberMe": "Angemeldet bleiben",
+    "disclaimer": "Es werden keinerlei Nutzerdaten gespeichert."
+  },
+  "login": {
+    "notAffiliated": "Nicht verbunden mit Bungie, Inc.",
+    "feature": {
+      "inventory": "Inventar + Tresor mit sofortigem Drag & Drop",
+      "godRolls": "Deine God-Rolls erkannt + mit der Meta verglichen",
+      "news": "Bungie-News + Tweets · in Echtzeit",
+      "xur": "Xûr · Statistiken · Händler · Checkpoints",
+      "armor": "Rüstungsoptimierer + Community-Builds",
+      "checklist": "Wochen-Checkliste, Aufträge & Triumphe"
+    }
+  },
+  "nav": {
+    "dashboard": "Übersicht",
+    "inventory": "Inventar",
+    "loadouts": "Ausrüstungen",
+    "rolls": "Waffen-Rolls",
+    "armor": "Rüstungs-Optimierer",
+    "builds": "Builds",
+    "checklist": "Wochenchecklist",
+    "activities": "Aktivitäten",
+    "reports": "Berichte",
+    "stats": "Statistiken",
+    "vendors": "Händler",
+    "news": "Neuigkeiten",
+    "tools": "Werkzeuge",
+    "community": "Community",
+    "game": "Spiel",
+    "soon": "Bald",
+    "settings": "Einstellungen",
+    "language": "Sprache",
+    "database": "Database"
+  },
+  "builds": {
+    "subtitle": "Beliebte Community-Builds für jede Klasse und jedes Element"
+  },
+  "dashboard": {
+    "welcomeHint": "Überblick über deinen Fortschritt und deine Destiny-2-Ressourcen",
+    "characters": {
+      "title": "Deine Hüter",
+      "hint": "Klicken, um das Inventar zu öffnen",
+      "today": "Heute",
+      "yesterday": "Gestern",
+      "daysAgo": "vor {{n}}T",
+      "monthsAgo": "vor {{n}}Mo"
+    },
+    "currencies": "Währungen",
+    "viewAll": "Alle anzeigen →",
+    "dailyReset": "Täglicher Reset",
+    "weeklyReset": "Wöchentlicher Reset",
+    "xurArrives": "Xûr kommt in",
+    "xurLeaves": "Xûr geht in",
+    "xurHere": "Xûr ist da",
+    "xurSoon": "Xûr kommt am Freitag",
+    "stats": {
+      "power": "Maximale Power",
+      "playtime": "Gesamte Spielzeit",
+      "vaultItems": "Gegenstände im Tresor",
+      "characters": "Charaktere",
+      "equipped": "ausgerüstet",
+      "totalKills": "Gesamte Ausschaltungen",
+      "activitiesCleared": "Abgeschlossene Aktivitäten",
+      "pvpKd": "K/D Schmelztiegel",
+      "publicEvents": "Öffentliche Ereignisse"
+    },
+    "exoticSpotlight": "Exotisch im Rampenlicht",
+    "exoticWeapons": "Exotische Waffen",
+    "exoticArmor": "Exotische Rüstungen",
+    "metaBuilds": "Beliebte Builds",
+    "metaBuildsHint": "Community-Meta · klicke, um den Guide zu öffnen",
+    "noExotics": "Keine Exotischen in dieser Kategorie.",
+    "recentDrops": "Aktuelle Beute",
+    "reports": "Deine Berichte",
+    "reportsHint": "Detaillierte Statistiken auf externen Seiten",
+    "greeting": {
+      "morning": "Guten Morgen",
+      "afternoon": "Guten Tag",
+      "evening": "Guten Abend",
+      "night": "Gute Nacht"
+    },
+    "liveBadge": "Live-Daten"
+  },
+  "reports": {
+    "title": "Berichte",
+    "subtitle": "Raid/Dungeon-Statistiken + Community-Checkpoints",
+    "totalCompletions": "Gesamte Abschlüsse",
+    "viewOn": "Ansehen auf",
+    "allDifficulties": "Alle",
+    "sortClears": "Sortierung: Clears",
+    "sortFastest": "Sortierung: Schnellster",
+    "sortName": "Sortierung: Name",
+    "analyzingPgcrs": "Analyse von {{n}} Bungie-PGCRs für die Abzeichen Makellos / Solo / Duo / Trio…",
+    "playedOnly": "Gespielt",
+    "allActivities": "Alle",
+    "unplayedOnly": "Nicht gespielt",
+    "noActivities": "Keine Aktivität gefunden. Spiele ein paar Runs und lade neu.",
+    "clears": "Clears",
+    "fastest": "Beste Zeit",
+    "avgTime": "Ø Zeit",
+    "bestKills": "Ausschaltungs-Rekord",
+    "kd": "K/D",
+    "avgKills": "Ø Ausschaltungen",
+    "avgDeaths": "Ø Tode",
+    "lastPlayed": "Zuletzt",
+    "d2checkpointInfo": "Community-Seite, die Checkpoints (gespeicherte Begegnungen) für Raids und Dungeons teilt. Du kannst einer Instanz mit einem bereits freigeschalteten Checkpoint beitreten.",
+    "openD2Checkpoint": "D2Checkpoint öffnen",
+    "checkpointsDisclaimer": "Externer Dienst — Cruzer leitet nur weiter. Aktive Checkpoints sind auf d2checkpoint.com sichtbar.",
+    "embedded": "Eingebettet von",
+    "openExternal": "Im Browser öffnen",
+    "embedFailed": "Die Seite verweigert das Einbetten",
+    "embedFallback": "Die Seite blockiert die Iframe-Anzeige (X-Frame-Options). Öffne sie im System-Browser.",
+    "focusWindow": "Fenster anzeigen",
+    "checkpointsEmpty": "Aktuell keine Checkpoints verfügbar.",
+    "copy": "Kopieren",
+    "join": "Beitreten",
+    "commandCopied": "Befehl kopiert: {{cmd}} — füge ihn in den Destiny-2-Chat ein",
+    "copyFailed": "Kopieren in die Zwischenablage nicht möglich",
+    "steamOpened": "Steam geöffnet — füge {{bot}} als Freund hinzu und tritt seinem Spiel bei",
+    "copyHint": "« {{cmd}} » kopieren",
+    "joinHint": "Dem Bot im Spiel beitreten (Destiny 2 muss laufen)",
+    "joinSent": "Befehl im Spiel gesendet, um {{bot}} beizutreten",
+    "d2NotRunning": "Destiny 2 läuft nicht — starte das Spiel und versuche es erneut",
+    "d2FocusFailed": "Fokus auf Destiny 2 nicht möglich — setze das Spiel auf Rahmenloses Fenster",
+    "totalBots": "Aktive Bots",
+    "activities": "Aktivitäten",
+    "raids": "Raids",
+    "dungeons": "Dungeons",
+    "otherActivities": "Andere",
+    "premium": "Premium",
+    "premiumOnly": "Nur Premium",
+    "premiumBot": "Premium-Bot",
+    "encounters": "Abgedeckte Begegnungen",
+    "searchActivity": "Aktivität suchen…",
+    "sortPopularity": "Sortierung: Beliebt",
+    "sortPremium": "Sortierung: Premium"
+  },
+  "marathon": {
+    "waiting": "Marathon-API noch nicht verfügbar. Dieser Bereich wird aktiviert, sobald Bungie die öffentliche API veröffentlicht.",
+    "status": "Wartend",
+    "dev": "Entwickler",
+    "editor": "Herausgeber",
+    "announced": "Angekündigt, kein Termin festgelegt"
+  },
+  "news": {
+    "subtitle": "Neueste Bungie-Ankündigungen — Destiny 2 & Marathon",
+    "tab": {
+      "all": "Alle",
+      "destiny": "Destiny 2",
+      "marathon": "Marathon",
+      "tweets": "Tweets"
+    },
+    "empty": "Aktuell keine Neuigkeiten.",
+    "readMore": "Artikel lesen",
+    "noTweets": "Keine Tweets abgerufen. Die Nitter-Spiegel könnten nicht erreichbar sein."
+  },
+  "itemPreview": {
+    "stats": "Werte",
+    "perks": "Perks & Sockets",
+    "catalyst": "Katalysator",
+    "catalystHint": "Katalysator-Slot — den Fortschritt siehst du im Spiel auf deiner ausgerüsteten Waffe."
+  },
+  "vendors": {
+    "title": "Händler & Prämien",
+    "subtitle": "Prämien-Inventar — tägliche Aktualisierung über die Bungie-API",
+    "bounties": "Prämien",
+    "other": "andere",
+    "bountiesSection": "Verfügbare Prämien",
+    "otherSection": "Andere Gegenstände im Angebot",
+    "searchPlaceholder": "Gegenstand suchen…",
+    "sortDefault": "Sortierung: Standard",
+    "sortName": "Sortieren · Name",
+    "sortType": "Sortieren · Typ",
+    "ready": "Bereit zur Abgabe",
+    "inProgress": "aktiv",
+    "sortRarity": "Sortieren · Seltenheit",
+    "sortCostAsc": "Sortieren · Kosten ↑",
+    "sortCheapest": "Sortieren · Gratis zuerst"
+  },
+  "checklist": {
+    "subtitle": "Aktive wöchentliche und tägliche Aufgaben — Live-Bungie-API",
+    "weeklyReset": "Wöchentlicher Reset (Dienstag)",
+    "dailyReset": "Täglicher Reset",
+    "weekly": "Wöchentlich",
+    "daily": "Täglich",
+    "endsIn": "Läuft ab in",
+    "rewardsAvailable": "Belohnungen verfügbar",
+    "reward": "Abzuholen",
+    "todo": "Nicht abgeschlossen",
+    "claim": "Abzuholen",
+    "done": "Abgeschlossen",
+    "stateDone": "Abgeschlossen",
+    "stateTodo": "Offen",
+    "perChar": "Pro Charakter:",
+    "filterAll": "Alle",
+    "allChars": "Alle Charaktere",
+    "searchPlaceholder": "Meilenstein suchen…",
+    "noneForFilter": "Kein Meilenstein entspricht diesen Filtern.",
+    "pursuits": "Aktive Prämien & Quests",
+    "pursuitsCount": "laufend",
+    "pursuitDone": "Abgeschlossen",
+    "moreObjectives": "weitere Ziele",
+    "tabMilestones": "Meilensteine",
+    "tabBounties": "Prämien",
+    "tabQuests": "Quests",
+    "tabTriumphs": "Triumphe",
+    "bountiesTitle": "Aktive Prämien",
+    "questsTitle": "Laufende Quests",
+    "inProgress": "In Bearbeitung",
+    "noBounties": "Keine aktiven Prämien.",
+    "noQuests": "Keine laufenden Quests.",
+    "noTriumphs": "Kein aktiver Triumph mit erkanntem Fortschritt.",
+    "sortDefault": "Sortierung: Standard",
+    "sortName": "Sortierung: Name",
+    "sortProgress": "Sortierung: Fortschritt",
+    "sortEndsAt": "Sortierung: Ende nah"
+  },
+  "xur": {
+    "here": "Xûr ist da",
+    "arriving": "Xûr ist weg",
+    "leavesIn": "Geht in",
+    "arrivesIn": "Kommt in",
+    "awayNote": "Xûr ist unterwegs. Komm am Freitag um 17:00 UTC wieder, um sein Angebot zu sehen."
+  },
+  "stats": {
+    "title": "Destiny-2-Statistiken",
+    "subtitle": "Alle deine Statistiken zusammengefasst — Live-Bungie-API",
+    "crucible": "Schmelztiegel (gesamt)",
+    "gambit": "Gambit",
+    "matches": "Matches",
+    "clears": "Clears",
+    "attempts": "Versuche",
+    "completion": "Abschluss",
+    "wins": "Siege",
+    "losses": "Niederlagen",
+    "noMatches": "Keine Partie in diesem Modus gespielt.",
+    "kd": "K/D",
+    "kda": "K+A/D",
+    "winRate": "Siegesquote",
+    "completionRatio": "Abschlussquote",
+    "record": "Bilanz S/N",
+    "fastest": "Schnellster",
+    "bestKills": "Ausschaltungs-Rekord (Match)",
+    "longestSpree": "Längste Serie",
+    "longestKill": "Weitester Schuss",
+    "avgKillDist": "Ø Schussdistanz",
+    "precisionKills": "Präzisionskills",
+    "ofKills": "der Ausschaltungen",
+    "avgLifespan": "Ø Lebensdauer",
+    "timePlayed": "Gesamtzeit",
+    "assists": "Assists",
+    "opponentsDefeated": "Besiegte Gegner",
+    "motes": "Abgelegte Motes",
+    "denied": "abgelehnt",
+    "invasions": "Invasionen",
+    "invasionKills": "Invasions-Ausschaltungen",
+    "primevalKills": "Urzeitler-Ausschaltungen",
+    "blockersSent": "Entsandte Blocker",
+    "noData": "Keine Daten für diesen Modus. Spiele mindestens eine Partie und versuche es erneut.",
+    "basedOn": "Berechnet aus den letzten {{n}} Matches",
+    "avgKills": "Ø Ausschaltungen / Match",
+    "efficiency": "Effizienz",
+    "precisionPct": "Präzision",
+    "avgDuration": "Ø Dauer",
+    "totalKills": "Gesamte Ausschaltungen",
+    "totalDeaths": "Gesamte Tode",
+    "perCharacter": "Pro Charakter"
+  },
+  "ironBanner": {
+    "title": "Eisenbanner",
+    "matches": "Matches",
+    "wins": "Siege",
+    "losses": "Niederlagen",
+    "noMatches": "Keine Eisenbanner-Partie gespielt.",
+    "record": "Bilanz Siege / Niederlagen",
+    "kd": "K/D",
+    "kda": "K+A/D",
+    "winRate": "Siegesquote",
+    "opponentsDefeated": "Besiegte Gegner",
+    "bestKills": "Ausschaltungs-Rekord (Match)",
+    "longestSpree": "Längste Serie",
+    "longestKill": "Weitester Schuss",
+    "avgKillDist": "Ø Schussdistanz",
+    "precisionKills": "Präzisionskills",
+    "ofKills": "der Ausschaltungen",
+    "avgLifespan": "Ø Lebensdauer",
+    "timePlayed": "Gesamtzeit"
+  },
+  "nightfall": {
+    "title": "Dämmerung",
+    "clears": "Clears",
+    "attempts": "Versuche",
+    "successRate": "Erfolgsquote",
+    "noMatches": "Keine Dämmerung gespielt.",
+    "completionRatio": "Erfolg / Versuche",
+    "kd": "K/D",
+    "fastest": "Schnellster",
+    "bestKills": "Ausschaltungs-Rekord (Run)",
+    "longestSpree": "Längste Serie",
+    "opponentsDefeated": "Besiegte Gegner",
+    "assists": "Assists",
+    "precisionKills": "Präzisionskills",
+    "ofKills": "der Ausschaltungen",
+    "timePlayed": "Gesamtzeit"
+  },
+  "trials": {
+    "title": "Prüfungen von Osiris",
+    "matches": "Matches",
+    "wins": "Siege",
+    "losses": "Niederlagen",
+    "noMatches": "Keine Trials-Partie gespielt.",
+    "record": "Bilanz Siege / Niederlagen",
+    "kd": "K/D",
+    "kda": "K+A/D",
+    "winRate": "Siegesquote",
+    "opponentsDefeated": "Besiegte Gegner",
+    "bestKills": "Ausschaltungs-Rekord (Match)",
+    "longestSpree": "Längste Serie",
+    "longestKill": "Weitester Schuss",
+    "avgKillDistance": "Ø Schussdistanz",
+    "precisionKills": "Präzisionskills",
+    "ofKills": "der Ausschaltungen",
+    "avgLifespan": "Ø Lebensdauer",
+    "timePlayed": "Gesamtzeit"
+  },
+  "playtime": {
+    "title": "Spielzeit",
+    "spentInDestiny": "in Destiny 2 verbracht",
+    "firstSeen": "Erste Verbindung",
+    "lastSeen": "Letzte Verbindung",
+    "byMode": "Aufteilung nach Modus",
+    "byCharacter": "Aufteilung nach Charakter",
+    "ofTotal": "des Gesamten",
+    "mode": {
+      "pvp": "Schmelztiegel (PvP)",
+      "strikes": "Strikes",
+      "raid": "Raids",
+      "pve": "PvE (gesamt)"
+    }
+  },
+  "tools": {
+    "subtitle": "Alle wichtigen Community-Werkzeuge",
+    "search": "Suchen…",
+    "native": "In Cruzer integriert",
+    "nativeBadge": "Native Integration · Bungie-API",
+    "nativeHint": "Alle Community-Werkzeuge, zusammengefasst in Cruzer — Live-Statistiken über die Bungie-API",
+    "nativeCount": "{{n}} native Werkzeuge",
+    "nativeShort": "nativ",
+    "totalShort": "insgesamt",
+    "openNative": "In Cruzer öffnen",
+    "externalLinks": "Externe Links · im Browser zu öffnen",
+    "badgeNative": "Nativ",
+    "badgeExternal": "Extern",
+    "xurDesc": "Xûrs Angebot live — kommt freitags um 17:00 UTC",
+    "playtimeDesc": "Gesamte Spielzeit, nach Modus und Charakter",
+    "trialsDesc": "Prüfungen-von-Osiris-Statistiken — K/D, Siegesquote, Rekorde",
+    "nightfallDesc": "Dämmerung-Statistiken — Clears, beste Zeit, K/D, Rekorde",
+    "category": {
+      "inventory": "Inventar & Verwaltung",
+      "weapons": "Waffen",
+      "armor": "Rüstung",
+      "stats": "Statistiken & Berichte",
+      "checklist": "Wochenchecklists",
+      "lore": "Lore & Wiki",
+      "builds": "Builds & Guides",
+      "community": "Community",
+      "api": "API & Entwicklung"
+    }
+  },
+  "loadouts": {
+    "title": "Gespeicherte Ausrüstungen",
+    "subtitle": "Deine im Spiel gespeicherten Ausrüstungen",
+    "slot": "Slot {{n}}",
+    "empty": "Leerer Slot",
+    "noneFetched": "Kein Loadout für diesen Charakter gefunden."
+  },
+  "common": {
+    "loading": "Lädt…",
+    "error": "Fehler",
+    "retry": "Erneut versuchen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "refresh": "Aktualisieren",
+    "more": "Mehr anzeigen",
+    "less": "Weniger anzeigen",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "minimize": "Minimieren",
+    "maximize": "Maximieren",
+    "restore": "Wiederherstellen"
+  },
+  "update": {
+    "available": "Update verfügbar",
+    "download": "Herunterladen",
+    "installRestart": "Installieren & neu starten",
+    "error": "Update fehlgeschlagen"
+  },
+  "search": {
+    "placeholder": "Suchen (is:weapon, tier:legendary, tag:keep…)"
+  },
+  "dupes": {
+    "title": "Duplikate",
+    "count": "{{groups}} Gruppen · {{extras}} überschüssige Kopien",
+    "empty": "Keine Duplikate gefunden."
+  },
+  "maxPower": {
+    "title": "Maximale Power",
+    "subtitle": "Die stärksten Teile aller Charaktere + Tresor ausrüsten",
+    "equipAll": "Alles ausrüsten",
+    "current": "Aktuell",
+    "target": "Ziel",
+    "delta": "Gewinn"
+  },
+  "postmaster": {
+    "title": "Poststelle",
+    "count": "{{n}} Gegenstände in der Poststelle",
+    "pullAll": "Alles abholen",
+    "pull": "Abholen",
+    "empty": "Poststelle leer."
+  },
+  "vault": {
+    "subtitle": "Alle deine im gemeinsamen Tresor gelagerten Gegenstände",
+    "empty": "Der Tresor ist für diesen Filter leer.",
+    "filter": {
+      "all": "Alle",
+      "weapons": "Waffen",
+      "armor": "Rüstung",
+      "general": "Allgemein"
+    },
+    "sort": {
+      "power": "Sortierung: Power",
+      "name": "Sortierung: Name",
+      "type": "Sortierung: Typ"
+    }
+  },
+  "organizer": {
+    "title": "Organizer",
+    "count": "{{n}} Gegenstände",
+    "col": {
+      "name": "Name",
+      "type": "Typ",
+      "power": "Power",
+      "total": "Gesamt",
+      "tier": "Seltenheit",
+      "tag": "Tag",
+      "location": "Ort"
+    },
+    "onChar": "Charakter"
+  },
+  "compare": {
+    "title": "Vergleichen",
+    "add": "Zum Vergleich hinzufügen",
+    "remove": "Entfernen",
+    "clear": "Alles leeren",
+    "item": "Gegenstand"
+  },
+  "inventory": {
+    "power": "Power",
+    "bag": "Charakter-Inventar",
+    "vault": "Tresor",
+    "noCharacter": "Kein Charakter ausgewählt.",
+    "otherItems": "weitere Gegenstände im Tresor (Materialien, Quests usw.)",
+    "playedTotal": "Spielzeit",
+    "lastPlayed": "Zuletzt gespielt",
+    "subtab": {
+      "view": "Ansicht"
+    },
+    "tab": {
+      "overview": "Gegenstandsverwaltung",
+      "character": "Charakter",
+      "loadouts": "Ausrüstungen",
+      "vault": "Tresor",
+      "organizer": "Organizer",
+      "dupes": "Duplikate",
+      "maxpower": "Maximale Power",
+      "postmaster": "Poststelle"
+    },
+    "filter": {
+      "all": "Alle",
+      "weapons": "Waffen",
+      "armor": "Rüstung"
+    }
+  },
+  "item": {
+    "stats": "Werte",
+    "description": "Beschreibung"
+  },
+  "confirm": {
+    "logout": {
+      "title": "Abmelden?",
+      "message": "Du wirst von deinem Bungie.net-Konto abgemeldet. Dein Inventar und deine Statistiken sind bis zur nächsten Anmeldung nicht mehr erreichbar."
+    },
+    "hint": {
+      "esc": "Abbrechen",
+      "enter": "Bestätigen"
+    }
+  },
+  "layout": {
+    "guardians": "Hüter"
+  },
+  "toasts": {
+    "itemEquipped": "Gegenstand ausgerüstet",
+    "equipFailed": "Ausrüsten fehlgeschlagen: {{error}}",
+    "itemTransferred": "Gegenstand transferiert",
+    "transferFailed": "Transfer fehlgeschlagen: {{error}}",
+    "sentToVault": "In den Tresor gelegt",
+    "vaultTransferFailed": "Tresor-Transfer fehlgeschlagen: {{error}}",
+    "dataRefreshed": "Daten aktualisiert",
+    "d2NotRunning": "Destiny 2 läuft nicht",
+    "alwaysOnTopEnabled": "Immer im Vordergrund aktiviert",
+    "alwaysOnTopDisabled": "Deaktiviert",
+    "alwaysOnTopFailed": "Immer im Vordergrund: {{error}}",
+    "manifestReloaded": "Manifest neu geladen",
+    "disconnected": "Abgemeldet",
+    "localCacheCleared": "Lokaler Cache geleert",
+    "errorGeneric": "Fehler: {{error}}",
+    "preferencesReset": "Einstellungen zurückgesetzt",
+    "overlayEnabled": "Overlay aktiviert",
+    "overlayDisabled": "Overlay deaktiviert"
+  },
+  "resetNotif": {
+    "daily": {
+      "title": "Täglicher Reset in 15 Min",
+      "body": "17:00 UTC — Checkliste & Händler werden zurückgesetzt."
+    },
+    "weekly": {
+      "title": "Wöchentlicher Reset in 1 h",
+      "body": "Dienstag 17:00 UTC — Wochenaufträge & Raids starten neu."
+    },
+    "xur": {
+      "title": "Xûr ist da!",
+      "body": "Freitag 18:00 UTC — sein Sortiment ist online."
+    }
+  },
+  "database": {
+    "title": "Datenbank",
+    "subtitle": "Durchsuche alle Destiny-2-Gegenstände, sortiert nach Kategorie.",
+    "categories": "Kategorien",
+    "search": "Suchen…",
+    "all": "Alle",
+    "sort": "Sortierung",
+    "sortOpt": {
+      "rarity": "Seltenheit",
+      "type": "Typ",
+      "name": "Name"
+    },
+    "noResults": "Keine Ergebnisse.",
+    "loading": "Destiny-2-Katalog wird zwischengespeichert…",
+    "loadingHint": "Dieser Download (~40 MB) erfolgt nur einmal pro Bungie-Manifest-Version — künftige Aufrufe sind sofort verfügbar.",
+    "loadingError": "Laden fehlgeschlagen: {{error}}",
+    "loadMore": "Mehr laden (+{{n}})",
+    "hash": "HASH",
+    "tab": {
+      "weapons": "Waffen",
+      "armor": "Rüstung",
+      "mods": "Mods",
+      "subclass": "Unterklassen",
+      "ghosts": "Ghosts",
+      "ships": "Schiffe",
+      "vehicles": "Sparrows",
+      "emblems": "Embleme",
+      "shaders": "Shader",
+      "emotes": "Emotes",
+      "finishers": "Finisher"
+    },
+    "facet": {
+      "all": "Alle",
+      "kinetic": "Kinetisch",
+      "energy": "Energie",
+      "power": "Schwer",
+      "titan": "Titan",
+      "hunter": "Jäger",
+      "warlock": "Warlock"
+    },
+    "tier": {
+      "exotic": "Exotisch",
+      "legendary": "Legendär",
+      "rare": "Selten",
+      "uncommon": "Ungewöhnlich",
+      "common": "Gewöhnlich"
+    }
+  },
+  "bot": {
+    "status": {
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "meta": "Discord-Bot · Destiny 2",
+    "heroTitle": "Bot",
+    "description": "Discord-Begleiter der Cruzer-App. 26 Slash-Befehle — Xûr, Spielerstatistiken, Raids, Händler, Marathon — direkt auf deinem Server. Gleiche Datenquellen wie die App.",
+    "invite": "Einladen",
+    "support": "Support",
+    "refresh": "Aktualisieren",
+    "loading": "Bot-Status wird geladen…",
+    "statusUnavailable": "⚠ Bot-Status nicht verfügbar",
+    "statusUnavailableHint": "{{url}} hat nicht geantwortet. Der Bot ist vielleicht offline oder noch nicht deployed. Du kannst ihn trotzdem einladen, wenn du ihn lokal startest.",
+    "tiles": {
+      "servers": "Server",
+      "users": "Benutzer",
+      "commands24h": "Befehle · 24 h",
+      "commandsTotal": "{{n}} insgesamt",
+      "uptime": "Uptime",
+      "deployed": "deployed {{date}}"
+    },
+    "top": {
+      "kicker": "// Top 24 h",
+      "title": "Meistgenutzte Befehle",
+      "updatedAt": "akt. · {{time}}"
+    },
+    "modules": {
+      "kicker": "// Module",
+      "title": "Befehlskategorien",
+      "cmdCount": "{{n}} Befehl",
+      "cmdCountPlural": "{{n}} Befehle"
+    },
+    "catalog": {
+      "kicker": "// Katalog",
+      "allCommands": "{{n}} Slash-Befehle",
+      "viewAll": "Alle anzeigen ×",
+      "search": "Suchen…",
+      "empty": "Kein Befehl passt."
+    },
+    "help": {
+      "title": "Hilfe mit dem Bot nötig?",
+      "subtitle": "Tritt dem offiziellen Discord bei — Support, Patches, Feedback.",
+      "openDiscord": "Discord öffnen"
+    },
+    "categories": {
+      "world": "Welt · wöchentlich",
+      "player": "Spieler",
+      "items": "Items",
+      "vendors": "Händler",
+      "marathon": "Marathon",
+      "utility": "Utility",
+      "admin": "Admin"
+    }
+  },
+  "settings": {
+    "subtitle": "App-Einstellungen · Kürzel · Benachrichtigungen",
+    "version": "Cruzer v{{version}}",
+    "section": {
+      "account": "Konto",
+      "display": "Anzeige",
+      "notifications": "Benachrichtigungen",
+      "shortcuts": "Tastaturkürzel",
+      "advanced": "Erweitert"
+    },
+    "session": {
+      "label": "Bungie.net-Sitzung",
+      "hintAuth": "Über OAuth 2.0 authentifiziert",
+      "hintAuthManifest": "Über OAuth 2.0 authentifiziert · Manifest geladen"
+    },
+    "manifest": {
+      "label": "Manifest neu laden",
+      "hint": "Lädt die Spieltabellen erneut (Items, Aktivitäten, Händler)",
+      "action": "Neu laden"
+    },
+    "cache": {
+      "label": "Lokalen Cache leeren",
+      "hint": "Entfernt Manifest und Einstellungen vom USB-Stick",
+      "action": "Leeren"
+    },
+    "language": {
+      "label": "Oberflächensprache",
+      "hint": "Legt auch die Locale für Bungie-Texte fest"
+    },
+    "alwaysOnTop": {
+      "label": "Immer im Vordergrund",
+      "hint": "Heftet Cruzer über Destiny 2, damit du es im Spiel lesen kannst",
+      "aria": "Immer im Vordergrund"
+    },
+    "compactMode": {
+      "label": "Kompaktmodus",
+      "hint": "Engere Ränder, kompakteres Inventar und dichtere Listen"
+    },
+    "theme": {
+      "label": "Thema",
+      "hint": "Drei Stimmungen — Dunkel (Standard), Mitternacht (tiefes Schwarz), Nebel (violetter Schleier)",
+      "dark": "Dunkel",
+      "midnight": "Mitternacht",
+      "nebula": "Nebel"
+    },
+    "notifWeekly": {
+      "label": "Wöchentlicher Reset",
+      "hint": "Hinweis 1 h vor dem Reset am Dienstag (17:00 UTC)"
+    },
+    "notifDaily": {
+      "label": "Täglicher Reset",
+      "hint": "Hinweis 15 Min vor dem Reset (17:00 UTC)"
+    },
+    "notifXur": {
+      "label": "Xûrs Ankunft",
+      "hint": "Benachrichtigt freitags 18:00 UTC, wenn Xûr landet"
+    },
+    "soundAlerts": {
+      "label": "Tonalarme",
+      "hint": "Kurzer Ton bei jeder Benachrichtigung (Sofort-Test)"
+    },
+    "shortcuts": {
+      "inventory": "Inventar öffnen",
+      "checklist": "Checkliste öffnen",
+      "refresh": "Daten aktualisieren",
+      "focusD2": "Destiny 2 fokussieren",
+      "alwaysOnTop": "Immer im Vordergrund",
+      "overlay": "In-Game-Overlay"
+    },
+    "devLogs": {
+      "label": "Entwickler-Logs",
+      "hint": "Aktiviert ausführliche console.debug-Ausgaben in Hooks und API"
+    },
+    "bungieDiag": {
+      "label": "Bungie-API-Diagnose",
+      "hint": "Zeigt detaillierte Netzwerkfehler in Toasts und Konsole"
+    },
+    "reset": {
+      "label": "Einstellungen zurücksetzen",
+      "hint": "Setzt alle Einstellungen auf Standardwerte (ohne Sitzung zu ändern)",
+      "action": "Zurücksetzen"
+    },
+    "footer": {
+      "build": "Cruzer Compagnon · Portable Build · {{year}}",
+      "activeLang": "Aktive Sprache · {{lang}}"
+    },
+    "overlay": {
+      "label": "In-Game-Overlay",
+      "hint": "Zeigt ein minimales HUD über Destiny 2 und Marathon — automatisch erkannt"
+    }
+  },
+  "toast": {
+    "join": "Im Spiel beitreten",
+    "close": "Schließen"
+  },
+  "errorPanel": {
+    "title": "Fehler",
+    "sessionExpired": "Deine Bungie.net-Sitzung ist möglicherweise abgelaufen — bitte erneut anmelden.",
+    "maintenance": "Die Bungie-API ist in Wartung. Versuche es in wenigen Minuten erneut.",
+    "unknownBungie": "Unbekannter Bungie-Fehler",
+    "unknown": "Unbekannter Fehler"
+  },
+  "livePlayers": {
+    "tooltip": "Spieler online (alle Plattformen, geschätzt)"
+  },
+  "season": {
+    "claimed": "Eingefordert"
+  },
+  "whatsNew": {
+    "title": "Was ist neu",
+    "dismiss": "Los geht's",
+    "footerHint": "Vollständiges Änderungsprotokoll in CHANGELOG.md"
+  }
+}

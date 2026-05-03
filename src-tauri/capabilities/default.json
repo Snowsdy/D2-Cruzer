@@ -1,0 +1,46 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capability for the main window",
+  "platforms": [
+    "windows"
+  ],
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:window:default",
+    "core:window:allow-close",
+    "core:window:allow-toggle-maximize",
+    "core:window:allow-start-dragging",
+    "core:window:allow-minimize",
+    "core:window:allow-internal-toggle-maximize",
+    "core:event:default",
+    "deep-link:default",
+    "core:default",
+    "opener:default",
+    "log:default",
+    "updater:default",
+    {
+      "identifier": "shell:allow-open",
+      "allow": [
+        { "url": "^https://(www\\.)?bungie\\.net/.+" },
+        { "url": "^https://(www\\.)?mobalytics\\.gg/.+" },
+        { "url": "^https://(www\\.)?popularity\\.report/.*" },
+        { "url": "^https://(www\\.)?raid\\.report/.+" },
+        { "url": "^https://(www\\.)?dungeon\\.report/.+" },
+        { "url": "^https://(www\\.)?d2checkpoint\\.com/.*" },
+        { "url": "^https://(www\\.)?checkpoints\\.tech/.*" },
+        { "url": "^https://github\\.com/.+" },
+        { "url": "^https://(www\\.)?reddit\\.com/.+" },
+        { "url": "^https://(www\\.)?threads\\.(com|net)/.+" },
+        { "url": "^https://(www\\.)?youtube\\.com/.+" },
+        { "url": "^https://store\\.steampowered\\.com/.+" },
+        { "url": "^https://(www\\.)?marathonthegame\\.com/.*" }
+      ]
+    },
+    "process:default",
+    "process:allow-restart",
+    "store:default"
+  ]
+}

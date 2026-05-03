@@ -1,0 +1,77 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Cruzer",
+  "version": "0.0.1",
+  "identifier": "com.snowsdy.cruzer",
+  "build": {
+    "beforeDevCommand": "bun run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "bun run build",
+    "frontendDist": "../dist",
+    "removeUnusedCommands": true
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Cruzer Compagnon",
+        "width": 1280,
+        "height": 800,
+        "minWidth": 960,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": false,
+        "transparent": false,
+        "shadow": true,
+        "dragDropEnabled": false,
+        "center": true,
+        "visible": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "createUpdaterArtifacts": true,
+    "active": true,
+    "targets": "msi",
+    "publisher": "Cruzer",
+    "copyright": "© 2026 Cruzer · Projet communautaire · Destiny 2 © Bungie, Inc.",
+    "category": "Utility",
+    "shortDescription": "Compagnon Destiny 2 tout-en-un",
+    "longDescription": "Cruzer Compagnon — application desktop tout-en-un pour Destiny 2 : inventaire, transferts, loadouts, rolls d'armes, optimiseur d'armure, checklist hebdo, statistiques, marchands, Xûr, bannière de fer, épreuves, et bien plus. Portable USB, mises à jour automatiques, OAuth Bungie officiel.",
+    "homepage": "https://cruzer.gg",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "allowDowngrades": false,
+      "wix": {
+        "upgradeCode": "5e33d94f-08b8-571a-8ad2-40a18b9d45c6"
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDE0Qjc1MTlGNTM1RkI2RDQKUldUVXRsOVRuMUczRk9KSU91SE53QWcvTkl6R0Fkb1VRRTlUOFAvL2laK3RFSkkwMTRaZVhLdlcK",
+      "endpoints": [
+        "https://github.com/Snowsdy/D2-Cruzer/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    },
+    "deep-link": {
+        "desktop": {
+          "schemes": ["cruzer"]
+      }
+    }
+  }
+}

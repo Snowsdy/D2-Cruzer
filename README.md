@@ -1,4 +1,4 @@
-# React + TypeScript + Vite + shadcn/ui
+# React + TypeScript + Vite + shadcn/ui (https://tauriui.vercel.app/)
 
 This is a template for a new Vite project with React, TypeScript, and shadcn/ui.
 

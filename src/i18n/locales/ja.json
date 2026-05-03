@@ -1,0 +1,765 @@
+{
+  "app": {
+    "name": "Cruzer コンパニオン",
+    "tagline": "Destiny 2 のオールインワン・コンパニオン"
+  },
+  "auth": {
+    "login": "Bungie.net でサインイン",
+    "logout": "サインアウト",
+    "welcome": "ようこそ、ガーディアン",
+    "connecting": "サインイン中…",
+    "error": "認証に失敗しました",
+    "rememberMe": "ログイン情報を保存する",
+    "disclaimer": "ユーザーデータは保存されません。"
+  },
+  "login": {
+    "notAffiliated": "Bungie, Inc. とは提携していません",
+    "feature": {
+      "inventory": "インベントリ + ボルトを即座にドラッグ&ドロップ",
+      "godRolls": "自分のゴッドロールを特定しメタと比較",
+      "news": "Bungie ニュース + ツイート · リアルタイム",
+      "xur": "Xûr · 統計 · ベンダー · チェックポイント",
+      "armor": "アーマー最適化 + コミュニティビルド",
+      "checklist": "週次チェックリスト、契約、トライアンフ"
+    }
+  },
+  "nav": {
+    "dashboard": "ダッシュボード",
+    "inventory": "インベントリ",
+    "loadouts": "ロードアウト",
+    "rolls": "武器のロール",
+    "armor": "アーマー最適化",
+    "builds": "ビルド",
+    "checklist": "週間チェックリスト",
+    "activities": "アクティビティ",
+    "reports": "レポート",
+    "stats": "統計",
+    "vendors": "ベンダー",
+    "news": "ニュース",
+    "tools": "ツール",
+    "community": "コミュニティ",
+    "game": "ゲーム",
+    "soon": "近日公開",
+    "settings": "設定",
+    "language": "言語",
+    "database": "データベース"
+  },
+  "builds": {
+    "subtitle": "各クラス・各属性におけるコミュニティで人気のビルド"
+  },
+  "dashboard": {
+    "welcomeHint": "Destiny 2 の進行状況とリソースの概要",
+    "characters": {
+      "title": "あなたのガーディアン",
+      "hint": "クリックしてインベントリを開く",
+      "today": "今日",
+      "yesterday": "昨日",
+      "daysAgo": "{{n}}日前",
+      "monthsAgo": "{{n}}か月前"
+    },
+    "currencies": "通貨",
+    "viewAll": "すべて表示 →",
+    "dailyReset": "デイリーリセット",
+    "weeklyReset": "ウィークリーリセット",
+    "xurArrives": "シュールの到着まで",
+    "xurLeaves": "シュールの出発まで",
+    "xurHere": "シュールが来訪中",
+    "xurSoon": "シュールは金曜日に到着します",
+    "stats": {
+      "power": "最大パワー",
+      "playtime": "総プレイ時間",
+      "vaultItems": "金庫内のアイテム",
+      "characters": "キャラクター",
+      "equipped": "装備中",
+      "totalKills": "総キル数",
+      "activitiesCleared": "クリアしたアクティビティ",
+      "pvpKd": "クルーシブル K/D",
+      "publicEvents": "パブリックイベント"
+    },
+    "exoticSpotlight": "注目のエキゾチック",
+    "exoticWeapons": "エキゾチック武器",
+    "exoticArmor": "エキゾチックアーマー",
+    "metaBuilds": "人気ビルド",
+    "metaBuildsHint": "コミュニティのメタ · クリックでガイドを開く",
+    "noExotics": "このカテゴリーにはエキゾチックがありません。",
+    "recentDrops": "最近の戦利品",
+    "reports": "あなたのレポート",
+    "reportsHint": "外部サイトでの詳細ステータス",
+    "greeting": {
+      "morning": "おはようございます",
+      "afternoon": "こんにちは",
+      "evening": "こんばんは",
+      "night": "おやすみなさい"
+    },
+    "liveBadge": "ライブデータ"
+  },
+  "reports": {
+    "title": "レポート",
+    "subtitle": "レイド/ダンジョンのステータス + コミュニティのチェックポイント",
+    "totalCompletions": "総クリア数",
+    "viewOn": "表示先",
+    "allDifficulties": "すべて",
+    "sortClears": "並び順: クリア数",
+    "sortFastest": "並び順: 最速",
+    "sortName": "並び順: 名前",
+    "analyzingPgcrs": "{{n}} 件の Bungie PGCR を解析中、フローレス / ソロ / デュオ / トリオ バッジを確認中…",
+    "playedOnly": "プレイ済み",
+    "allActivities": "すべて",
+    "unplayedOnly": "未プレイ",
+    "noActivities": "アクティビティが見つかりません。いくつかプレイしてから再試行してください。",
+    "clears": "クリア数",
+    "fastest": "最速タイム",
+    "avgTime": "平均タイム",
+    "bestKills": "キル数記録",
+    "kd": "K/D",
+    "avgKills": "平均キル数",
+    "avgDeaths": "平均デス数",
+    "lastPlayed": "最終プレイ",
+    "d2checkpointInfo": "レイドやダンジョンのチェックポイント(保存されたエンカウンター)を共有するコミュニティサイトです。すでに解除されたチェックポイントのインスタンスに参加できます。",
+    "openD2Checkpoint": "D2Checkpoint を開く",
+    "checkpointsDisclaimer": "外部サービス — Cruzer はリダイレクトするだけです。アクティブなチェックポイントは d2checkpoint.com で確認できます。",
+    "embedded": "埋め込み元",
+    "openExternal": "ブラウザで開く",
+    "embedFailed": "サイトが埋め込みを拒否しました",
+    "embedFallback": "サイトは iframe 表示をブロックしています (X-Frame-Options)。システムのブラウザで開いてください。",
+    "focusWindow": "ウィンドウを表示",
+    "checkpointsEmpty": "現在利用可能なチェックポイントはありません。",
+    "copy": "コピー",
+    "join": "参加",
+    "commandCopied": "コマンドをコピーしました: {{cmd}} — Destiny 2 のチャットに貼り付けてください",
+    "copyFailed": "クリップボードにコピーできませんでした",
+    "steamOpened": "Steam を開きました — {{bot}} をフレンドに追加し、そのゲームに参加してください",
+    "copyHint": "「{{cmd}}」をコピー",
+    "joinHint": "ゲーム内でボットに参加 (Destiny 2 が起動している必要があります)",
+    "joinSent": "{{bot}} に参加するコマンドをゲーム内に送信しました",
+    "d2NotRunning": "Destiny 2 が起動していません — ゲームを起動して再試行してください",
+    "d2FocusFailed": "Destiny 2 にフォーカスを当てられません — ゲームをボーダレスウィンドウモードにしてください",
+    "totalBots": "アクティブなボット",
+    "activities": "アクティビティ",
+    "raids": "レイド",
+    "dungeons": "ダンジョン",
+    "otherActivities": "その他",
+    "premium": "プレミアム",
+    "premiumOnly": "プレミアムのみ",
+    "premiumBot": "プレミアムボット",
+    "encounters": "対応エンカウンター",
+    "searchActivity": "アクティビティを検索…",
+    "sortPopularity": "並び順: 人気",
+    "sortPremium": "並び順: プレミアム"
+  },
+  "marathon": {
+    "waiting": "Marathon API はまだ利用できません。Bungie が公開 API をリリースし次第、このセクションが有効になります。",
+    "status": "待機中",
+    "dev": "開発元",
+    "editor": "発売元",
+    "announced": "発表済み・日程未定"
+  },
+  "news": {
+    "subtitle": "Bungie の最新情報 — Destiny 2 & Marathon",
+    "tab": {
+      "all": "すべて",
+      "destiny": "Destiny 2",
+      "marathon": "Marathon",
+      "tweets": "ツイート"
+    },
+    "empty": "現在ニュースはありません。",
+    "readMore": "記事を読む",
+    "noTweets": "ツイートを取得できませんでした。Nitter のミラーが利用できない可能性があります。"
+  },
+  "itemPreview": {
+    "stats": "ステータス",
+    "perks": "パーク & ソケット",
+    "catalyst": "カタリスト",
+    "catalystHint": "カタリストスロット — 進行状況は装備中の武器でゲーム内で確認できます。"
+  },
+  "vendors": {
+    "title": "ベンダー & バウンティ",
+    "subtitle": "バウンティのインベントリ — Bungie API から毎日更新",
+    "bounties": "バウンティ",
+    "other": "その他",
+    "bountiesSection": "利用可能なバウンティ",
+    "otherSection": "その他の販売アイテム",
+    "searchPlaceholder": "アイテムを検索…",
+    "sortDefault": "並び順: デフォルト",
+    "sortName": "並び替え · 名前",
+    "sortType": "並び替え · タイプ",
+    "ready": "提出可能",
+    "inProgress": "進行中",
+    "sortRarity": "並び替え · レアリティ",
+    "sortCostAsc": "並び替え · コスト ↑",
+    "sortCheapest": "並び替え · 無料優先"
+  },
+  "checklist": {
+    "subtitle": "週間・日間のアクティブなタスク — Bungie API ライブ",
+    "weeklyReset": "週間リセット (火曜日)",
+    "dailyReset": "デイリーリセット",
+    "weekly": "週間",
+    "daily": "日間",
+    "endsIn": "残り時間",
+    "rewardsAvailable": "報酬を受け取れます",
+    "reward": "受取待ち",
+    "todo": "未完了",
+    "claim": "受取待ち",
+    "done": "完了",
+    "stateDone": "完了",
+    "stateTodo": "未完了",
+    "perChar": "キャラクターごと:",
+    "filterAll": "すべて",
+    "allChars": "全キャラクター",
+    "searchPlaceholder": "マイルストーンを検索…",
+    "noneForFilter": "このフィルターに一致するマイルストーンはありません。",
+    "pursuits": "アクティブなバウンティ & クエスト",
+    "pursuitsCount": "進行中",
+    "pursuitDone": "完了",
+    "moreObjectives": "その他の目標",
+    "tabMilestones": "マイルストーン",
+    "tabBounties": "バウンティ",
+    "tabQuests": "クエスト",
+    "tabTriumphs": "トライアンフ",
+    "bountiesTitle": "アクティブなバウンティ",
+    "questsTitle": "進行中のクエスト",
+    "inProgress": "進行中",
+    "noBounties": "アクティブなバウンティはありません。",
+    "noQuests": "進行中のクエストはありません。",
+    "noTriumphs": "進行状況が検出されたアクティブなトライアンフはありません。",
+    "sortDefault": "並び順: デフォルト",
+    "sortName": "並び順: 名前",
+    "sortProgress": "並び順: 進行状況",
+    "sortEndsAt": "並び順: 終了間近"
+  },
+  "xur": {
+    "here": "シュールが来訪中",
+    "arriving": "シュールは不在です",
+    "leavesIn": "出発まで",
+    "arrivesIn": "到着まで",
+    "awayNote": "シュールは移動中です。金曜日の 17:00 UTC に戻って在庫を確認してください。"
+  },
+  "stats": {
+    "title": "Destiny 2 統計",
+    "subtitle": "すべての統計を統合 — Bungie API ライブ",
+    "crucible": "クルーシブル (合計)",
+    "gambit": "ガンビット",
+    "matches": "試合",
+    "clears": "クリア数",
+    "attempts": "挑戦数",
+    "completion": "完了率",
+    "wins": "勝利数",
+    "losses": "敗北数",
+    "noMatches": "このモードでのプレイ履歴はありません。",
+    "kd": "K/D",
+    "kda": "K+A/D",
+    "winRate": "勝率",
+    "completionRatio": "完了率",
+    "record": "勝敗記録",
+    "fastest": "最速",
+    "bestKills": "キル数記録 (試合)",
+    "longestSpree": "最長連続キル",
+    "longestKill": "最長射撃",
+    "avgKillDist": "平均射撃距離",
+    "precisionKills": "プレシジョンキル",
+    "ofKills": "総キル中の割合",
+    "avgLifespan": "平均生存時間",
+    "timePlayed": "総プレイ時間",
+    "assists": "アシスト",
+    "opponentsDefeated": "撃破した敵",
+    "motes": "投入したモート",
+    "denied": "拒否数",
+    "invasions": "侵略",
+    "invasionKills": "侵略キル数",
+    "primevalKills": "プライムバル キル数",
+    "blockersSent": "送信したブロッカー",
+    "noData": "このモードのデータがありません。少なくとも1試合プレイしてから再試行してください。",
+    "basedOn": "直近 {{n}} 試合から計算",
+    "avgKills": "平均キル数 / 試合",
+    "efficiency": "効率",
+    "precisionPct": "プレシジョン率",
+    "avgDuration": "平均時間",
+    "totalKills": "総キル数",
+    "totalDeaths": "総デス数",
+    "perCharacter": "キャラクター別"
+  },
+  "ironBanner": {
+    "title": "アイアンバナー",
+    "matches": "試合",
+    "wins": "勝利数",
+    "losses": "敗北数",
+    "noMatches": "アイアンバナーのプレイ履歴はありません。",
+    "record": "勝敗記録",
+    "kd": "K/D",
+    "kda": "K+A/D",
+    "winRate": "勝率",
+    "opponentsDefeated": "撃破した敵",
+    "bestKills": "キル数記録 (試合)",
+    "longestSpree": "最長連続キル",
+    "longestKill": "最長射撃",
+    "avgKillDist": "平均射撃距離",
+    "precisionKills": "プレシジョンキル",
+    "ofKills": "総キル中の割合",
+    "avgLifespan": "平均生存時間",
+    "timePlayed": "総プレイ時間"
+  },
+  "nightfall": {
+    "title": "ナイトフォール",
+    "clears": "クリア数",
+    "attempts": "挑戦数",
+    "successRate": "成功率",
+    "noMatches": "ナイトフォールのプレイ履歴はありません。",
+    "completionRatio": "成功 / 挑戦の比率",
+    "kd": "K/D",
+    "fastest": "最速",
+    "bestKills": "キル数記録 (ラン)",
+    "longestSpree": "最長連続キル",
+    "opponentsDefeated": "撃破した敵",
+    "assists": "アシスト",
+    "precisionKills": "プレシジョンキル",
+    "ofKills": "総キル中の割合",
+    "timePlayed": "総プレイ時間"
+  },
+  "trials": {
+    "title": "オシリスの試練",
+    "matches": "試合",
+    "wins": "勝利数",
+    "losses": "敗北数",
+    "noMatches": "オシリスの試練のプレイ履歴はありません。",
+    "record": "勝敗記録",
+    "kd": "K/D",
+    "kda": "K+A/D",
+    "winRate": "勝率",
+    "opponentsDefeated": "撃破した敵",
+    "bestKills": "キル数記録 (試合)",
+    "longestSpree": "最長連続キル",
+    "longestKill": "最長射撃",
+    "avgKillDistance": "平均射撃距離",
+    "precisionKills": "プレシジョンキル",
+    "ofKills": "総キル中の割合",
+    "avgLifespan": "平均生存時間",
+    "timePlayed": "総プレイ時間"
+  },
+  "playtime": {
+    "title": "プレイ時間",
+    "spentInDestiny": "Destiny 2 でのプレイ時間",
+    "firstSeen": "初回接続",
+    "lastSeen": "最終接続",
+    "byMode": "モード別の内訳",
+    "byCharacter": "キャラクター別の内訳",
+    "ofTotal": "合計に対する割合",
+    "mode": {
+      "pvp": "クルーシブル (PvP)",
+      "strikes": "ストライク",
+      "raid": "レイド",
+      "pve": "PvE (合計)"
+    }
+  },
+  "tools": {
+    "subtitle": "コミュニティの必須ツールをすべて集約",
+    "search": "検索…",
+    "native": "Cruzer に統合",
+    "nativeBadge": "ネイティブ統合 · Bungie API",
+    "nativeHint": "コミュニティのすべてのツールを Cruzer に統合 — Bungie API でライブ統計を取得",
+    "nativeCount": "{{n}} 個のネイティブツール",
+    "nativeShort": "ネイティブ",
+    "totalShort": "合計",
+    "openNative": "Cruzer で開く",
+    "externalLinks": "外部リンク · ブラウザで開く",
+    "badgeNative": "ネイティブ",
+    "badgeExternal": "外部",
+    "xurDesc": "シュールの在庫をライブで表示 — 金曜日の 17:00 UTC に到着",
+    "playtimeDesc": "総プレイ時間、モード別・キャラクター別",
+    "trialsDesc": "オシリスの試練の統計 — K/D、勝率、記録",
+    "nightfallDesc": "ナイトフォールの統計 — クリア数、最速タイム、K/D、記録",
+    "category": {
+      "inventory": "インベントリ & 管理",
+      "weapons": "武器",
+      "armor": "アーマー",
+      "stats": "統計 & レポート",
+      "checklist": "週間 & チェックリスト",
+      "lore": "ロア & Wiki",
+      "builds": "ビルド & ガイド",
+      "community": "コミュニティ",
+      "api": "API & 開発"
+    }
+  },
+  "loadouts": {
+    "title": "保存されたロードアウト",
+    "subtitle": "ゲーム内に保存されたロードアウト",
+    "slot": "スロット {{n}}",
+    "empty": "空のスロット",
+    "noneFetched": "このキャラクターのロードアウトは見つかりませんでした。"
+  },
+  "common": {
+    "loading": "読み込み中…",
+    "error": "エラー",
+    "retry": "再試行",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "refresh": "更新",
+    "more": "もっと見る",
+    "less": "閉じる",
+    "close": "閉じる",
+    "confirm": "確定",
+    "previous": "前へ",
+    "next": "次へ",
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restore": "元に戻す"
+  },
+  "update": {
+    "available": "アップデートが利用可能です",
+    "download": "ダウンロード",
+    "installRestart": "インストールして再起動",
+    "error": "アップデートに失敗しました"
+  },
+  "search": {
+    "placeholder": "検索 (is:weapon, tier:legendary, tag:keep…)"
+  },
+  "dupes": {
+    "title": "重複アイテム",
+    "count": "{{groups}} グループ · {{extras}} 個の重複コピー",
+    "empty": "重複は見つかりませんでした。"
+  },
+  "maxPower": {
+    "title": "最大パワー",
+    "subtitle": "すべてのキャラクター + 金庫から最も強力な装備を装備",
+    "equipAll": "すべて装備",
+    "current": "現在",
+    "target": "目標",
+    "delta": "増加"
+  },
+  "postmaster": {
+    "title": "ポストマスター",
+    "count": "ポストマスターに {{n}} 個のアイテム",
+    "pullAll": "すべて受け取る",
+    "pull": "受け取る",
+    "empty": "ポストマスターは空です。"
+  },
+  "vault": {
+    "subtitle": "共有金庫に保管されているすべてのアイテム",
+    "empty": "このフィルターでは金庫は空です。",
+    "filter": {
+      "all": "すべて",
+      "weapons": "武器",
+      "armor": "アーマー",
+      "general": "一般"
+    },
+    "sort": {
+      "power": "並び順: パワー",
+      "name": "並び順: 名前",
+      "type": "並び順: 種類"
+    }
+  },
+  "organizer": {
+    "title": "オーガナイザー",
+    "count": "{{n}} 個のアイテム",
+    "col": {
+      "name": "名前",
+      "type": "種類",
+      "power": "パワー",
+      "total": "合計",
+      "tier": "レアリティ",
+      "tag": "タグ",
+      "location": "場所"
+    },
+    "onChar": "キャラクター"
+  },
+  "compare": {
+    "title": "比較",
+    "add": "比較に追加",
+    "remove": "削除",
+    "clear": "すべてクリア",
+    "item": "アイテム"
+  },
+  "inventory": {
+    "power": "パワー",
+    "bag": "キャラクターのインベントリ",
+    "vault": "金庫",
+    "noCharacter": "キャラクターが選択されていません。",
+    "otherItems": "金庫内のその他のアイテム (素材、クエストなど)",
+    "playedTotal": "プレイ時間",
+    "lastPlayed": "最終接続",
+    "subtab": {
+      "view": "表示"
+    },
+    "tab": {
+      "overview": "アイテムマネージャー",
+      "character": "キャラクター",
+      "loadouts": "ロードアウト",
+      "vault": "金庫",
+      "organizer": "オーガナイザー",
+      "dupes": "重複アイテム",
+      "maxpower": "最大パワー",
+      "postmaster": "ポストマスター"
+    },
+    "filter": {
+      "all": "すべて",
+      "weapons": "武器",
+      "armor": "アーマー"
+    }
+  },
+  "item": {
+    "stats": "ステータス",
+    "description": "説明"
+  },
+  "confirm": {
+    "logout": {
+      "title": "サインアウトしますか?",
+      "message": "Bungie.netアカウントからサインアウトします。次回サインインするまで、インベントリと統計情報にはアクセスできません。"
+    },
+    "hint": {
+      "esc": "キャンセル",
+      "enter": "確定"
+    }
+  },
+  "layout": {
+    "guardians": "ガーディアン"
+  },
+  "toasts": {
+    "itemEquipped": "アイテムを装備しました",
+    "equipFailed": "装備に失敗しました: {{error}}",
+    "itemTransferred": "アイテムを転送しました",
+    "transferFailed": "転送に失敗しました: {{error}}",
+    "sentToVault": "ボルトへ送りました",
+    "vaultTransferFailed": "ボルトへの転送に失敗しました: {{error}}",
+    "dataRefreshed": "データを更新しました",
+    "d2NotRunning": "Destiny 2 が起動していません",
+    "alwaysOnTopEnabled": "常に前面表示を有効化",
+    "alwaysOnTopDisabled": "無効化",
+    "alwaysOnTopFailed": "常に前面表示: {{error}}",
+    "manifestReloaded": "マニフェストを再読み込みしました",
+    "disconnected": "サインアウトしました",
+    "localCacheCleared": "ローカルキャッシュを削除しました",
+    "errorGeneric": "エラー: {{error}}",
+    "preferencesReset": "設定をリセットしました",
+    "overlayEnabled": "オーバーレイ オン",
+    "overlayDisabled": "オーバーレイ オフ"
+  },
+  "resetNotif": {
+    "daily": {
+      "title": "デイリーリセットまで15分",
+      "body": "17:00 UTC — チェックリストとベンダーがリセットされます。"
+    },
+    "weekly": {
+      "title": "ウィークリーリセットまで1時間",
+      "body": "火曜17:00 UTC — ウィークリー契約とレイドがリセットされます。"
+    },
+    "xur": {
+      "title": "Xûr が到着!",
+      "body": "金曜18:00 UTC — 在庫が公開されました。"
+    }
+  },
+  "database": {
+    "title": "データベース",
+    "subtitle": "Destiny 2 のすべてのアイテムをカテゴリ別に閲覧できます。",
+    "categories": "カテゴリ",
+    "search": "検索…",
+    "all": "すべて",
+    "sort": "並べ替え",
+    "sortOpt": {
+      "rarity": "レアリティ",
+      "type": "タイプ",
+      "name": "名前"
+    },
+    "noResults": "該当なし。",
+    "loading": "Destiny 2 カタログをキャッシュしています…",
+    "loadingHint": "このダウンロード(約40 MB)はBungieマニフェストのバージョンごとに一度だけ行われ、次回以降は瞬時に開けます。",
+    "loadingError": "読み込みに失敗しました: {{error}}",
+    "loadMore": "さらに読み込む (+{{n}})",
+    "hash": "HASH",
+    "tab": {
+      "weapons": "武器",
+      "armor": "アーマー",
+      "mods": "Mod",
+      "subclass": "サブクラス",
+      "ghosts": "ゴースト",
+      "ships": "シップ",
+      "vehicles": "スパロー",
+      "emblems": "エンブレム",
+      "shaders": "シェーダー",
+      "emotes": "エモート",
+      "finishers": "フィニッシャー"
+    },
+    "facet": {
+      "all": "すべて",
+      "kinetic": "キネティック",
+      "energy": "エナジー",
+      "power": "パワー",
+      "titan": "タイタン",
+      "hunter": "ハンター",
+      "warlock": "ウォーロック"
+    },
+    "tier": {
+      "exotic": "エキゾチック",
+      "legendary": "レジェンダリー",
+      "rare": "レア",
+      "uncommon": "アンコモン",
+      "common": "コモン"
+    }
+  },
+  "bot": {
+    "status": {
+      "online": "オンライン",
+      "offline": "オフライン"
+    },
+    "meta": "Discord ボット · Destiny 2",
+    "heroTitle": "Bot",
+    "description": "Cruzer アプリの Discord コンパニオン。26のスラッシュコマンド — Xûr、プレイヤー統計、レイド、ベンダー、Marathon — をサーバーを離れずに利用できます。アプリと同じデータソース。",
+    "invite": "招待",
+    "support": "サポート",
+    "refresh": "更新",
+    "loading": "ボットのステータスを読み込み中…",
+    "statusUnavailable": "⚠ ボットのステータスを取得できません",
+    "statusUnavailableHint": "{{url}} が応答しませんでした。ボットはオフラインか未デプロイの可能性があります。ローカルで起動している場合でも招待できます。",
+    "tiles": {
+      "servers": "サーバー",
+      "users": "ユーザー",
+      "commands24h": "コマンド · 24 時間",
+      "commandsTotal": "総計 {{n}}",
+      "uptime": "稼働時間",
+      "deployed": "デプロイ日 {{date}}"
+    },
+    "top": {
+      "kicker": "// 24時間トップ",
+      "title": "よく使われたコマンド",
+      "updatedAt": "更新 · {{time}}"
+    },
+    "modules": {
+      "kicker": "// モジュール",
+      "title": "コマンドカテゴリ",
+      "cmdCount": "{{n}} コマンド",
+      "cmdCountPlural": "{{n}} コマンド"
+    },
+    "catalog": {
+      "kicker": "// カタログ",
+      "allCommands": "{{n}} のスラッシュコマンド",
+      "viewAll": "すべて表示 ×",
+      "search": "検索…",
+      "empty": "該当するコマンドがありません。"
+    },
+    "help": {
+      "title": "ボットでお困りですか?",
+      "subtitle": "公式 Discord に参加 — サポート・パッチ・フィードバック。",
+      "openDiscord": "Discord を開く"
+    },
+    "categories": {
+      "world": "ワールド · 週次",
+      "player": "プレイヤー",
+      "items": "アイテム",
+      "vendors": "ベンダー",
+      "marathon": "Marathon",
+      "utility": "ユーティリティ",
+      "admin": "管理"
+    }
+  },
+  "settings": {
+    "subtitle": "アプリ設定 · ショートカット · 通知",
+    "version": "Cruzer v{{version}}",
+    "section": {
+      "account": "アカウント",
+      "display": "表示",
+      "notifications": "通知",
+      "shortcuts": "キーボードショートカット",
+      "advanced": "詳細設定"
+    },
+    "session": {
+      "label": "Bungie.net セッション",
+      "hintAuth": "OAuth 2.0 で認証済み",
+      "hintAuthManifest": "OAuth 2.0 で認証済み · マニフェスト読み込み済み"
+    },
+    "manifest": {
+      "label": "マニフェストを更新",
+      "hint": "ゲームテーブル(アイテム、アクティビティ、ベンダー)を再ダウンロード",
+      "action": "更新"
+    },
+    "cache": {
+      "label": "ローカルキャッシュを削除",
+      "hint": "USBメモリ上のマニフェストと設定を削除します",
+      "action": "削除"
+    },
+    "language": {
+      "label": "インターフェース言語",
+      "hint": "Bungie から取得するテキストのロケールも設定します"
+    },
+    "alwaysOnTop": {
+      "label": "常に前面表示",
+      "hint": "Destiny 2 の上に Cruzer を重ねてゲーム中に閲覧できます",
+      "aria": "常に前面表示"
+    },
+    "compactMode": {
+      "label": "コンパクトモード",
+      "hint": "余白を狭め、インベントリとリストを高密度化します"
+    },
+    "theme": {
+      "label": "テーマ",
+      "hint": "3つの雰囲気 — ダーク（デフォルト）、ミッドナイト（深い黒）、ネビュラ（紫のベール）",
+      "dark": "ダーク",
+      "midnight": "ミッドナイト",
+      "nebula": "ネビュラ"
+    },
+    "notifWeekly": {
+      "label": "ウィークリーリセット",
+      "hint": "火曜リセット(17:00 UTC)の1時間前に通知"
+    },
+    "notifDaily": {
+      "label": "デイリーリセット",
+      "hint": "リセット(17:00 UTC)の15分前に通知"
+    },
+    "notifXur": {
+      "label": "Xûr の到着",
+      "hint": "金曜18:00 UTC に Xûr 出現を通知"
+    },
+    "soundAlerts": {
+      "label": "サウンドアラート",
+      "hint": "通知ごとに短い音を再生します(即時テスト)"
+    },
+    "shortcuts": {
+      "inventory": "インベントリを開く",
+      "checklist": "チェックリストを開く",
+      "refresh": "データを更新",
+      "focusD2": "Destiny 2 にフォーカス",
+      "alwaysOnTop": "常に前面表示",
+      "overlay": "ゲーム内オーバーレイ"
+    },
+    "devLogs": {
+      "label": "開発ログ",
+      "hint": "フックと API の詳細な console.debug を有効化"
+    },
+    "bungieDiag": {
+      "label": "Bungie API 診断",
+      "hint": "詳細なネットワークエラーをトーストとコンソールに表示"
+    },
+    "reset": {
+      "label": "設定をリセット",
+      "hint": "すべての設定を既定値に戻します(セッションには影響しません)",
+      "action": "リセット"
+    },
+    "footer": {
+      "build": "Cruzer Compagnon · ポータブルビルド · {{year}}",
+      "activeLang": "使用中の言語 · {{lang}}"
+    },
+    "overlay": {
+      "label": "ゲーム内オーバーレイ",
+      "hint": "Destiny 2とMarathonの上に最小限のHUDを表示 — 自動検出"
+    }
+  },
+  "toast": {
+    "join": "ゲームに参加",
+    "close": "閉じる"
+  },
+  "errorPanel": {
+    "title": "エラー",
+    "sessionExpired": "Bungie.net のセッションが切れている可能性があります — 再度サインインしてください。",
+    "maintenance": "Bungie API はメンテナンス中です。数分後にもう一度お試しください。",
+    "unknownBungie": "不明な Bungie エラー",
+    "unknown": "不明なエラー"
+  },
+  "livePlayers": {
+    "tooltip": "オンラインプレイヤー数(全プラットフォーム・推定)"
+  },
+  "season": {
+    "claimed": "受領済み"
+  },
+  "whatsNew": {
+    "title": "新着情報",
+    "dismiss": "了解",
+    "footerHint": "完全な変更履歴は CHANGELOG.md を参照"
+  }
+}

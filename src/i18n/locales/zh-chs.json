@@ -1,0 +1,765 @@
+{
+  "app": {
+    "name": "Cruzer 伙伴",
+    "tagline": "Destiny 2 全能伙伴应用"
+  },
+  "auth": {
+    "login": "使用 Bungie.net 登录",
+    "logout": "登出",
+    "welcome": "欢迎,守护者",
+    "connecting": "登录中…",
+    "error": "认证失败",
+    "rememberMe": "记住我",
+    "disclaimer": "我们不会存储任何用户数据。"
+  },
+  "login": {
+    "notAffiliated": "与 Bungie, Inc. 无关联",
+    "feature": {
+      "inventory": "物品栏 + 仓库即时拖放",
+      "godRolls": "识别你的 god-roll 并与 meta 比较",
+      "news": "Bungie 新闻 + 推文 · 实时",
+      "xur": "Xûr · 统计 · 商人 · 检查点",
+      "armor": "护甲优化器 + 社区 build",
+      "checklist": "每周清单、契约与胜利"
+    }
+  },
+  "nav": {
+    "dashboard": "仪表盘",
+    "inventory": "库存",
+    "loadouts": "装备配置",
+    "rolls": "武器词条",
+    "armor": "护甲优化",
+    "builds": "Build 配装",
+    "checklist": "每周清单",
+    "activities": "活动",
+    "reports": "战报",
+    "stats": "统计",
+    "vendors": "商人",
+    "news": "新闻",
+    "tools": "工具",
+    "community": "社区",
+    "game": "游戏",
+    "soon": "即将推出",
+    "settings": "设置",
+    "language": "语言",
+    "database": "数据库"
+  },
+  "builds": {
+    "subtitle": "社区中每个职业和属性的热门 Build 配装"
+  },
+  "dashboard": {
+    "welcomeHint": "你的 Destiny 2 进度和资源总览",
+    "characters": {
+      "title": "你的守护者",
+      "hint": "点击打开库存",
+      "today": "今天",
+      "yesterday": "昨天",
+      "daysAgo": "{{n}}天前",
+      "monthsAgo": "{{n}}个月前"
+    },
+    "currencies": "货币",
+    "viewAll": "查看全部 →",
+    "dailyReset": "每日重置",
+    "weeklyReset": "每周重置",
+    "xurArrives": "Xûr 将在以下时间到达",
+    "xurLeaves": "Xûr 将在以下时间离开",
+    "xurHere": "Xûr 已到达",
+    "xurSoon": "Xûr 周五到达",
+    "stats": {
+      "power": "最大威能",
+      "playtime": "总游戏时长",
+      "vaultItems": "保险库物品",
+      "characters": "角色",
+      "equipped": "已装备",
+      "totalKills": "总击杀数",
+      "activitiesCleared": "已完成活动",
+      "pvpKd": "熔炉 K/D",
+      "publicEvents": "公共事件"
+    },
+    "exoticSpotlight": "精选异域",
+    "exoticWeapons": "异域武器",
+    "exoticArmor": "异域护甲",
+    "metaBuilds": "热门 Build 配装",
+    "metaBuildsHint": "社区 Meta · 点击打开攻略",
+    "noExotics": "此类别中没有异域物品。",
+    "recentDrops": "最近的战利品",
+    "reports": "你的战报",
+    "reportsHint": "外部站点上的详细统计数据",
+    "greeting": {
+      "morning": "早上好",
+      "afternoon": "下午好",
+      "evening": "晚上好",
+      "night": "晚安"
+    },
+    "liveBadge": "实时数据"
+  },
+  "reports": {
+    "title": "战报",
+    "subtitle": "突袭/密境统计 + 社区检查点",
+    "totalCompletions": "总完成次数",
+    "viewOn": "在此查看",
+    "allDifficulties": "全部",
+    "sortClears": "排序:通关次数",
+    "sortFastest": "排序:最快时间",
+    "sortName": "排序:名称",
+    "analyzingPgcrs": "正在分析 Bungie 的 {{n}} 个 PGCR 以获取无瑕疵/单人/双人/三人徽章…",
+    "playedOnly": "已游玩",
+    "allActivities": "全部",
+    "unplayedOnly": "未游玩",
+    "noActivities": "未找到活动。多玩几局后再重试。",
+    "clears": "通关次数",
+    "fastest": "最快时间",
+    "avgTime": "平均时间",
+    "bestKills": "击杀记录",
+    "kd": "K/D",
+    "avgKills": "平均击杀",
+    "avgDeaths": "平均死亡",
+    "lastPlayed": "最近一次",
+    "d2checkpointInfo": "社区站点,分享突袭和密境的检查点(保存的遭遇战进度)。你可以加入一个已解锁检查点的实例。",
+    "openD2Checkpoint": "打开 D2Checkpoint",
+    "checkpointsDisclaimer": "外部服务 —— Cruzer 仅负责跳转。活动中的检查点可在 d2checkpoint.com 查看。",
+    "embedded": "嵌入自",
+    "openExternal": "在浏览器中打开",
+    "embedFailed": "该站点拒绝嵌入",
+    "embedFallback": "该站点阻止了 iframe 显示(X-Frame-Options)。请在系统浏览器中打开。",
+    "focusWindow": "显示窗口",
+    "checkpointsEmpty": "当前无可用检查点。",
+    "copy": "复制",
+    "join": "加入",
+    "commandCopied": "已复制指令:{{cmd}} —— 粘贴到 Destiny 2 聊天框",
+    "copyFailed": "无法复制到剪贴板",
+    "steamOpened": "Steam 已打开 —— 添加 {{bot}} 为好友然后加入他的游戏",
+    "copyHint": "复制「{{cmd}}」",
+    "joinHint": "在游戏中加入机器人(Destiny 2 必须已启动)",
+    "joinSent": "已在游戏中发送指令以加入 {{bot}}",
+    "d2NotRunning": "Destiny 2 未启动 —— 请启动游戏后重试",
+    "d2FocusFailed": "无法聚焦 Destiny 2 —— 请将游戏设为无边框窗口模式",
+    "totalBots": "活跃机器人",
+    "activities": "活动",
+    "raids": "突袭",
+    "dungeons": "密境",
+    "otherActivities": "其他",
+    "premium": "高级版",
+    "premiumOnly": "仅限高级版",
+    "premiumBot": "高级机器人",
+    "encounters": "覆盖的遭遇战",
+    "searchActivity": "搜索活动…",
+    "sortPopularity": "排序:热门",
+    "sortPremium": "排序:高级版"
+  },
+  "marathon": {
+    "waiting": "Marathon API 尚未开放。Bungie 发布公共 API 后此板块将启用。",
+    "status": "等待中",
+    "dev": "开发商",
+    "editor": "发行商",
+    "announced": "已公布,尚未确定日期"
+  },
+  "news": {
+    "subtitle": "Bungie 最新公告 —— Destiny 2 & Marathon",
+    "tab": {
+      "all": "全部",
+      "destiny": "Destiny 2",
+      "marathon": "Marathon",
+      "tweets": "推文"
+    },
+    "empty": "暂无新闻。",
+    "readMore": "阅读全文",
+    "noTweets": "未获取到推文。Nitter 镜像可能不可用。"
+  },
+  "itemPreview": {
+    "stats": "属性",
+    "perks": "特性与插槽",
+    "catalyst": "催化剂",
+    "catalystHint": "催化剂槽位 —— 进度可在游戏中查看已装备的武器。"
+  },
+  "vendors": {
+    "title": "商人与悬赏",
+    "subtitle": "悬赏库存 —— 通过 Bungie API 每日刷新",
+    "bounties": "悬赏",
+    "other": "其他",
+    "bountiesSection": "可接取的悬赏",
+    "otherSection": "其他在售物品",
+    "searchPlaceholder": "搜索物品…",
+    "sortDefault": "排序:默认",
+    "sortName": "排序 · 名称",
+    "sortType": "排序 · 类型",
+    "ready": "可提交",
+    "inProgress": "进行中",
+    "sortRarity": "排序 · 稀有度",
+    "sortCostAsc": "排序 · 花费 ↑",
+    "sortCheapest": "排序 · 免费优先"
+  },
+  "checklist": {
+    "subtitle": "当前每周和每日任务 —— Bungie API 实时数据",
+    "weeklyReset": "每周重置(周二)",
+    "dailyReset": "每日重置",
+    "weekly": "每周",
+    "daily": "每日",
+    "endsIn": "剩余时间",
+    "rewardsAvailable": "可领取奖励",
+    "reward": "待领取",
+    "todo": "未完成",
+    "claim": "待领取",
+    "done": "已完成",
+    "stateDone": "已完成",
+    "stateTodo": "待完成",
+    "perChar": "每个角色:",
+    "filterAll": "全部",
+    "allChars": "所有角色",
+    "searchPlaceholder": "搜索里程碑…",
+    "noneForFilter": "没有里程碑符合这些筛选条件。",
+    "pursuits": "当前悬赏与任务",
+    "pursuitsCount": "进行中",
+    "pursuitDone": "已完成",
+    "moreObjectives": "其他目标",
+    "tabMilestones": "里程碑",
+    "tabBounties": "悬赏",
+    "tabQuests": "任务",
+    "tabTriumphs": "凯旋",
+    "bountiesTitle": "当前悬赏",
+    "questsTitle": "进行中的任务",
+    "inProgress": "进行中",
+    "noBounties": "没有进行中的悬赏。",
+    "noQuests": "没有进行中的任务。",
+    "noTriumphs": "未检测到有进度的活跃凯旋。",
+    "sortDefault": "排序:默认",
+    "sortName": "排序:名称",
+    "sortProgress": "排序:进度",
+    "sortEndsAt": "排序:即将结束"
+  },
+  "xur": {
+    "here": "Xûr 已到达",
+    "arriving": "Xûr 已离开",
+    "leavesIn": "离开倒计时",
+    "arrivesIn": "到达倒计时",
+    "awayNote": "Xûr 外出中。请于周五 17:00 UTC 回来查看他的商品。"
+  },
+  "stats": {
+    "title": "Destiny 2 统计",
+    "subtitle": "你的所有统计数据汇总 —— Bungie API 实时数据",
+    "crucible": "熔炉(总计)",
+    "gambit": "诡诈",
+    "matches": "场次",
+    "clears": "通关",
+    "attempts": "尝试",
+    "completion": "完成率",
+    "wins": "胜利",
+    "losses": "失败",
+    "noMatches": "该模式下没有游玩记录。",
+    "kd": "K/D",
+    "kda": "K+A/D",
+    "winRate": "胜率",
+    "completionRatio": "完成比率",
+    "record": "胜/负战绩",
+    "fastest": "最快时间",
+    "bestKills": "单场击杀记录",
+    "longestSpree": "最长连杀",
+    "longestKill": "最远击杀",
+    "avgKillDist": "平均击杀距离",
+    "precisionKills": "精准击杀",
+    "ofKills": "占击杀",
+    "avgLifespan": "平均生存时间",
+    "timePlayed": "总时长",
+    "assists": "助攻",
+    "opponentsDefeated": "击败对手",
+    "motes": "缴纳微粒",
+    "denied": "被拒绝",
+    "invasions": "入侵",
+    "invasionKills": "入侵击杀",
+    "primevalKills": "原初者击杀",
+    "blockersSent": "派出阻挡者",
+    "noData": "该模式下无数据。至少游玩一局后重试。",
+    "basedOn": "基于最近 {{n}} 场比赛计算",
+    "avgKills": "平均击杀/场",
+    "efficiency": "效率",
+    "precisionPct": "精准率",
+    "avgDuration": "平均时长",
+    "totalKills": "总击杀数",
+    "totalDeaths": "总死亡数",
+    "perCharacter": "按角色"
+  },
+  "ironBanner": {
+    "title": "铁旗",
+    "matches": "场次",
+    "wins": "胜利",
+    "losses": "失败",
+    "noMatches": "没有铁旗游玩记录。",
+    "record": "胜利/失败战绩",
+    "kd": "K/D",
+    "kda": "K+A/D",
+    "winRate": "胜率",
+    "opponentsDefeated": "击败对手",
+    "bestKills": "单场击杀记录",
+    "longestSpree": "最长连杀",
+    "longestKill": "最远击杀",
+    "avgKillDist": "平均击杀距离",
+    "precisionKills": "精准击杀",
+    "ofKills": "占击杀",
+    "avgLifespan": "平均生存时间",
+    "timePlayed": "总时长"
+  },
+  "nightfall": {
+    "title": "夜幕",
+    "clears": "通关",
+    "attempts": "尝试",
+    "successRate": "成功率",
+    "noMatches": "没有夜幕游玩记录。",
+    "completionRatio": "成功/尝试比",
+    "kd": "K/D",
+    "fastest": "最快时间",
+    "bestKills": "单局击杀记录",
+    "longestSpree": "最长连杀",
+    "opponentsDefeated": "击败对手",
+    "assists": "助攻",
+    "precisionKills": "精准击杀",
+    "ofKills": "占击杀",
+    "timePlayed": "总时长"
+  },
+  "trials": {
+    "title": "奥西里斯试炼",
+    "matches": "场次",
+    "wins": "胜利",
+    "losses": "失败",
+    "noMatches": "没有试炼游玩记录。",
+    "record": "胜利/失败战绩",
+    "kd": "K/D",
+    "kda": "K+A/D",
+    "winRate": "胜率",
+    "opponentsDefeated": "击败对手",
+    "bestKills": "单场击杀记录",
+    "longestSpree": "最长连杀",
+    "longestKill": "最远击杀",
+    "avgKillDistance": "平均击杀距离",
+    "precisionKills": "精准击杀",
+    "ofKills": "占击杀",
+    "avgLifespan": "平均生存时间",
+    "timePlayed": "总时长"
+  },
+  "playtime": {
+    "title": "游戏时长",
+    "spentInDestiny": "在 Destiny 2 中度过",
+    "firstSeen": "首次登录",
+    "lastSeen": "最近登录",
+    "byMode": "按模式分布",
+    "byCharacter": "按角色分布",
+    "ofTotal": "占总计",
+    "mode": {
+      "pvp": "熔炉(PvP)",
+      "strikes": "突击",
+      "raid": "突袭",
+      "pve": "PvE(总计)"
+    }
+  },
+  "tools": {
+    "subtitle": "所有必备社区工具",
+    "search": "搜索…",
+    "native": "Cruzer 内置",
+    "nativeBadge": "原生集成 · Bungie API",
+    "nativeHint": "所有社区工具,汇集于 Cruzer —— 通过 Bungie API 实时统计",
+    "nativeCount": "{{n}} 个原生工具",
+    "nativeShort": "原生",
+    "totalShort": "共计",
+    "openNative": "在 Cruzer 中打开",
+    "externalLinks": "外部链接 · 在浏览器中打开",
+    "badgeNative": "原生",
+    "badgeExternal": "外部",
+    "xurDesc": "Xûr 实时库存 —— 每周五 17:00 UTC 到达",
+    "playtimeDesc": "总游戏时长,按模式和角色细分",
+    "trialsDesc": "奥西里斯试炼统计 —— K/D、胜率、记录",
+    "nightfallDesc": "夜幕统计 —— 通关、最快时间、K/D、记录",
+    "category": {
+      "inventory": "库存与管理",
+      "weapons": "武器",
+      "armor": "护甲",
+      "stats": "统计与战报",
+      "checklist": "每周与清单",
+      "lore": "剧情与百科",
+      "builds": "Build 与攻略",
+      "community": "社区",
+      "api": "API 与开发"
+    }
+  },
+  "loadouts": {
+    "title": "已保存的装备配置",
+    "subtitle": "你在游戏中保存的装备配置",
+    "slot": "槽位 {{n}}",
+    "empty": "空槽位",
+    "noneFetched": "未找到该角色的装备配置。"
+  },
+  "common": {
+    "loading": "加载中…",
+    "error": "错误",
+    "retry": "重试",
+    "save": "保存",
+    "cancel": "取消",
+    "refresh": "刷新",
+    "more": "显示更多",
+    "less": "显示更少",
+    "close": "关闭",
+    "confirm": "确认",
+    "previous": "上一个",
+    "next": "下一个",
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restore": "还原"
+  },
+  "update": {
+    "available": "有可用更新",
+    "download": "下载",
+    "installRestart": "安装并重启",
+    "error": "更新失败"
+  },
+  "search": {
+    "placeholder": "搜索(is:weapon, tier:legendary, tag:keep…)"
+  },
+  "dupes": {
+    "title": "重复物品",
+    "count": "{{groups}} 组 · 多余 {{extras}} 份",
+    "empty": "未发现重复物品。"
+  },
+  "maxPower": {
+    "title": "最大威能",
+    "subtitle": "为所有角色 + 保险库装备最强部件",
+    "equipAll": "全部装备",
+    "current": "当前",
+    "target": "目标",
+    "delta": "提升"
+  },
+  "postmaster": {
+    "title": "邮箱",
+    "count": "邮箱中有 {{n}} 件物品",
+    "pullAll": "全部领取",
+    "pull": "领取",
+    "empty": "邮箱为空。"
+  },
+  "vault": {
+    "subtitle": "所有存放在共享保险库中的物品",
+    "empty": "此筛选条件下保险库为空。",
+    "filter": {
+      "all": "全部",
+      "weapons": "武器",
+      "armor": "护甲",
+      "general": "通用"
+    },
+    "sort": {
+      "power": "排序:威能",
+      "name": "排序:名称",
+      "type": "排序:类型"
+    }
+  },
+  "organizer": {
+    "title": "整理器",
+    "count": "{{n}} 件物品",
+    "col": {
+      "name": "名称",
+      "type": "类型",
+      "power": "威能",
+      "total": "总计",
+      "tier": "稀有度",
+      "tag": "标签",
+      "location": "位置"
+    },
+    "onChar": "角色"
+  },
+  "compare": {
+    "title": "对比",
+    "add": "加入对比",
+    "remove": "移除",
+    "clear": "清空",
+    "item": "物品"
+  },
+  "inventory": {
+    "power": "威能",
+    "bag": "角色库存",
+    "vault": "保险库",
+    "noCharacter": "未选择角色。",
+    "otherItems": "保险库中的其他物品(材料、任务等)",
+    "playedTotal": "游戏时长",
+    "lastPlayed": "最近登录",
+    "subtab": {
+      "view": "视图"
+    },
+    "tab": {
+      "overview": "物品管理",
+      "character": "角色",
+      "loadouts": "装备配置",
+      "vault": "保险库",
+      "organizer": "整理器",
+      "dupes": "重复物品",
+      "maxpower": "最大威能",
+      "postmaster": "邮箱"
+    },
+    "filter": {
+      "all": "全部",
+      "weapons": "武器",
+      "armor": "护甲"
+    }
+  },
+  "item": {
+    "stats": "属性",
+    "description": "描述"
+  },
+  "confirm": {
+    "logout": {
+      "title": "要登出吗?",
+      "message": "你将退出 Bungie.net 账户。在下次登录之前,物品栏和统计数据将无法访问。"
+    },
+    "hint": {
+      "esc": "取消",
+      "enter": "确认"
+    }
+  },
+  "layout": {
+    "guardians": "守护者"
+  },
+  "toasts": {
+    "itemEquipped": "物品已装备",
+    "equipFailed": "装备失败:{{error}}",
+    "itemTransferred": "物品已转移",
+    "transferFailed": "转移失败:{{error}}",
+    "sentToVault": "已存入仓库",
+    "vaultTransferFailed": "转入仓库失败:{{error}}",
+    "dataRefreshed": "数据已刷新",
+    "d2NotRunning": "Destiny 2 未运行",
+    "alwaysOnTopEnabled": "已启用置顶",
+    "alwaysOnTopDisabled": "已停用",
+    "alwaysOnTopFailed": "置顶:{{error}}",
+    "manifestReloaded": "清单已重新加载",
+    "disconnected": "已登出",
+    "localCacheCleared": "本地缓存已清空",
+    "errorGeneric": "错误:{{error}}",
+    "preferencesReset": "偏好已重置",
+    "overlayEnabled": "已启用覆层",
+    "overlayDisabled": "已禁用覆层"
+  },
+  "resetNotif": {
+    "daily": {
+      "title": "每日重置前 15 分钟",
+      "body": "17:00 UTC — 清单与商人即将刷新。"
+    },
+    "weekly": {
+      "title": "每周重置前 1 小时",
+      "body": "周二 17:00 UTC — 每周悬赏与突袭将重置。"
+    },
+    "xur": {
+      "title": "Xûr 到了!",
+      "body": "周五 18:00 UTC — 他的库存已上线。"
+    }
+  },
+  "database": {
+    "title": "数据库",
+    "subtitle": "按类别浏览 Destiny 2 的所有物品。",
+    "categories": "类别",
+    "search": "搜索…",
+    "all": "全部",
+    "sort": "排序",
+    "sortOpt": {
+      "rarity": "稀有度",
+      "type": "类型",
+      "name": "名称"
+    },
+    "noResults": "无结果。",
+    "loading": "正在缓存 Destiny 2 目录…",
+    "loadingHint": "此下载(约 40 MB)每个 Bungie 清单版本仅执行一次,后续打开将是即时的。",
+    "loadingError": "加载失败:{{error}}",
+    "loadMore": "加载更多 (+{{n}})",
+    "hash": "HASH",
+    "tab": {
+      "weapons": "武器",
+      "armor": "护甲",
+      "mods": "模组",
+      "subclass": "子职业",
+      "ghosts": "幽灵",
+      "ships": "战舰",
+      "vehicles": "麻雀",
+      "emblems": "徽章",
+      "shaders": "涂装",
+      "emotes": "动作",
+      "finishers": "终结技"
+    },
+    "facet": {
+      "all": "全部",
+      "kinetic": "动能",
+      "energy": "能量",
+      "power": "重型",
+      "titan": "泰坦",
+      "hunter": "猎人",
+      "warlock": "术士"
+    },
+    "tier": {
+      "exotic": "异域",
+      "legendary": "传说",
+      "rare": "稀有",
+      "uncommon": "罕见",
+      "common": "普通"
+    }
+  },
+  "bot": {
+    "status": {
+      "online": "在线",
+      "offline": "离线"
+    },
+    "meta": "Discord 机器人 · Destiny 2",
+    "heroTitle": "Bot",
+    "description": "Cruzer 应用的 Discord 伴侣。26 条斜杠命令 — Xûr、玩家统计、突袭、商人、Marathon — 无需离开服务器即可使用。与应用采用相同的数据源。",
+    "invite": "邀请",
+    "support": "支持",
+    "refresh": "刷新",
+    "loading": "正在加载机器人状态…",
+    "statusUnavailable": "⚠ 无法获取机器人状态",
+    "statusUnavailableHint": "{{url}} 未响应。机器人可能离线或尚未部署。如果在本地运行,你仍可以邀请它。",
+    "tiles": {
+      "servers": "服务器",
+      "users": "用户",
+      "commands24h": "命令 · 24 小时",
+      "commandsTotal": "共 {{n}} 条",
+      "uptime": "在线时长",
+      "deployed": "部署于 {{date}}"
+    },
+    "top": {
+      "kicker": "// 24 小时 TOP",
+      "title": "最常用命令",
+      "updatedAt": "更新 · {{time}}"
+    },
+    "modules": {
+      "kicker": "// 模块",
+      "title": "命令类别",
+      "cmdCount": "{{n}} 条命令",
+      "cmdCountPlural": "{{n}} 条命令"
+    },
+    "catalog": {
+      "kicker": "// 目录",
+      "allCommands": "{{n}} 条斜杠命令",
+      "viewAll": "全部显示 ×",
+      "search": "搜索…",
+      "empty": "没有匹配的命令。"
+    },
+    "help": {
+      "title": "需要机器人帮助?",
+      "subtitle": "加入官方 Discord — 支持、更新、反馈。",
+      "openDiscord": "打开 Discord"
+    },
+    "categories": {
+      "world": "世界 · 每周",
+      "player": "玩家",
+      "items": "物品",
+      "vendors": "商人",
+      "marathon": "Marathon",
+      "utility": "实用",
+      "admin": "管理"
+    }
+  },
+  "settings": {
+    "subtitle": "应用偏好 · 快捷键 · 通知",
+    "version": "Cruzer v{{version}}",
+    "section": {
+      "account": "账户",
+      "display": "显示",
+      "notifications": "通知",
+      "shortcuts": "键盘快捷键",
+      "advanced": "高级"
+    },
+    "session": {
+      "label": "Bungie.net 会话",
+      "hintAuth": "通过 OAuth 2.0 认证",
+      "hintAuthManifest": "通过 OAuth 2.0 认证 · 清单已加载"
+    },
+    "manifest": {
+      "label": "刷新清单",
+      "hint": "重新下载游戏数据表(物品、活动、商人)",
+      "action": "刷新"
+    },
+    "cache": {
+      "label": "清空本地缓存",
+      "hint": "删除存储在 U 盘上的清单和偏好设置",
+      "action": "清空"
+    },
+    "language": {
+      "label": "界面语言",
+      "hint": "同时设置从 Bungie 获取文本的语言"
+    },
+    "alwaysOnTop": {
+      "label": "窗口置顶",
+      "hint": "将 Cruzer 固定在 Destiny 2 之上,便于游戏时查看",
+      "aria": "窗口置顶"
+    },
+    "compactMode": {
+      "label": "紧凑模式",
+      "hint": "收窄外边距,物品栏与列表更紧凑"
+    },
+    "theme": {
+      "label": "主题",
+      "hint": "三种氛围 — 深色（默认）、午夜（纯黑）、星云（紫色薄纱）",
+      "dark": "深色",
+      "midnight": "午夜",
+      "nebula": "星云"
+    },
+    "notifWeekly": {
+      "label": "每周重置",
+      "hint": "周二重置(17:00 UTC)前 1 小时提醒"
+    },
+    "notifDaily": {
+      "label": "每日重置",
+      "hint": "每日重置(17:00 UTC)前 15 分钟提醒"
+    },
+    "notifXur": {
+      "label": "Xûr 到来",
+      "hint": "周五 18:00 UTC Xûr 出现时提醒"
+    },
+    "soundAlerts": {
+      "label": "声音提醒",
+      "hint": "每次通知时播放短音(立即测试)"
+    },
+    "shortcuts": {
+      "inventory": "打开物品栏",
+      "checklist": "打开清单",
+      "refresh": "刷新数据",
+      "focusD2": "聚焦 Destiny 2",
+      "alwaysOnTop": "窗口置顶",
+      "overlay": "游戏内覆层"
+    },
+    "devLogs": {
+      "label": "开发日志",
+      "hint": "启用 hooks 与 API 的详细 console.debug"
+    },
+    "bungieDiag": {
+      "label": "Bungie API 诊断",
+      "hint": "在 toast 与控制台中显示详细的网络错误"
+    },
+    "reset": {
+      "label": "重置偏好",
+      "hint": "将所有设置恢复为默认值(不影响会话)",
+      "action": "重置"
+    },
+    "footer": {
+      "build": "Cruzer Compagnon · 便携构建 · {{year}}",
+      "activeLang": "当前语言 · {{lang}}"
+    },
+    "overlay": {
+      "label": "游戏内覆层",
+      "hint": "在 Destiny 2 和 Marathon 上显示简约 HUD —— 自动检测"
+    }
+  },
+  "toast": {
+    "join": "加入游戏",
+    "close": "关闭"
+  },
+  "errorPanel": {
+    "title": "错误",
+    "sessionExpired": "你的 Bungie.net 会话可能已过期 — 请重新登录。",
+    "maintenance": "Bungie API 正在维护。请几分钟后再试。",
+    "unknownBungie": "未知的 Bungie 错误",
+    "unknown": "未知错误"
+  },
+  "livePlayers": {
+    "tooltip": "在线玩家(所有平台,估算)"
+  },
+  "season": {
+    "claimed": "已领取"
+  },
+  "whatsNew": {
+    "title": "新功能",
+    "dismiss": "出发",
+    "footerHint": "完整更新日志请见 CHANGELOG.md"
+  }
+}
