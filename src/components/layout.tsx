@@ -10,6 +10,7 @@ import { SearchBar } from "./search-bar"
 import { RefreshButton } from "./refresh-button"
 import { ToastHost } from "./toast-host"
 import { MaintenanceBanner } from "./maintenance-banner"
+import { UpdateBanner } from "./update-banner"
 import { AppStatusBanner } from "./app-status-banner"
 import { SeasonBadge } from "./season-badge"
 import { LivePlayersBadge } from "./live-player-badge"
@@ -123,6 +124,7 @@ export function Layout() {
       {/* Top bar — 2 compact rows                                        */}
       {/* -------------------------------------------------------------- */}
       <TitleBar />
+      <UpdateBanner />
       <AppStatusBanner />
       <MaintenanceBanner />
       <header className="bg-bungie-bg/85 sticky top-0 z-30 backdrop-blur-xl">
