@@ -12,7 +12,7 @@ import { invoke } from "@tauri-apps/api/core"
 import { getCurrentWindow } from "@tauri-apps/api/window"
 import { useSettingsStore } from "../store/settings"
 import { useQueryClient } from "@tanstack/react-query"
-import { toast } from "@/store/toast"
+import { toast } from "sonner"
 import i18n from "@/i18n"
 
 // ---------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { equipItem, transferItem, type ActionErrorPayload } from "@/api/actions"
 import { useSelectedMembership } from "./useProfile"
-import { toast } from "@/store/toast"
+import { toast } from "sonner"
 import i18n from "@/i18n"
 
 function describeError(e: unknown): string {

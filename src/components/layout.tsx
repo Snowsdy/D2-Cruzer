@@ -8,7 +8,6 @@ import { LanguageSwitcher } from "./language-switcher"
 import { CharacterSelector } from "./character-selector"
 import { SearchBar } from "./search-bar"
 import { RefreshButton } from "./refresh-button"
-import { ToastHost } from "./toast-host"
 import { MaintenanceBanner } from "./maintenance-banner"
 import { AppStatusBanner } from "./app-status-banner"
 import { SeasonBadge } from "./season-badge"
@@ -291,7 +290,6 @@ export function Layout() {
         </div>
       </main>
 
-      <ToastHost />
       <WhatsNewModal />
       <ConfirmDialog
         open={confirmLogout}

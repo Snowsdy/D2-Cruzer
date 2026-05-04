@@ -12,7 +12,7 @@ import {
   useLoadoutIcon,
 } from "@/hooks/useLoadoutDef"
 import { useAuthStore } from "@/store/auth"
-import { toast } from "@/store/toast"
+import { toast } from "sonner"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import type {
   DestinyLoadoutComponent,

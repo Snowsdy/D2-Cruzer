@@ -10,7 +10,7 @@ import { useSettingsStore, type ThemeMode } from "@/store/settings"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { Dropdown } from "@/components/dropdown"
-import { toast } from "@/store/toast"
+import { toast } from "sonner"
 
 // ---------------------------------------------------------------------------
 // Primitives

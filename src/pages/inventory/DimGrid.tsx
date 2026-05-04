@@ -19,7 +19,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAuthStore } from "@/store/auth"
 
 import { useSelectedMembership } from "@/hooks/useProfile"
-import { toast } from "@/store/toast"
+import { toast } from "sonner"
 import {
   Buckets,
   WEAPON_BUCKETS,
@@ -378,7 +378,7 @@ function PostmasterCell({
 
   if (items.length === 0) {
     return (
-      <div className="text-bungie-muted/30 border-bungie-border/30 border-b py-2 pl-1 text-xs">
+      <div className="border-b py-2 pl-1 text-xs">
         —
       </div>
     )
@@ -392,20 +392,21 @@ function PostmasterCell({
     >
       <div className="mb-1.5 flex items-center justify-between pl-1">
         <div
-          className={`inline-flex items-center gap-1 text-[9px] tracking-[0.18em] uppercase ${
-            full ? "font-bold text-red-400" : "text-bungie-muted/70"
+          className={`inline-flex flex-nowrap gap-1 text-[9px] tracking-[0.18em] uppercase ${
+            full && "font-bold text-red-400"
           }`}
         >
-          <IconMail size={11} /> Postmaster
-          <span className="ml-1 tabular-nums">{items.length}/21</span>
+          <IconMail size={12} />
+          <p>{t('postmaster.title')}</p>
+          <span className="tabular-nums">{items.length}/21</span>
         </div>
         <button
           onClick={pullAll}
           disabled={pullMutation.isPending}
-          className="bg-bungie-accent/15 border-bungie-accent/40 text-bungie-accent hover:bg-bungie-accent/25 rounded-full border px-2 py-0.5 text-[9px] font-semibold tracking-widest uppercase transition-all disabled:opacity-50"
+          className="hover:bg-bungie-accent/25 rounded-full border px-2 py-0.5 text-[8px] font-semibold tracking-widest uppercase transition-all disabled:opacity-50"
           title={t("inventory.pull")}
         >
-          {pullMutation.isPending ? "…" : t("inventory.pull")}
+          {pullMutation.isPending ? "…" : t("postmaster.pullAll")}
         </button>
       </div>
       <div className="flex flex-wrap items-start gap-1">

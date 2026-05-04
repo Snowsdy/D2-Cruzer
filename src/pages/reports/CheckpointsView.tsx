@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { invoke } from "@tauri-apps/api/core"
 import { fetchD2CheckpointBots, type D2CheckpointBot } from "@/api/d2checkpoint"
 import { useManifestStore } from "@/store/manifest"
-import { toast } from "@/store/toast"
+import { toast } from "sonner"
 import { ACCENTS } from "@/constants/uiAccents"
 import { Dropdown } from "@/components/dropdown"
 

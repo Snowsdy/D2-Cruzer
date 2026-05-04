@@ -12,6 +12,7 @@ import { Settings } from "@/pages/settings/Settings"
 import { Marathon } from "@/pages/marathon/Marathon"
 import { BotDashboard } from "@/pages/bot/BotDashboard"
 import { useAuthStore } from "@/store/auth"
+import { Toaster } from "@/components/ui/sonner"
 
 // Code-split the heaviest views — loaded on demand when the user navigates
 // to them. Database carries a 40 MB manifest catalog; Reports and Stats
@@ -75,6 +76,7 @@ function RequireAuth({ children }: { children: JSX.Element }) {
 export default function App() {
   return (
     <>
+      <Toaster position="top-right" richColors swipeDirections={['top', 'bottom', 'left', 'right']} />
       <DeepLinkHandler />
       <Routes>
         <Route path="/login" element={<Login />} />
