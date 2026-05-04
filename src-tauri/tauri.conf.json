@@ -31,7 +31,7 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; connect-src 'self' https://www.bungie.net https://bungie.net https://fonts.googleapis.com https://fonts.gstatic.com https://popularity.report https://*.popularity.report https://cruzer.gg https://*.cruzer.gg https://press.bungie.com; img-src 'self' data: blob: https: http:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; frame-src https://raid.report https://dungeon.report https://d2checkpoint.com https://*.raid.report https://*.dungeon.report https://*.d2checkpoint.com https://popularity.report https://*.popularity.report; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'none'"
     }
   },
   "bundle": {
