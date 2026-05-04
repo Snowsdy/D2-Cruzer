@@ -46,11 +46,10 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_log::Builder::new().level(tauri_plugin_log::log::LevelFilter::Info).build())
         .plugin(tauri_plugin_updater::Builder::new().build())
-        .plugin(tauri_plugin_single_instance::init(|app, args, _cwd| {
-            println!("a new app instance was opened with {args:?} and the deep link event was already triggered");
-            if let Some(window) = app.get_webview_window("main") {
-                let _ = window.set_focus();
-            }
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            let _ = app.get_webview_window("main")
+                        .expect("no main window")
+                        .set_focus();
         }))
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_deep_link::init())
@@ -111,7 +110,6 @@ pub fn run() {
         ])
         .on_page_load(|webview, payload| {
             if webview.label() == "main" && matches!(payload.event(), PageLoadEvent::Finished) {
-                log::info!("main webview finished loading");
                 let _ = webview.window().show();
             }
         })
@@ -128,18 +126,18 @@ async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
       .download_and_install(
         |chunk_length, content_length| {
           downloaded += chunk_length;
-          println!("downloaded {downloaded} from {content_length:?}");
+          log::info!("downloaded {downloaded} from {content_length:?}");
         },
         || {
-          println!("download finished");
+          log::info!("download finished");
         },
       )
       .await?;
 
-    println!("update installed");
+    log::info!("update installed");
     app.restart();
   } else {
-    println!("No update required.")
+    log::info!("No update required.")
   }
 
   Ok(())

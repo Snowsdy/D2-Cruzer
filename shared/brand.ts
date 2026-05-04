@@ -16,7 +16,7 @@ export const BRAND = Object.freeze({
 
   /** Canonical version bumped at release time. App (Cargo.toml) reads the
    *  same number; bot reports it via `/bot`. */
-  version: "0.1.0",
+  version: "0.0.3",
 
   /** Core magenta — used for highlights, buttons, dashboard accent. */
   colorPrimary: 0xf3075e,

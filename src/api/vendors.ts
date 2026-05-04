@@ -17,8 +17,7 @@ export async function getVendorDef(
 // Canonical vendor hashes live in `/shared/vendors.ts` — imported here so
 // the Cruzer desktop app and the Discord bot always agree on which hash
 // maps to which vendor. See that file for the full list.
-export { VendorHashes } from "../../shared/vendors"
-export type { VendorKey } from "../../shared/vendors"
+export { type VendorKey, VendorHashes } from "../../shared/vendors"
 
 /**
  * Fetch a vendor's live state for a given character.

@@ -1,20 +1,18 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from "zustand/middleware"
-import { SK_PLATFORM, SK_AUTH_CHARACTER } from "../constants/storageKeys"
+import { SK_PLATFORM, SK_AUTH_CHARACTER } from "@/constants/storageKeys"
 
 export interface AuthState {
   accessToken: string | null
   refreshToken: string | null
   expiresAt: number | null
   membershipId: string | null
-  rememberMe: boolean
   setTokens: (t: {
     accessToken: string
     refreshToken: string | null
     expiresIn: number
     membershipId: string
   }) => void
-  setRememberMe: (v: boolean) => void
   clear: () => void
   isExpired: () => boolean
 }
@@ -34,7 +32,6 @@ export const useAuthStore = create<AuthState>()(
           expiresAt: Date.now() + expiresIn * 1000,
           membershipId,
         }),
-      setRememberMe: (v) => set({ rememberMe: v }),
       clear: () => {
         // Wipe auth.
         set({
@@ -63,13 +60,6 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "cruzer-auth",
       storage: createJSONStorage(() => localStorage),
-      // Only write tokens to disk when the user opted to be remembered.
-      // When `rememberMe` is false, we persist just that flag — tokens stay
-      // in-memory and die with the page (defense against disk exfiltration).
-      partialize: (state) =>
-        state.rememberMe
-          ? state
-          : ({ rememberMe: state.rememberMe } as AuthState),
     }
   )
 )

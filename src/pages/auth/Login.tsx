@@ -74,8 +74,6 @@ export function Login() {
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const rememberMe = useAuthStore((s) => s.rememberMe)
-  const setRememberMe = useAuthStore((s) => s.setRememberMe)
   // When auth lands from another window (main window finishing OAuth → the
   // overlay webview sees the shared Zustand/localStorage token arrive), jump
   // to the dashboard. Otherwise the overlay stays stuck on /login even
@@ -373,38 +371,6 @@ export function Login() {
                     )}
                   </span>
                 </button>
-
-                {/* Remember toggle */}
-                <label className="group flex cursor-pointer items-center gap-3 select-none">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="peer sr-only"
-                  />
-                  <div
-                    className={`relative h-6 w-11 rounded-full transition-all ${
-                      rememberMe
-                        ? "bg-bungie-accent/90"
-                        : "border-bungie-border border bg-white/10"
-                    }`}
-                    style={
-                      rememberMe
-                        ? { boxShadow: "0 0 12px rgba(243,7,94,0.5)" }
-                        : undefined
-                    }
-                  >
-                    <div
-                      className={`absolute top-0.75 h-4.5 w-4.5 rounded-full bg-white transition-all ${
-                        rememberMe ? "left-5.25" : "left-0.75"
-                      }`}
-                      style={{ boxShadow: "0 2px 6px rgba(0,0,0,0.4)" }}
-                    />
-                  </div>
-                  <span className="text-[14px] text-white/85 transition-colors group-hover:text-white">
-                    {t("auth.rememberMe")}
-                  </span>
-                </label>
 
                 {error && (
                   <div className="flex items-start gap-2.5 rounded-md border border-red-500/40 bg-red-500/5 p-3.5 text-[13px] leading-relaxed text-red-300">
