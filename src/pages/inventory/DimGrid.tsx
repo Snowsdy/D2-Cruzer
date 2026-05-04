@@ -14,7 +14,7 @@ import { DropZone } from "./DropZone"
 import { StatBar } from "./StatBar"
 import { VaultColumn } from "./VaultColumn"
 import { IconMail, IconScope, IconShield, IconSparkle } from "@/components/icon"
-import { invoke } from "@tauri-apps/api/core"
+import { trackedInvoke } from "@/lib/tauri"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAuthStore } from "@/store/auth"
 
@@ -344,7 +344,7 @@ function PostmasterCell({
       if (!membership) throw new Error("No membership")
       const token = useAuthStore.getState().accessToken
       if (!token) throw new Error("Not authenticated")
-      await invoke("pull_from_postmaster", {
+      await trackedInvoke("pull_from_postmaster", {
         apiKey: import.meta.env.VITE_BUNGIE_API_KEY,
         accessToken: token,
         itemReferenceHash: it.itemHash,
@@ -358,20 +358,20 @@ function PostmasterCell({
       qc.invalidateQueries({ queryKey: ["profile"] })
       setTimeout(() => qc.refetchQueries({ queryKey: ["profile"] }), 1000)
       setTimeout(() => qc.refetchQueries({ queryKey: ["profile"] }), 2500)
-    },
-    onError: (e) =>
-      toast.error(`${t("inventory.pull")} · ${(e as Error).message}`),
+    }
   })
 
   const pullAll = async () => {
     for (const it of items) {
       try {
         await pullMutation.mutateAsync(it)
+        .then(() => toast.success(`Postmaster vidé (${items.length})`))
+        .catch((e) => toast.error(`${(e as Error).message}`))
       } catch {
         /* already toasted */
       }
     }
-    toast.success(`Postmaster vidé (${items.length})`)
+    
   }
 
   const full = items.length >= 20
@@ -404,7 +404,7 @@ function PostmasterCell({
           onClick={pullAll}
           disabled={pullMutation.isPending}
           className="hover:bg-bungie-accent/25 rounded-full border px-2 py-0.5 text-[8px] font-semibold tracking-widest uppercase transition-all disabled:opacity-50"
-          title={t("inventory.pull")}
+          title={t("postmaster.pullAll")}
         >
           {pullMutation.isPending ? "…" : t("postmaster.pullAll")}
         </button>

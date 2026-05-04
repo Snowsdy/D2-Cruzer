@@ -41,8 +41,8 @@ const SOURCES = [
 async function openExternal(url: string) {
   if (url.startsWith("/")) return
   try {
-    const { open } = await import("@tauri-apps/plugin-shell")
-    await open(url)
+    const { openUrl } = await import("@tauri-apps/plugin-opener")
+    await openUrl(url)
   } catch {
     window.open(url, "_blank")
   }

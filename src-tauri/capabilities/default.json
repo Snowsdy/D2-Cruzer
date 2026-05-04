@@ -18,29 +18,54 @@
     "core:event:default",
     "deep-link:default",
     "core:default",
-    "opener:default",
     "log:default",
     "updater:default",
     {
       "identifier": "shell:allow-open",
       "allow": [
-        { "url": "^https://(www\\.)?bungie\\.net/.+" },
-        { "url": "^https://(www\\.)?mobalytics\\.gg/.+" },
-        { "url": "^https://(www\\.)?popularity\\.report/.*" },
-        { "url": "^https://(www\\.)?raid\\.report/.+" },
-        { "url": "^https://(www\\.)?dungeon\\.report/.+" },
-        { "url": "^https://(www\\.)?d2checkpoint\\.com/.*" },
-        { "url": "^https://(www\\.)?checkpoints\\.tech/.*" },
-        { "url": "^https://github\\.com/.+" },
-        { "url": "^https://(www\\.)?reddit\\.com/.+" },
-        { "url": "^https://(www\\.)?threads\\.(com|net)/.+" },
-        { "url": "^https://(www\\.)?youtube\\.com/.+" },
-        { "url": "^https://store\\.steampowered\\.com/.+" },
-        { "url": "^https://(www\\.)?marathonthegame\\.com/.*" }
+        {
+          "url": "^https://(www\\.)?bungie\\.net/.+"
+        },
+        {
+          "url": "^https://(www\\.)?mobalytics\\.gg/.+"
+        },
+        {
+          "url": "^https://(www\\.)?popularity\\.report/.*"
+        },
+        {
+          "url": "^https://(www\\.)?raid\\.report/.+"
+        },
+        {
+          "url": "^https://(www\\.)?dungeon\\.report/.+"
+        },
+        {
+          "url": "^https://(www\\.)?d2checkpoint\\.com/.*"
+        },
+        {
+          "url": "^https://(www\\.)?checkpoints\\.tech/.*"
+        },
+        {
+          "url": "^https://github\\.com/.+"
+        },
+        {
+          "url": "^https://(www\\.)?reddit\\.com/.+"
+        },
+        {
+          "url": "^https://(www\\.)?threads\\.(com|net)/.+"
+        },
+        {
+          "url": "^https://(www\\.)?youtube\\.com/.+"
+        },
+        {
+          "url": "^https://store\\.steampowered\\.com/.+"
+        },
+        {
+          "url": "^https://(www\\.)?marathonthegame\\.com/.*"
+        }
       ]
     },
     "process:default",
     "process:allow-restart",
-    "store:default"
+    "opener:default"
   ]
 }

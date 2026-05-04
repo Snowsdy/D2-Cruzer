@@ -24,7 +24,6 @@ export const useAuthStore = create<AuthState>()(
       refreshToken: null,
       expiresAt: null,
       membershipId: null,
-      rememberMe: true,
       setTokens: ({ accessToken, refreshToken, expiresIn, membershipId }) =>
         set({
           accessToken,

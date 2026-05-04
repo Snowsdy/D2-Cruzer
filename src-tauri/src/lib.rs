@@ -44,14 +44,19 @@ fn external_navigation_plugin<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_log::Builder::new().level(tauri_plugin_log::log::LevelFilter::Info).build())
+        .plugin(tauri_plugin_shell::init())
+        .plugin(
+            tauri_plugin_log::Builder::new()
+                .level(tauri_plugin_log::log::LevelFilter::Info)
+                .build(),
+        )
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
-            let _ = app.get_webview_window("main")
-                        .expect("no main window")
-                        .set_focus();
+            let _ = app
+                .get_webview_window("main")
+                .expect("no main window")
+                .set_focus();
         }))
-        .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_deep_link::init())
         .plugin(
             tauri_plugin_log::Builder::new()
@@ -118,27 +123,27 @@ pub fn run() {
 }
 
 async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
-  if let Some(update) = app.updater()?.check().await? {
-    let mut downloaded = 0;
+    if let Some(update) = app.updater()?.check().await? {
+        let mut downloaded = 0;
 
-    // alternatively we could also call update.download() and update.install() separately
-    update
-      .download_and_install(
-        |chunk_length, content_length| {
-          downloaded += chunk_length;
-          log::info!("downloaded {downloaded} from {content_length:?}");
-        },
-        || {
-          log::info!("download finished");
-        },
-      )
-      .await?;
+        // alternatively we could also call update.download() and update.install() separately
+        update
+            .download_and_install(
+                |chunk_length, content_length| {
+                    downloaded += chunk_length;
+                    log::info!("downloaded {downloaded} from {content_length:?}");
+                },
+                || {
+                    log::info!("download finished");
+                },
+            )
+            .await?;
 
-    log::info!("update installed");
-    app.restart();
-  } else {
-    log::info!("No update required.")
-  }
+        log::info!("update installed");
+        app.restart();
+    } else {
+        log::info!("No update required.")
+    }
 
-  Ok(())
+    Ok(())
 }

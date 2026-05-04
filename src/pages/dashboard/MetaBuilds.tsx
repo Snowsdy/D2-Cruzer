@@ -445,8 +445,8 @@ function BuildModal({ build, onClose }: { build: Build; onClose: () => void }) {
             <button
               onClick={async () => {
                 try {
-                  const { open } = await import("@tauri-apps/plugin-shell")
-                  await open(build.mobalyticsUrl)
+                  const { openUrl } = await import("@tauri-apps/plugin-opener")
+                  await openUrl(build.mobalyticsUrl)
                 } catch {
                   window.open(build.mobalyticsUrl, "_blank")
                 }

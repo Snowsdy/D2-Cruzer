@@ -24,8 +24,8 @@ const STYLE = {
 
 const openLink = async (url: string) => {
   try {
-    const { open } = await import("@tauri-apps/plugin-shell")
-    await open(url)
+    const { openUrl } = await import("@tauri-apps/plugin-opener")
+    await openUrl(url)
   } catch {
     window.open(url, "_blank")
   }
